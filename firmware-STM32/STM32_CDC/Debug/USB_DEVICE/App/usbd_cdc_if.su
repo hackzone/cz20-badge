@@ -1,0 +1,10 @@
+usbd_cdc_if.c:165:15:CDC_Init_FS	8	static
+usbd_cdc_if.c:201:15:CDC_DeInit_FS	8	static
+usbd_cdc_if.c:219:15:CDC_Control_FS	24	static
+usbd_cdc_if.c:318:15:CDC_Receive_FS	16	static
+usbd_cdc_if.c:338:9:CDC_Transmit_FS	24	static
+usbd_cdc_if.c:356:13:ComPort_Config	8	static
+usbd_cdc_if.c:429:6:HAL_UART_RxCpltCallback	16	static
+usbd_cdc_if.c:439:6:UART_Early_Exit	24	static
+usbd_cdc_if.c:452:6:HAL_UART_RxHalfCpltCallback	16	static
+usbd_cdc_if.c:456:6:HAL_UART_TxCpltCallback	16	static
