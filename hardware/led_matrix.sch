@@ -1,0 +1,456 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 5 5
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Device:LED_RGBA D35
+U 1 1 5E819CE1
+P 3350 2000
+F 0 "D35" V 3396 1670 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 3305 1670 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 3350 1950 50  0001 C CNN
+F 3 "~" H 3350 1950 50  0001 C CNN
+	1    3350 2000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED_RGBA D39
+U 1 1 5E81B733
+P 4150 2000
+F 0 "D39" V 4196 1670 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 4105 1670 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 4150 1950 50  0001 C CNN
+F 3 "~" H 4150 1950 50  0001 C CNN
+	1    4150 2000
+	0    -1   -1   0   
+$EndComp
+Text HLabel 3150 2250 3    50   Input ~ 0
+R1
+Wire Wire Line
+	3150 2250 3150 2200
+Text HLabel 3950 2250 3    50   Input ~ 0
+R2
+Text HLabel 3350 2250 3    50   Input ~ 0
+G1
+Wire Wire Line
+	3350 2250 3350 2200
+Text HLabel 3550 2250 3    50   Input ~ 0
+B1
+Wire Wire Line
+	3550 2250 3550 2200
+Text HLabel 4150 2250 3    50   Input ~ 0
+G2
+Text HLabel 4350 2250 3    50   Input ~ 0
+B2
+Wire Wire Line
+	4350 2250 4350 2200
+Wire Wire Line
+	3350 1800 3750 1800
+Text HLabel 3750 1750 1    50   Input ~ 0
+L1
+Wire Wire Line
+	3750 1750 3750 1800
+Connection ~ 3750 1800
+Wire Wire Line
+	3750 1800 4150 1800
+Wire Wire Line
+	3950 2250 3950 2200
+Wire Wire Line
+	4150 2250 4150 2200
+$Comp
+L Device:LED_RGBA D43
+U 1 1 5E829C00
+P 4950 2000
+F 0 "D43" V 4996 1670 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 4905 1670 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 4950 1950 50  0001 C CNN
+F 3 "~" H 4950 1950 50  0001 C CNN
+	1    4950 2000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED_RGBA D47
+U 1 1 5E829C0A
+P 5750 2000
+F 0 "D47" V 5796 1670 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 5705 1670 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 5750 1950 50  0001 C CNN
+F 3 "~" H 5750 1950 50  0001 C CNN
+	1    5750 2000
+	0    -1   -1   0   
+$EndComp
+Text HLabel 4750 2250 3    50   Input ~ 0
+R1
+Wire Wire Line
+	4750 2250 4750 2200
+Text HLabel 5550 2250 3    50   Input ~ 0
+R2
+Text HLabel 4950 2250 3    50   Input ~ 0
+G1
+Wire Wire Line
+	4950 2250 4950 2200
+Text HLabel 5150 2250 3    50   Input ~ 0
+B1
+Wire Wire Line
+	5150 2250 5150 2200
+Text HLabel 5750 2250 3    50   Input ~ 0
+G2
+Text HLabel 5950 2250 3    50   Input ~ 0
+B2
+Wire Wire Line
+	5950 2250 5950 2200
+Wire Wire Line
+	4950 1800 5350 1800
+Text HLabel 5350 1750 1    50   Input ~ 0
+L2
+Wire Wire Line
+	5350 1750 5350 1800
+Connection ~ 5350 1800
+Wire Wire Line
+	5350 1800 5750 1800
+Wire Wire Line
+	5550 2250 5550 2200
+Wire Wire Line
+	5750 2250 5750 2200
+$Comp
+L Device:LED_RGBA D36
+U 1 1 5E82ECAC
+P 3350 2650
+F 0 "D36" V 3396 2320 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 3305 2320 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 3350 2600 50  0001 C CNN
+F 3 "~" H 3350 2600 50  0001 C CNN
+	1    3350 2650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED_RGBA D40
+U 1 1 5E82ECB6
+P 4150 2650
+F 0 "D40" V 4196 2320 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 4105 2320 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 4150 2600 50  0001 C CNN
+F 3 "~" H 4150 2600 50  0001 C CNN
+	1    4150 2650
+	0    -1   -1   0   
+$EndComp
+Text HLabel 3150 2900 3    50   Input ~ 0
+R1
+Wire Wire Line
+	3150 2900 3150 2850
+Text HLabel 3950 2900 3    50   Input ~ 0
+R2
+Text HLabel 3350 2900 3    50   Input ~ 0
+G1
+Wire Wire Line
+	3350 2900 3350 2850
+Text HLabel 3550 2900 3    50   Input ~ 0
+B1
+Wire Wire Line
+	3550 2900 3550 2850
+Text HLabel 4150 2900 3    50   Input ~ 0
+G2
+Text HLabel 4350 2900 3    50   Input ~ 0
+B2
+Wire Wire Line
+	4350 2900 4350 2850
+Wire Wire Line
+	3350 2450 3750 2450
+Text HLabel 3750 2400 1    50   Input ~ 0
+L3
+Wire Wire Line
+	3750 2400 3750 2450
+Connection ~ 3750 2450
+Wire Wire Line
+	3750 2450 4150 2450
+Wire Wire Line
+	3950 2900 3950 2850
+Wire Wire Line
+	4150 2900 4150 2850
+$Comp
+L Device:LED_RGBA D44
+U 1 1 5E82ECD1
+P 4950 2650
+F 0 "D44" V 4996 2320 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 4905 2320 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 4950 2600 50  0001 C CNN
+F 3 "~" H 4950 2600 50  0001 C CNN
+	1    4950 2650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED_RGBA D48
+U 1 1 5E82ECDB
+P 5750 2650
+F 0 "D48" V 5796 2320 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 5705 2320 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 5750 2600 50  0001 C CNN
+F 3 "~" H 5750 2600 50  0001 C CNN
+	1    5750 2650
+	0    -1   -1   0   
+$EndComp
+Text HLabel 4750 2900 3    50   Input ~ 0
+R1
+Wire Wire Line
+	4750 2900 4750 2850
+Text HLabel 5550 2900 3    50   Input ~ 0
+R2
+Text HLabel 4950 2900 3    50   Input ~ 0
+G1
+Wire Wire Line
+	4950 2900 4950 2850
+Text HLabel 5150 2900 3    50   Input ~ 0
+B1
+Wire Wire Line
+	5150 2900 5150 2850
+Text HLabel 5750 2900 3    50   Input ~ 0
+G2
+Text HLabel 5950 2900 3    50   Input ~ 0
+B2
+Wire Wire Line
+	5950 2900 5950 2850
+Wire Wire Line
+	4950 2450 5350 2450
+Text HLabel 5350 2400 1    50   Input ~ 0
+L4
+Wire Wire Line
+	5350 2400 5350 2450
+Connection ~ 5350 2450
+Wire Wire Line
+	5350 2450 5750 2450
+Wire Wire Line
+	5550 2900 5550 2850
+Wire Wire Line
+	5750 2900 5750 2850
+$Comp
+L Device:LED_RGBA D37
+U 1 1 5E839E05
+P 3350 3300
+F 0 "D37" V 3396 2970 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 3305 2970 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 3350 3250 50  0001 C CNN
+F 3 "~" H 3350 3250 50  0001 C CNN
+	1    3350 3300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED_RGBA D41
+U 1 1 5E839E0F
+P 4150 3300
+F 0 "D41" V 4196 2970 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 4105 2970 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 4150 3250 50  0001 C CNN
+F 3 "~" H 4150 3250 50  0001 C CNN
+	1    4150 3300
+	0    -1   -1   0   
+$EndComp
+Text HLabel 3150 3550 3    50   Input ~ 0
+R1
+Wire Wire Line
+	3150 3550 3150 3500
+Text HLabel 3950 3550 3    50   Input ~ 0
+R2
+Text HLabel 3350 3550 3    50   Input ~ 0
+G1
+Wire Wire Line
+	3350 3550 3350 3500
+Text HLabel 3550 3550 3    50   Input ~ 0
+B1
+Wire Wire Line
+	3550 3550 3550 3500
+Text HLabel 4150 3550 3    50   Input ~ 0
+G2
+Text HLabel 4350 3550 3    50   Input ~ 0
+B2
+Wire Wire Line
+	4350 3550 4350 3500
+Wire Wire Line
+	3350 3100 3750 3100
+Text HLabel 3750 3050 1    50   Input ~ 0
+L5
+Wire Wire Line
+	3750 3050 3750 3100
+Connection ~ 3750 3100
+Wire Wire Line
+	3750 3100 4150 3100
+Wire Wire Line
+	3950 3550 3950 3500
+Wire Wire Line
+	4150 3550 4150 3500
+$Comp
+L Device:LED_RGBA D45
+U 1 1 5E839E2A
+P 4950 3300
+F 0 "D45" V 4996 2970 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 4905 2970 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 4950 3250 50  0001 C CNN
+F 3 "~" H 4950 3250 50  0001 C CNN
+	1    4950 3300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED_RGBA D49
+U 1 1 5E839E34
+P 5750 3300
+F 0 "D49" V 5796 2970 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 5705 2970 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 5750 3250 50  0001 C CNN
+F 3 "~" H 5750 3250 50  0001 C CNN
+	1    5750 3300
+	0    -1   -1   0   
+$EndComp
+Text HLabel 4750 3550 3    50   Input ~ 0
+R1
+Wire Wire Line
+	4750 3550 4750 3500
+Text HLabel 5550 3550 3    50   Input ~ 0
+R2
+Text HLabel 4950 3550 3    50   Input ~ 0
+G1
+Wire Wire Line
+	4950 3550 4950 3500
+Text HLabel 5150 3550 3    50   Input ~ 0
+B1
+Wire Wire Line
+	5150 3550 5150 3500
+Text HLabel 5750 3550 3    50   Input ~ 0
+G2
+Text HLabel 5950 3550 3    50   Input ~ 0
+B2
+Wire Wire Line
+	5950 3550 5950 3500
+Wire Wire Line
+	4950 3100 5350 3100
+Text HLabel 5350 3050 1    50   Input ~ 0
+L6
+Wire Wire Line
+	5350 3050 5350 3100
+Connection ~ 5350 3100
+Wire Wire Line
+	5350 3100 5750 3100
+Wire Wire Line
+	5550 3550 5550 3500
+Wire Wire Line
+	5750 3550 5750 3500
+$Comp
+L Device:LED_RGBA D38
+U 1 1 5E839E4F
+P 3350 3950
+F 0 "D38" V 3396 3620 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 3305 3620 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 3350 3900 50  0001 C CNN
+F 3 "~" H 3350 3900 50  0001 C CNN
+	1    3350 3950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED_RGBA D42
+U 1 1 5E839E59
+P 4150 3950
+F 0 "D42" V 4196 3620 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 4105 3620 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 4150 3900 50  0001 C CNN
+F 3 "~" H 4150 3900 50  0001 C CNN
+	1    4150 3950
+	0    -1   -1   0   
+$EndComp
+Text HLabel 3150 4200 3    50   Input ~ 0
+R1
+Wire Wire Line
+	3150 4200 3150 4150
+Text HLabel 3950 4200 3    50   Input ~ 0
+R2
+Text HLabel 3350 4200 3    50   Input ~ 0
+G1
+Wire Wire Line
+	3350 4200 3350 4150
+Text HLabel 3550 4200 3    50   Input ~ 0
+B1
+Wire Wire Line
+	3550 4200 3550 4150
+Text HLabel 4150 4200 3    50   Input ~ 0
+G2
+Text HLabel 4350 4200 3    50   Input ~ 0
+B2
+Wire Wire Line
+	4350 4200 4350 4150
+Wire Wire Line
+	3350 3750 3750 3750
+Text HLabel 3750 3700 1    50   Input ~ 0
+L7
+Wire Wire Line
+	3750 3700 3750 3750
+Connection ~ 3750 3750
+Wire Wire Line
+	3750 3750 4150 3750
+Wire Wire Line
+	3950 4200 3950 4150
+Wire Wire Line
+	4150 4200 4150 4150
+$Comp
+L Device:LED_RGBA D46
+U 1 1 5E839E74
+P 4950 3950
+F 0 "D46" V 4996 3620 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 4905 3620 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 4950 3900 50  0001 C CNN
+F 3 "~" H 4950 3900 50  0001 C CNN
+	1    4950 3950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED_RGBA D50
+U 1 1 5E839E7E
+P 5750 3950
+F 0 "D50" V 5796 3620 50  0000 R CNN
+F 1 "LL-R3528RGBC-008-B" V 5705 3620 50  0000 R CNN
+F 2 "LED_SMD:LED_Cree-PLCC4_3.2x2.8mm_CCW" H 5750 3900 50  0001 C CNN
+F 3 "~" H 5750 3900 50  0001 C CNN
+	1    5750 3950
+	0    -1   -1   0   
+$EndComp
+Text HLabel 4750 4200 3    50   Input ~ 0
+R1
+Wire Wire Line
+	4750 4200 4750 4150
+Text HLabel 5550 4200 3    50   Input ~ 0
+R2
+Text HLabel 4950 4200 3    50   Input ~ 0
+G1
+Wire Wire Line
+	4950 4200 4950 4150
+Text HLabel 5150 4200 3    50   Input ~ 0
+B1
+Wire Wire Line
+	5150 4200 5150 4150
+Text HLabel 5750 4200 3    50   Input ~ 0
+G2
+Text HLabel 5950 4200 3    50   Input ~ 0
+B2
+Wire Wire Line
+	5950 4200 5950 4150
+Wire Wire Line
+	4950 3750 5350 3750
+Text HLabel 5350 3700 1    50   Input ~ 0
+L8
+Wire Wire Line
+	5350 3700 5350 3750
+Connection ~ 5350 3750
+Wire Wire Line
+	5350 3750 5750 3750
+Wire Wire Line
+	5550 4200 5550 4150
+Wire Wire Line
+	5750 4200 5750 4150
+$EndSCHEMATC
