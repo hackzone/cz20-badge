@@ -1,3 +1,8 @@
 (sym_lib_table
   (lib (name audio)(type Legacy)(uri ${KIPRJMOD}/libs/audio.lib)(options "")(descr ""))
+  (lib (name DW-01)(type Legacy)(uri ${KIPRJMOD}/libs/DW-01.lib)(options "")(descr ""))
+  (lib (name led_rgba)(type Legacy)(uri ${KIPRJMOD}/libs/led_rgba.lib)(options "")(descr ""))
+  (lib (name LP5024)(type Legacy)(uri ${KIPRJMOD}/libs/LP5024.lib)(options "")(descr ""))
+  (lib (name rgbchip)(type Legacy)(uri ${KIPRJMOD}/libs/rgbchip.lib)(options "")(descr ""))
+  (lib (name tp4056)(type Legacy)(uri ${KIPRJMOD}/libs/tp4056.lib)(options "")(descr ""))
 )

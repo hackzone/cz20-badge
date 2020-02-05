@@ -1,10 +1,9 @@
 EESchema Schematic File Version 4
-LIBS:cz-badge-hardware-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 3 3
+Sheet 3 5
 Title ""
 Date ""
 Rev ""
@@ -393,8 +392,6 @@ F 3 "~" H 6500 2450 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Connection ~ 6500 2600
-Wire Wire Line
-	6500 2600 6650 2600
 Connection ~ 6500 2300
 Wire Wire Line
 	6500 2300 6650 2300
@@ -414,8 +411,6 @@ F 3 "~" H 6500 4050 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Connection ~ 6500 3900
-Wire Wire Line
-	6500 3900 6650 3900
 Connection ~ 6500 4200
 Wire Wire Line
 	6500 4200 6650 4200
@@ -437,34 +432,12 @@ Connection ~ 1400 3850
 Wire Wire Line
 	2400 3550 2200 3550
 Connection ~ 2400 3550
-Wire Wire Line
-	7050 3900 6950 3900
 Text HLabel 7050 3900 1    50   Input ~ 0
 5V
-$Comp
-L Device:Ferrite_Bead FB3
-U 1 1 5DFCD30D
-P 6800 3900
-F 0 "FB3" V 7050 3800 50  0000 L CNN
-F 1 "100Ohm@100MHz" V 6950 3800 50  0000 L CNN
-F 2 "Inductor_SMD:L_0603_1608Metric" V 6730 3900 50  0001 C CNN
-F 3 "~" H 6800 3900 50  0001 C CNN
-	1    6800 3900
-	0    -1   -1   0   
-$EndComp
 Text HLabel 7050 2600 3    50   Input ~ 0
 5V
-$Comp
-L Device:Ferrite_Bead FB2
-U 1 1 5DFD1FD3
-P 6800 2600
-F 0 "FB2" V 7050 2500 50  0000 L CNN
-F 1 "100Ohm@100MHz" V 6950 2500 50  0000 L CNN
-F 2 "Inductor_SMD:L_0603_1608Metric" V 6730 2600 50  0001 C CNN
-F 3 "~" H 6800 2600 50  0001 C CNN
-	1    6800 2600
-	0    -1   1    0   
-$EndComp
 Wire Wire Line
-	6950 2600 7050 2600
+	6500 3900 7050 3900
+Wire Wire Line
+	6500 2600 7050 2600
 $EndSCHEMATC

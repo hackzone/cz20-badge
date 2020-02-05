@@ -1,10 +1,9 @@
 EESchema Schematic File Version 4
-LIBS:cz-badge-hardware-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 3
+Sheet 2 5
 Title ""
 Date ""
 Rev ""
@@ -31,7 +30,7 @@ U 1 1 5DC5D8CF
 P 3500 1800
 F 0 "SW2" H 3500 2085 50  0000 C CNN
 F 1 "SW_Push" H 3500 1994 50  0000 C CNN
-F 2 "silicone_key_contact:silicone_key_contact" H 3500 2000 50  0001 C CNN
+F 2 "silicone_key_contact:silicone_key_contact_mirrored" H 3500 2000 50  0001 C CNN
 F 3 "~" H 3500 2000 50  0001 C CNN
 	1    3500 1800
 	1    0    0    -1  
@@ -75,7 +74,7 @@ U 1 1 5DC625C6
 P 3500 2500
 F 0 "SW6" H 3500 2785 50  0000 C CNN
 F 1 "SW_Push" H 3500 2694 50  0000 C CNN
-F 2 "silicone_key_contact:silicone_key_contact" H 3500 2700 50  0001 C CNN
+F 2 "silicone_key_contact:silicone_key_contact_mirrored" H 3500 2700 50  0001 C CNN
 F 3 "~" H 3500 2700 50  0001 C CNN
 	1    3500 2500
 	1    0    0    -1  
@@ -97,7 +96,7 @@ U 1 1 5DC625D2
 P 5700 2500
 F 0 "SW8" H 5700 2785 50  0000 C CNN
 F 1 "SW_Push" H 5700 2694 50  0000 C CNN
-F 2 "silicone_key_contact:silicone_key_contact" H 5700 2700 50  0001 C CNN
+F 2 "silicone_key_contact:silicone_key_contact_mirrored" H 5700 2700 50  0001 C CNN
 F 3 "~" H 5700 2700 50  0001 C CNN
 	1    5700 2500
 	1    0    0    -1  
@@ -119,7 +118,7 @@ U 1 1 5DC67D8A
 P 3500 3200
 F 0 "SW10" H 3500 3485 50  0000 C CNN
 F 1 "SW_Push" H 3500 3394 50  0000 C CNN
-F 2 "silicone_key_contact:silicone_key_contact" H 3500 3400 50  0001 C CNN
+F 2 "silicone_key_contact:silicone_key_contact_mirrored" H 3500 3400 50  0001 C CNN
 F 3 "~" H 3500 3400 50  0001 C CNN
 	1    3500 3200
 	1    0    0    -1  
@@ -141,7 +140,7 @@ U 1 1 5DC67D96
 P 5700 3200
 F 0 "SW12" H 5700 3485 50  0000 C CNN
 F 1 "SW_Push" H 5700 3394 50  0000 C CNN
-F 2 "silicone_key_contact:silicone_key_contact" H 5700 3400 50  0001 C CNN
+F 2 "silicone_key_contact:silicone_key_contact_mirrored" H 5700 3400 50  0001 C CNN
 F 3 "~" H 5700 3400 50  0001 C CNN
 	1    5700 3200
 	1    0    0    -1  
@@ -163,7 +162,7 @@ U 1 1 5DC67DA2
 P 3500 3900
 F 0 "SW14" H 3500 4185 50  0000 C CNN
 F 1 "SW_Push" H 3500 4094 50  0000 C CNN
-F 2 "silicone_key_contact:silicone_key_contact" H 3500 4100 50  0001 C CNN
+F 2 "silicone_key_contact:silicone_key_contact_mirrored" H 3500 4100 50  0001 C CNN
 F 3 "~" H 3500 4100 50  0001 C CNN
 	1    3500 3900
 	1    0    0    -1  
@@ -185,7 +184,7 @@ U 1 1 5DC67DAE
 P 5700 3900
 F 0 "SW16" H 5700 4185 50  0000 C CNN
 F 1 "SW_Push" H 5700 4094 50  0000 C CNN
-F 2 "silicone_key_contact:silicone_key_contact" H 5700 4100 50  0001 C CNN
+F 2 "silicone_key_contact:silicone_key_contact_mirrored" H 5700 4100 50  0001 C CNN
 F 3 "~" H 5700 4100 50  0001 C CNN
 	1    5700 3900
 	1    0    0    -1  
@@ -351,285 +350,6 @@ Wire Wire Line
 Connection ~ 4000 4150
 Wire Wire Line
 	4000 4150 4000 4550
-$Comp
-L LED:SK6812 D17
-U 1 1 5DC9E86D
-P 1600 5800
-F 0 "D17" H 1944 5846 50  0000 L CNN
-F 1 "SK6812" H 1944 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 1650 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 1700 5425 50  0001 L TNN
-	1    1600 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D18
-U 1 1 5DCA016C
-P 2200 5800
-F 0 "D18" H 2544 5846 50  0000 L CNN
-F 1 "SK6812" H 2544 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 2250 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 2300 5425 50  0001 L TNN
-	1    2200 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D19
-U 1 1 5DCA0D06
-P 2800 5800
-F 0 "D19" H 3144 5846 50  0000 L CNN
-F 1 "SK6812" H 3144 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 2850 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 2900 5425 50  0001 L TNN
-	1    2800 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D20
-U 1 1 5DCA1768
-P 3400 5800
-F 0 "D20" H 3744 5846 50  0000 L CNN
-F 1 "SK6812" H 3744 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 3450 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 3500 5425 50  0001 L TNN
-	1    3400 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D21
-U 1 1 5DCB6B58
-P 4000 5800
-F 0 "D21" H 4344 5846 50  0000 L CNN
-F 1 "SK6812" H 4344 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 4050 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 4100 5425 50  0001 L TNN
-	1    4000 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D22
-U 1 1 5DCB6B5E
-P 4600 5800
-F 0 "D22" H 4944 5846 50  0000 L CNN
-F 1 "SK6812" H 4944 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 4650 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 4700 5425 50  0001 L TNN
-	1    4600 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D23
-U 1 1 5DCB6B64
-P 5200 5800
-F 0 "D23" H 5544 5846 50  0000 L CNN
-F 1 "SK6812" H 5544 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 5250 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 5300 5425 50  0001 L TNN
-	1    5200 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D24
-U 1 1 5DCB6B6A
-P 5800 5800
-F 0 "D24" H 6144 5846 50  0000 L CNN
-F 1 "SK6812" H 6144 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 5850 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 5900 5425 50  0001 L TNN
-	1    5800 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D25
-U 1 1 5DCBA596
-P 6400 5800
-F 0 "D25" H 6744 5846 50  0000 L CNN
-F 1 "SK6812" H 6744 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 6450 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 6500 5425 50  0001 L TNN
-	1    6400 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D26
-U 1 1 5DCBA59C
-P 7000 5800
-F 0 "D26" H 7344 5846 50  0000 L CNN
-F 1 "SK6812" H 7344 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 7050 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 7100 5425 50  0001 L TNN
-	1    7000 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D27
-U 1 1 5DCBA5A2
-P 7600 5800
-F 0 "D27" H 7944 5846 50  0000 L CNN
-F 1 "SK6812" H 7944 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 7650 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 7700 5425 50  0001 L TNN
-	1    7600 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D28
-U 1 1 5DCBA5A8
-P 8200 5800
-F 0 "D28" H 8544 5846 50  0000 L CNN
-F 1 "SK6812" H 8544 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 8250 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 8300 5425 50  0001 L TNN
-	1    8200 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D29
-U 1 1 5DCBF05A
-P 8800 5800
-F 0 "D29" H 9144 5846 50  0000 L CNN
-F 1 "SK6812" H 9144 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 8850 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 8900 5425 50  0001 L TNN
-	1    8800 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D30
-U 1 1 5DCBF060
-P 9400 5800
-F 0 "D30" H 9744 5846 50  0000 L CNN
-F 1 "SK6812" H 9744 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 9450 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 9500 5425 50  0001 L TNN
-	1    9400 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D31
-U 1 1 5DCBF066
-P 10000 5800
-F 0 "D31" H 10344 5846 50  0000 L CNN
-F 1 "SK6812" H 10344 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 10050 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 10100 5425 50  0001 L TNN
-	1    10000 5800
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED:SK6812 D32
-U 1 1 5DCBF06C
-P 10600 5800
-F 0 "D32" H 10944 5846 50  0000 L CNN
-F 1 "SK6812" H 10944 5755 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 10650 5500 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 10700 5425 50  0001 L TNN
-	1    10600 5800
-	1    0    0    -1  
-$EndComp
-NoConn ~ 10900 5800
-Wire Wire Line
-	10600 6100 10000 6100
-Wire Wire Line
-	10000 6100 9400 6100
-Connection ~ 10000 6100
-Wire Wire Line
-	9400 6100 8800 6100
-Connection ~ 9400 6100
-Wire Wire Line
-	8800 6100 8200 6100
-Connection ~ 8800 6100
-Wire Wire Line
-	8200 6100 7600 6100
-Connection ~ 8200 6100
-Wire Wire Line
-	7600 6100 7000 6100
-Connection ~ 7600 6100
-Wire Wire Line
-	7000 6100 6400 6100
-Connection ~ 7000 6100
-Wire Wire Line
-	6400 6100 5800 6100
-Connection ~ 6400 6100
-Wire Wire Line
-	5800 6100 5200 6100
-Connection ~ 5800 6100
-Wire Wire Line
-	5200 6100 4600 6100
-Connection ~ 5200 6100
-Wire Wire Line
-	4600 6100 4000 6100
-Connection ~ 4600 6100
-Wire Wire Line
-	4000 6100 3400 6100
-Connection ~ 4000 6100
-Wire Wire Line
-	3400 6100 2800 6100
-Connection ~ 3400 6100
-Wire Wire Line
-	2800 6100 2200 6100
-Connection ~ 2800 6100
-Wire Wire Line
-	2200 6100 1600 6100
-Connection ~ 2200 6100
-Wire Wire Line
-	10600 5500 10000 5500
-Wire Wire Line
-	10000 5500 9400 5500
-Connection ~ 10000 5500
-Wire Wire Line
-	9400 5500 8800 5500
-Connection ~ 9400 5500
-Wire Wire Line
-	8800 5500 8200 5500
-Connection ~ 8800 5500
-Wire Wire Line
-	8200 5500 7600 5500
-Connection ~ 8200 5500
-Wire Wire Line
-	7600 5500 7000 5500
-Connection ~ 7600 5500
-Wire Wire Line
-	7000 5500 6400 5500
-Connection ~ 7000 5500
-Wire Wire Line
-	6400 5500 5800 5500
-Connection ~ 6400 5500
-Wire Wire Line
-	5800 5500 5200 5500
-Connection ~ 5800 5500
-Wire Wire Line
-	5200 5500 4600 5500
-Connection ~ 5200 5500
-Wire Wire Line
-	4600 5500 4000 5500
-Connection ~ 4600 5500
-Wire Wire Line
-	4000 5500 3400 5500
-Connection ~ 4000 5500
-Wire Wire Line
-	3400 5500 2800 5500
-Connection ~ 3400 5500
-Wire Wire Line
-	2800 5500 2200 5500
-Connection ~ 2800 5500
-Wire Wire Line
-	2200 5500 1600 5500
-Connection ~ 2200 5500
-Wire Wire Line
-	1600 5500 1050 5500
-Connection ~ 1600 5500
-Wire Wire Line
-	1300 5800 1050 5800
-Wire Wire Line
-	1600 6100 1050 6100
-Connection ~ 1600 6100
-Text HLabel 1050 5500 0    50   Input ~ 0
-5V
-Text HLabel 1050 5800 0    50   Input ~ 0
-LEDS_IN
-Text HLabel 1050 6100 0    50   Input ~ 0
-GND
 $Comp
 L Diode:1N4148W D1
 U 1 1 5DD564D3
