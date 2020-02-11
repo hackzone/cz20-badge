@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 5
+Sheet 1 6
 Title ""
 Date ""
 Rev ""
@@ -223,8 +223,6 @@ Wire Wire Line
 	9700 6200 9700 6250
 Text Notes 8850 4750 0    98   ~ 0
 Voltage sensing
-Wire Notes Line
-	7650 4600 7650 6550
 Wire Wire Line
 	9850 5500 9850 5450
 Wire Notes Line
@@ -234,9 +232,9 @@ Wire Notes Line
 Text Notes 9400 5050 0    98   ~ 0
 (5V > 2.5V dividers)
 Wire Notes Line
-	7650 4600 11200 4600
+	8650 4600 11200 4600
 Text GLabel 2300 1550 1    50   UnSpc ~ 0
-5V_USB
+VCC
 Text GLabel 2300 2000 3    50   UnSpc ~ 0
 GND
 Text GLabel 5600 5150 0    50   Input ~ 0
@@ -360,33 +358,19 @@ F 3 "http://katalog.we-online.de/em/datasheet/693072010801.pdf" H 5000 1450 50  
 	1    5000 1450
 	1    0    0    -1  
 $EndComp
-Text GLabel 3900 1550 0    50   Input ~ 0
+Text GLabel 3350 1550 0    50   Input ~ 0
 SD_SCK
-Wire Wire Line
-	3900 1550 4100 1550
-Text GLabel 3900 1750 0    50   Input ~ 0
+Text GLabel 3350 1750 0    50   Input ~ 0
 SD_MISO
-Text GLabel 3900 1350 0    50   Input ~ 0
+Text GLabel 3350 1350 0    50   Input ~ 0
 SD_MOSI
-Wire Wire Line
-	3900 1350 4100 1350
-Wire Wire Line
-	3900 1750 4100 1750
-Text GLabel 3850 1450 0    50   UnSpc ~ 0
+Text GLabel 3300 1450 0    50   UnSpc ~ 0
 3V3
-Wire Wire Line
-	3850 1450 4100 1450
-Text GLabel 3850 1650 0    50   UnSpc ~ 0
+Text GLabel 3300 1650 0    50   UnSpc ~ 0
 GND
-Wire Wire Line
-	3850 1650 4100 1650
-NoConn ~ 4100 1850
-NoConn ~ 4100 1150
-Wire Wire Line
-	3900 1250 4100 1250
 Text GLabel 3100 5250 2    50   Input ~ 0
 SD_CS
-Text GLabel 3900 1250 0    50   Input ~ 0
+Text GLabel 3350 1250 0    50   Input ~ 0
 SD_CS
 Text GLabel 5800 2150 3    50   UnSpc ~ 0
 GND
@@ -403,30 +387,6 @@ Wire Wire Line
 Connection ~ 3650 5350
 Wire Wire Line
 	3650 5350 3800 5350
-$Comp
-L Regulator_Linear:AMS1117-3.3 U3
-U 1 1 5DD61A5F
-P 7900 3150
-F 0 "U3" H 7900 3392 50  0000 C CNN
-F 1 "AMS1117-3.3" H 7900 3301 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:SOT-223-3_TabPin2" H 7900 3350 50  0001 C CNN
-F 3 "http://www.advanced-monolithic.com/pdf/ds1117.pdf" H 8000 2900 50  0001 C CNN
-F 4 "C6186" H 7900 3150 50  0001 C CNN "LCSC"
-	1    7900 3150
-	1    0    0    -1  
-$EndComp
-Text GLabel 7450 3150 0    50   UnSpc ~ 0
-5V_USB
-Wire Wire Line
-	7450 3150 7550 3150
-Text GLabel 8350 3150 2    50   UnSpc ~ 0
-3V3
-Wire Wire Line
-	8350 3150 8250 3150
-Text GLabel 7900 3550 3    50   UnSpc ~ 0
-GND
-Wire Wire Line
-	7900 3550 7900 3500
 $Sheet
 S 5050 3100 1050 800 
 U 5DD7D9A9
@@ -461,7 +421,7 @@ Wire Wire Line
 Wire Wire Line
 	4900 3400 5050 3400
 Text GLabel 6250 3350 2    50   UnSpc ~ 0
-5V_USB
+VCC
 Wire Wire Line
 	6250 3350 6100 3350
 Text GLabel 6250 3200 2    50   UnSpc ~ 0
@@ -547,8 +507,6 @@ Text GLabel 10100 2800 0    50   BiDi ~ 0
 USB_DP
 Text GLabel 10750 800  1    50   UnSpc ~ 0
 GND
-Wire Notes Line
-	8650 2750 8650 4600
 $Comp
 L Connector:Conn_01x01_Male J3
 U 1 1 5DD96E41
@@ -594,51 +552,6 @@ Text GLabel 1950 3550 0    50   Input ~ 0
 I2C_SDA
 Wire Notes Line
 	8650 2750 450  2750
-$Comp
-L Device:C C?
-U 1 1 5DF5609A
-P 8250 3350
-AR Path="/5DC753C3/5DF5609A" Ref="C?"  Part="1" 
-AR Path="/5DF5609A" Ref="C16"  Part="1" 
-F 0 "C16" H 8365 3396 50  0000 L CNN
-F 1 "100uF" H 8365 3305 50  0000 L CNN
-F 2 "Capacitor_SMD:C_Elec_5x5.4" H 8288 3200 50  0001 C CNN
-F 3 "~" H 8250 3350 50  0001 C CNN
-F 4 "C134722" H 8250 3350 50  0001 C CNN "LCSC"
-	1    8250 3350
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7900 3500 8250 3500
-Connection ~ 7900 3500
-Wire Wire Line
-	7900 3500 7900 3450
-Wire Wire Line
-	8250 3200 8250 3150
-Connection ~ 8250 3150
-Wire Wire Line
-	8250 3150 8200 3150
-$Comp
-L Device:C C?
-U 1 1 5DF61103
-P 7550 3350
-AR Path="/5DC753C3/5DF61103" Ref="C?"  Part="1" 
-AR Path="/5DF61103" Ref="C15"  Part="1" 
-F 0 "C15" H 7665 3396 50  0000 L CNN
-F 1 "100uF" H 7665 3305 50  0000 L CNN
-F 2 "Capacitor_SMD:C_Elec_5x5.4" H 7588 3200 50  0001 C CNN
-F 3 "~" H 7550 3350 50  0001 C CNN
-F 4 "C134722" H 7550 3350 50  0001 C CNN "LCSC"
-	1    7550 3350
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	7550 3200 7550 3150
-Connection ~ 7550 3150
-Wire Wire Line
-	7550 3150 7600 3150
-Wire Wire Line
-	7550 3500 7900 3500
 $Comp
 L Device:C C?
 U 1 1 5DFEC4AA
@@ -771,9 +684,9 @@ ESP_EN
 Wire Wire Line
 	5650 4150 5700 4150
 Text GLabel 7450 1400 0    50   UnSpc ~ 0
-5V_USB
+VCC
 Text GLabel 7450 1200 0    50   UnSpc ~ 0
-5V_USB
+VCC
 Wire Wire Line
 	7550 1200 7450 1200
 Wire Wire Line
@@ -1191,7 +1104,7 @@ U 1 1 5E4457C1
 P 4450 4000
 F 0 "J7" H 4368 3575 50  0000 C CNN
 F 1 "Conn_01x04" H 4368 3666 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 4450 4000 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Horizontal" H 4450 4000 50  0001 C CNN
 F 3 "~" H 4450 4000 50  0001 C CNN
 	1    4450 4000
 	-1   0    0    1   
@@ -1212,6 +1125,204 @@ Wire Wire Line
 	4750 3700 4750 3900
 Wire Wire Line
 	4750 3900 4650 3900
+$Comp
+L Device:R R?
+U 1 1 5E48C29E
+P 3450 3450
+AR Path="/5DC753C3/5E48C29E" Ref="R?"  Part="1" 
+AR Path="/5E48C29E" Ref="R5"  Part="1" 
+F 0 "R5" V 3350 3450 50  0000 C CNN
+F 1 "1k2" V 3450 3450 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3380 3450 50  0001 C CNN
+F 3 "~" H 3450 3450 50  0001 C CNN
+F 4 "C22765" H 3450 3450 50  0001 C CNN "LCSC"
+	1    3450 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E48FC2B
+P 3700 3450
+AR Path="/5DC753C3/5E48FC2B" Ref="R?"  Part="1" 
+AR Path="/5E48FC2B" Ref="R9"  Part="1" 
+F 0 "R9" V 3600 3450 50  0000 C CNN
+F 1 "1k2" V 3700 3450 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3630 3450 50  0001 C CNN
+F 3 "~" H 3700 3450 50  0001 C CNN
+F 4 "C22765" H 3700 3450 50  0001 C CNN "LCSC"
+	1    3700 3450
+	1    0    0    -1  
+$EndComp
+Text GLabel 3550 3200 1    50   UnSpc ~ 0
+3V3
+Wire Wire Line
+	3550 3200 3550 3300
+Wire Wire Line
+	3550 3300 3450 3300
+Wire Wire Line
+	3550 3300 3700 3300
+Connection ~ 3550 3300
+Text GLabel 3350 3700 0    50   Input ~ 0
+I2C_SCL
+Wire Wire Line
+	3350 3700 3450 3700
+Wire Wire Line
+	3450 3700 3450 3600
+Text GLabel 3800 3700 2    50   Input ~ 0
+I2C_SDA
+Wire Wire Line
+	3800 3700 3700 3700
+Wire Wire Line
+	3700 3700 3700 3600
+$Comp
+L Device:R R?
+U 1 1 5E4C0F2B
+P 3500 1000
+AR Path="/5DC753C3/5E4C0F2B" Ref="R?"  Part="1" 
+AR Path="/5E4C0F2B" Ref="R10"  Part="1" 
+F 0 "R10" V 3400 1000 50  0000 C CNN
+F 1 "10k" V 3500 1000 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3430 1000 50  0001 C CNN
+F 3 "~" H 3500 1000 50  0001 C CNN
+F 4 "C25804" H 3500 1000 50  0001 C CNN "LCSC"
+	1    3500 1000
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3350 1250 3800 1250
+Wire Wire Line
+	3350 1350 3700 1350
+Wire Wire Line
+	3300 1450 4100 1450
+Wire Wire Line
+	3350 1550 3600 1550
+Wire Wire Line
+	3300 1650 4100 1650
+Wire Wire Line
+	3350 1750 3500 1750
+$Comp
+L Device:R R?
+U 1 1 5E5136EE
+P 3600 1000
+AR Path="/5DC753C3/5E5136EE" Ref="R?"  Part="1" 
+AR Path="/5E5136EE" Ref="R29"  Part="1" 
+F 0 "R29" V 3500 1000 50  0000 C CNN
+F 1 "10k" V 3600 1000 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3530 1000 50  0001 C CNN
+F 3 "~" H 3600 1000 50  0001 C CNN
+F 4 "C25804" H 3600 1000 50  0001 C CNN "LCSC"
+	1    3600 1000
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E5138F1
+P 3700 1000
+AR Path="/5DC753C3/5E5138F1" Ref="R?"  Part="1" 
+AR Path="/5E5138F1" Ref="R43"  Part="1" 
+F 0 "R43" V 3600 1000 50  0000 C CNN
+F 1 "10k" V 3700 1000 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3630 1000 50  0001 C CNN
+F 3 "~" H 3700 1000 50  0001 C CNN
+F 4 "C25804" H 3700 1000 50  0001 C CNN "LCSC"
+	1    3700 1000
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E513A66
+P 3800 1000
+AR Path="/5DC753C3/5E513A66" Ref="R?"  Part="1" 
+AR Path="/5E513A66" Ref="R44"  Part="1" 
+F 0 "R44" V 3700 1000 50  0000 C CNN
+F 1 "10k" V 3800 1000 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3730 1000 50  0001 C CNN
+F 3 "~" H 3800 1000 50  0001 C CNN
+F 4 "C25804" H 3800 1000 50  0001 C CNN "LCSC"
+	1    3800 1000
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3800 1150 3800 1250
+Connection ~ 3800 1250
+Wire Wire Line
+	3800 1250 4100 1250
+Wire Wire Line
+	3700 1150 3700 1350
+Connection ~ 3700 1350
+Wire Wire Line
+	3700 1350 4100 1350
+Wire Wire Line
+	3600 1150 3600 1550
+Connection ~ 3600 1550
+Wire Wire Line
+	3600 1550 4100 1550
+Wire Wire Line
+	3500 1150 3500 1750
+Connection ~ 3500 1750
+Wire Wire Line
+	3500 1750 4100 1750
+Text GLabel 3300 850  0    50   UnSpc ~ 0
+3V3
+Wire Wire Line
+	3300 850  3500 850 
+Connection ~ 3500 850 
+Wire Wire Line
+	3500 850  3600 850 
+Connection ~ 3600 850 
+Wire Wire Line
+	3600 850  3700 850 
+Connection ~ 3700 850 
+Wire Wire Line
+	3700 850  3800 850 
+$Comp
+L Device:R R?
+U 1 1 5E5B2814
+P 3900 1000
+AR Path="/5DC753C3/5E5B2814" Ref="R?"  Part="1" 
+AR Path="/5E5B2814" Ref="R45"  Part="1" 
+F 0 "R45" V 3800 1000 50  0000 C CNN
+F 1 "10k" V 3900 1000 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3830 1000 50  0001 C CNN
+F 3 "~" H 3900 1000 50  0001 C CNN
+F 4 "C25804" H 3900 1000 50  0001 C CNN "LCSC"
+	1    3900 1000
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E5B2945
+P 4000 1000
+AR Path="/5DC753C3/5E5B2945" Ref="R?"  Part="1" 
+AR Path="/5E5B2945" Ref="R46"  Part="1" 
+F 0 "R46" V 3900 1000 50  0000 C CNN
+F 1 "10k" V 4000 1000 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3930 1000 50  0001 C CNN
+F 3 "~" H 4000 1000 50  0001 C CNN
+F 4 "C25804" H 4000 1000 50  0001 C CNN "LCSC"
+	1    4000 1000
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3800 850  3900 850 
+Connection ~ 3800 850 
+Connection ~ 3900 850 
+Wire Wire Line
+	3900 850  4000 850 
+Wire Wire Line
+	4000 1150 4100 1150
+Wire Wire Line
+	3900 1150 3900 1850
+Wire Wire Line
+	3900 1850 4100 1850
+Wire Notes Line
+	8650 2750 8650 6550
+$Sheet
+S 7250 4900 1050 650 
+U 5E464BBE
+F0 "Power" 50
+F1 "Power.sch" 50
+$EndSheet
 Wire Bus Line
 	6650 5800 6650 6250
 Wire Bus Line

@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 4 5
+Sheet 4 6
 Title ""
 Date ""
 Rev ""
@@ -370,7 +370,7 @@ F 4 "C8670" H 1450 3400 50  0001 C CNN "LCSC"
 	-1   0    0    1   
 $EndComp
 Text GLabel 1150 3100 0    50   UnSpc ~ 0
-5V_USB
+VCC
 Wire Wire Line
 	1150 3100 1350 3100
 Wire Wire Line
@@ -431,7 +431,7 @@ Wire Wire Line
 Wire Wire Line
 	2500 3400 2500 4050
 Text GLabel 1000 3950 0    50   UnSpc ~ 0
-5V_USB
+VCC
 Wire Wire Line
 	1000 3950 1200 3950
 Wire Wire Line
@@ -490,7 +490,7 @@ Wire Wire Line
 Wire Wire Line
 	2250 4350 2250 4600
 Text GLabel 1150 4900 0    50   UnSpc ~ 0
-5V_USB
+VCC
 Wire Wire Line
 	1150 4900 1350 4900
 Wire Wire Line
@@ -547,7 +547,7 @@ Wire Wire Line
 Wire Wire Line
 	1650 5200 1900 5200
 Text GLabel 1000 5750 0    50   UnSpc ~ 0
-5V_USB
+VCC
 Wire Wire Line
 	1000 5750 1200 5750
 Wire Wire Line
