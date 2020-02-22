@@ -1,4 +1,5 @@
 (fp_lib_table
   (lib (name silicone_key_contact)(type KiCad)(uri ${KIPRJMOD}/libs/silicone_key_contact.pretty)(options "")(descr ""))
   (lib (name LiPoHolder)(type KiCad)(uri ${KIPRJMOD}/libs/LiPoHolder.pretty)(options "")(descr ""))
+  (lib (name esp32-wrover)(type KiCad)(uri ${KIPRJMOD}/libs/esp32-wrover.pretty)(options "")(descr ""))
 )

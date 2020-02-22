@@ -249,7 +249,7 @@ AR Path="/5DC753C3/5DC9DC17" Ref="U?"  Part="1"
 AR Path="/5DC9DC17" Ref="U2"  Part="1" 
 F 0 "U2" H 1300 4700 50  0000 C CNN
 F 1 "ESP32-WROOM-32D" V 2100 5950 50  0000 C CNN
-F 2 "RF_Module:ESP32-WROOM-32" H 2000 4450 50  0001 C CNN
+F 2 "esp32-wrover:XCVR_ESP32-WROVER" H 2000 4450 50  0001 C CNN
 F 3 "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32d_esp32-wroom-32u_datasheet_en.pdf" H 1700 6000 50  0001 C CNN
 	1    2000 5950
 	1    0    0    -1  
@@ -552,34 +552,10 @@ Text GLabel 1950 3550 0    50   Input ~ 0
 I2C_SDA
 Wire Notes Line
 	8650 2750 450  2750
-$Comp
-L Device:C C?
-U 1 1 5DFEC4AA
-P 2300 1750
-AR Path="/5DC753C3/5DFEC4AA" Ref="C?"  Part="1" 
-AR Path="/5DFEC4AA" Ref="C17"  Part="1" 
-F 0 "C17" H 2415 1796 50  0000 L CNN
-F 1 "100uF" H 2415 1705 50  0000 L CNN
-F 2 "Capacitor_SMD:C_Elec_5x5.4" H 2338 1600 50  0001 C CNN
-F 3 "~" H 2300 1750 50  0001 C CNN
-F 4 "C134722" H 2300 1750 50  0001 C CNN "LCSC"
-	1    2300 1750
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2300 2000 2300 1900
-Wire Wire Line
-	2300 1550 2300 1600
-Wire Wire Line
-	2300 1700 2300 1600
 Wire Wire Line
 	2100 1700 2300 1700
-Connection ~ 2300 1600
-Wire Wire Line
-	2300 1800 2300 1900
 Wire Wire Line
 	2100 1800 2300 1800
-Connection ~ 2300 1900
 $Comp
 L Connector:USB_C_Receptacle J1
 U 1 1 5EA1AFA4
@@ -667,14 +643,14 @@ Text GLabel 5650 4550 0    50   Input ~ 0
 I2C_SDA
 Wire Wire Line
 	5650 4550 5700 4550
-Text GLabel 5650 4750 0    50   Input ~ 0
+Text GLabel 5150 4750 0    50   Input ~ 0
 ESP_TX
 Wire Wire Line
-	5650 4750 5700 4750
-Text GLabel 5650 4650 0    50   Output ~ 0
+	5150 4750 5200 4750
+Text GLabel 5150 4650 0    50   Output ~ 0
 ESP_RX
 Wire Wire Line
-	5650 4650 5700 4650
+	5150 4650 5200 4650
 Text GLabel 5650 4250 0    50   Output ~ 0
 ESP_FLASH
 Wire Wire Line
@@ -1323,6 +1299,76 @@ U 5E464BBE
 F0 "Power" 50
 F1 "Power.sch" 50
 $EndSheet
+Text GLabel 3100 5850 2    50   Output ~ 0
+~CHARGE_ENABLE
+$Comp
+L Connector:TestPoint TP5
+U 1 1 5E4C8039
+P 4750 4650
+F 0 "TP5" V 4945 4722 50  0000 C CNN
+F 1 "TestPoint" V 4854 4722 50  0000 C CNN
+F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 4950 4650 50  0001 C CNN
+F 3 "~" H 4950 4650 50  0001 C CNN
+	1    4750 4650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:TestPoint TP6
+U 1 1 5E4C9456
+P 4750 4750
+F 0 "TP6" V 4945 4822 50  0000 C CNN
+F 1 "TestPoint" V 4854 4822 50  0000 C CNN
+F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 4950 4750 50  0001 C CNN
+F 3 "~" H 4950 4750 50  0001 C CNN
+	1    4750 4750
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4750 4650 4750 4550
+Wire Wire Line
+	4750 4550 5200 4550
+Wire Wire Line
+	5200 4550 5200 4650
+Connection ~ 5200 4650
+Wire Wire Line
+	5200 4650 5700 4650
+Wire Wire Line
+	4750 4750 4750 4850
+Wire Wire Line
+	4750 4850 5200 4850
+Wire Wire Line
+	5200 4850 5200 4750
+Connection ~ 5200 4750
+Wire Wire Line
+	5200 4750 5700 4750
+Wire Wire Line
+	2300 1550 2300 1600
+Wire Wire Line
+	2300 1800 2300 1950
+$Comp
+L Device:CP C17
+U 1 1 5E510BDD
+P 2450 1750
+F 0 "C17" H 2568 1796 50  0000 L CNN
+F 1 "100uF" H 2568 1705 50  0000 L CNN
+F 2 "Capacitor_SMD:CP_Elec_5x5.4" H 2488 1600 50  0001 C CNN
+F 3 "~" H 2450 1750 50  0001 C CNN
+F 4 "C134722" H 2450 1750 50  0001 C CNN "LCSC"
+	1    2450 1750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2450 1900 2450 1950
+Wire Wire Line
+	2450 1950 2300 1950
+Connection ~ 2300 1950
+Wire Wire Line
+	2300 1950 2300 2000
+Wire Wire Line
+	2450 1600 2300 1600
+Connection ~ 2300 1600
+Wire Wire Line
+	2300 1600 2300 1700
 Wire Bus Line
 	6650 5800 6650 6250
 Wire Bus Line
@@ -1333,6 +1379,4 @@ Wire Bus Line
 	6700 6450 6700 7100
 Wire Bus Line
 	5500 6250 5500 7300
-Text GLabel 3100 5850 2    50   Output ~ 0
-~CHARGE_ENABLE
 $EndSCHEMATC
