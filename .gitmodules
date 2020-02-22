@@ -1,3 +1,6 @@
 [submodule "ESP32-firmware"]
 	path = firmware-ESP32
 	url = git@github.com:badgeteam/ESP32-platform-firmware.git
+[submodule "firmware-STM32/tinyusb"]
+	path = firmware-STM32/tinyusb/
+	url = git@github.com:hathach/tinyusb.git
