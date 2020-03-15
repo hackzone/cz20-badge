@@ -526,7 +526,7 @@ F 2 "Package_TO_SOT_SMD:SOT-23" H 5350 4475 50  0001 L CIN
 F 3 "http://www.aosmd.com/pdfs/datasheet/ao3400.pdf" H 5150 4550 50  0001 L CNN
 F 4 "C20917" H 5150 4550 50  0001 C CNN "LCSC"
 	1    5150 4550
-	-1   0    0    1   
+	-1   0    0    -1  
 $EndComp
 $Comp
 L Regulator_Linear:MIC5504-3.3YM5 U8
