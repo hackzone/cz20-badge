@@ -1,10 +1,9 @@
 EESchema Schematic File Version 4
-LIBS:cz-badge-hardware-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 4 6
+Sheet 6 6
 Title ""
 Date ""
 Rev ""
@@ -276,10 +275,10 @@ AR Path="/5DC753C3/5E4109CF" Ref="R?"  Part="1"
 AR Path="/5E4109CF" Ref="R?"  Part="1" 
 AR Path="/5E3BA64A/5E4109CF" Ref="R32"  Part="1" 
 F 0 "R32" V 6193 4400 50  0000 C CNN
-F 1 "10k" V 6284 4400 50  0000 C CNN
+F 1 "1.5K" V 6284 4400 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 6330 4400 50  0001 C CNN
 F 3 "~" H 6400 4400 50  0001 C CNN
-F 4 "C25804" H 6400 4400 50  0001 C CNN "LCSC"
+F 4 "" H 6400 4400 50  0001 C CNN "LCSC"
 	1    6400 4400
 	1    0    0    -1  
 $EndComp
