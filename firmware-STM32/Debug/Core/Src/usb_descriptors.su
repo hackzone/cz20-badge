@@ -1,4 +1,0 @@
-usb_descriptors.c:67:17:tud_descriptor_device_cb	4	static
-usb_descriptors.c:86:17:tud_hid_descriptor_report_cb	4	static
-usb_descriptors.c:159:17:tud_descriptor_configuration_cb	16	static
-usb_descriptors.c:194:17:tud_descriptor_string_cb	24	static

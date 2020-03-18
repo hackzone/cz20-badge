@@ -1,7 +1,0 @@
-msc_disk.c:121:6:tud_msc_inquiry_cb	64	static
-msc_disk.c:136:6:tud_msc_test_unit_ready_cb	16	static
-msc_disk.c:145:6:tud_msc_capacity_cb	24	static
-msc_disk.c:156:6:tud_msc_start_stop_cb	16	static
-msc_disk.c:177:9:tud_msc_read10_cb	32	static
-msc_disk.c:189:9:tud_msc_write10_cb	32	static
-msc_disk.c:206:9:tud_msc_scsi_cb	40	static

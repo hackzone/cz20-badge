@@ -1,3 +1,0 @@
-led_driver.c:16:6:init_led	16	static
-led_driver.c:24:6:handle_led	4	static
-led_driver.c:28:9:getOutput_led	24	static
