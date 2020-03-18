@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:cz-badge-hardware-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -1435,6 +1434,10 @@ Text Notes 4350 5650 0    50   ~ 0
 Hides bootloader output when driven LOW
 Wire Wire Line
 	2600 5350 3800 5350
+Text GLabel 3100 5550 2    50   Input ~ 0
+TOUCH4
+Text GLabel 3100 5450 2    50   Input ~ 0
+TOUCH5
 Wire Bus Line
 	7000 4650 7000 5100
 Wire Bus Line
@@ -1445,8 +1448,4 @@ Wire Bus Line
 	8550 3400 8550 5300
 Wire Bus Line
 	7000 5100 7000 6150
-Text GLabel 3100 5550 2    50   Input ~ 0
-TOUCH4
-Text GLabel 3100 5450 2    50   Input ~ 0
-TOUCH5
 $EndSCHEMATC
