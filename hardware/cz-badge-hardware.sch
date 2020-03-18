@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:cz-badge-hardware-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -67,12 +68,6 @@ Wire Wire Line
 	3100 4850 2600 4850
 Wire Wire Line
 	2600 5050 3100 5050
-Text Notes 4350 5650 0    50   ~ 0
-Hides bootloader output when driven LOW
-Text Notes 4350 5250 0    50   ~ 0
-Changes SDIO timing when driven LOW
-Text Notes 4350 5000 0    50   ~ 0
-Enables serial bootloader when\nESP_FLASH is driven LOW
 $Comp
 L Device:C C?
 U 1 1 5DC9DC47
@@ -119,22 +114,20 @@ NoConn ~ 1400 6150
 NoConn ~ 1400 6250
 NoConn ~ 1400 6350
 NoConn ~ 1400 6450
-Text GLabel 3100 6450 2    50   Input ~ 0
+Text GLabel 900  4950 0    50   Input ~ 0
 VUSB_SENSE
-Text GLabel 3100 6550 2    50   Input ~ 0
+Text GLabel 900  5050 0    50   Input ~ 0
 VBAT_SENSE
 Wire Wire Line
 	3100 7050 2600 7050
 Wire Wire Line
-	2600 4950 3800 4950
+	2600 4950 3600 4950
 Wire Notes Line
 	2550 5650 4350 5650
 Wire Notes Line
 	4350 5650 4350 5600
 Wire Notes Line
 	4350 5250 2650 5250
-Text Notes 4350 5400 0    50   ~ 0
-Sets VDD_SDIO to 1.8V when driven HIGH
 $Comp
 L Device:R R?
 U 1 1 5DC9DC6D
@@ -153,8 +146,6 @@ Text GLabel 4150 5350 2    50   UnSpc ~ 0
 GND
 Wire Wire Line
 	4150 5350 4100 5350
-Wire Wire Line
-	2600 5350 3650 5350
 Text GLabel 9600 5850 0    50   Output ~ 0
 VUSB_SENSE
 Text GLabel 9850 5450 1    50   UnSpc ~ 0
@@ -227,8 +218,6 @@ Wire Wire Line
 	9850 5500 9850 5450
 Wire Notes Line
 	6050 450  6050 2750
-Wire Notes Line
-	7000 6550 7000 2750
 Text Notes 9400 5050 0    98   ~ 0
 (5V > 2.5V dividers)
 Wire Notes Line
@@ -237,8 +226,6 @@ Text GLabel 2300 1550 1    50   UnSpc ~ 0
 VCC
 Text GLabel 2300 2000 3    50   UnSpc ~ 0
 GND
-Text GLabel 5600 5150 0    50   Input ~ 0
-ROW1
 Wire Wire Line
 	3100 6050 2600 6050
 $Comp
@@ -254,16 +241,10 @@ F 3 "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32d
 	1    2000 5950
 	1    0    0    -1  
 $EndComp
-Text GLabel 5600 5250 0    50   Input ~ 0
-ROW2
 Wire Wire Line
 	3100 6150 2600 6150
-Text GLabel 5600 5350 0    50   Input ~ 0
-ROW3
 Wire Wire Line
 	3100 6250 2600 6250
-Text GLabel 5600 5450 0    50   Input ~ 0
-ROW4
 Wire Wire Line
 	3100 6350 2600 6350
 Text GLabel 1200 1100 0    50   Input ~ 0
@@ -298,18 +279,12 @@ Text GLabel 1200 1800 0    50   Input ~ 0
 COL4
 Wire Wire Line
 	1200 1800 1300 1800
-Text GLabel 6550 5350 2    50   Input ~ 0
-COL3
 Wire Wire Line
 	900  5050 1400 5050
 Wire Wire Line
 	900  4950 1400 4950
-Text GLabel 6550 5150 2    50   Input ~ 0
-COL1
 Wire Wire Line
 	3100 5750 2600 5750
-Text GLabel 6550 5250 2    50   Input ~ 0
-COL2
 Wire Wire Line
 	3100 5850 2600 5850
 Text GLabel 3000 4550 1    50   Input ~ 0
@@ -331,7 +306,7 @@ Text GLabel 3100 5750 2    50   Input ~ 0
 I2S_BCK
 Wire Wire Line
 	3100 5150 2600 5150
-Text GLabel 3100 6650 2    50   Input ~ 0
+Text GLabel 3100 6850 2    50   Input ~ 0
 TOUCH1
 Wire Wire Line
 	3100 5450 2600 5450
@@ -374,33 +349,24 @@ Text GLabel 3350 1250 0    50   Input ~ 0
 SD_CS
 Text GLabel 5800 2150 3    50   UnSpc ~ 0
 GND
-Text GLabel 3100 5450 2    50   Input ~ 0
+Text GLabel 3100 6450 2    50   Input ~ 0
 I2C_SCL
-Text GLabel 3100 5550 2    50   Input ~ 0
+Text GLabel 3100 6550 2    50   Input ~ 0
 I2C_SDA
-Text GLabel 4150 5450 2    50   Input ~ 0
-LEDS_IN
-Wire Wire Line
-	4150 5450 3650 5450
-Wire Wire Line
-	3650 5450 3650 5350
-Connection ~ 3650 5350
-Wire Wire Line
-	3650 5350 3800 5350
 $Sheet
-S 5050 3100 1050 800 
+S 4300 2900 1050 800 
 U 5DD7D9A9
 F0 "Audio" 50
 F1 "audio.sch" 50
-F2 "I2S_BCK" I L 5050 3200 50 
-F3 "I2S_WS" I L 5050 3300 50 
-F4 "I2S_DATA" I L 5050 3400 50 
-F5 "GND" I R 6100 3200 50 
-F6 "5V" I R 6100 3350 50 
-F7 "R-" I R 6100 3800 50 
-F8 "R+" I R 6100 3700 50 
-F9 "L+" I L 5050 3700 50 
-F10 "L-" I L 5050 3800 50 
+F2 "I2S_BCK" I L 4300 3000 50 
+F3 "I2S_WS" I L 4300 3100 50 
+F4 "I2S_DATA" I L 4300 3200 50 
+F5 "GND" I R 5350 3000 50 
+F6 "5V" I R 5350 3150 50 
+F7 "R-" I R 5350 3600 50 
+F8 "R+" I R 5350 3500 50 
+F9 "L+" I L 4300 3500 50 
+F10 "L-" I L 4300 3600 50 
 $EndSheet
 Wire Notes Line
 	4350 5250 4350 5200
@@ -408,26 +374,26 @@ Wire Notes Line
 	4350 5350 4300 5350
 Wire Notes Line
 	4350 4950 4300 4950
-Text GLabel 4900 3200 0    50   Input ~ 0
+Text GLabel 4150 3000 0    50   Input ~ 0
 I2S_BCK
-Text GLabel 4900 3400 0    50   Input ~ 0
+Text GLabel 4150 3200 0    50   Input ~ 0
 I2S_DATA
-Text GLabel 4900 3300 0    50   Input ~ 0
+Text GLabel 4150 3100 0    50   Input ~ 0
 I2S_WS
 Wire Wire Line
-	4900 3200 5050 3200
+	4150 3000 4300 3000
 Wire Wire Line
-	4900 3300 5050 3300
+	4150 3100 4300 3100
 Wire Wire Line
-	4900 3400 5050 3400
-Text GLabel 6250 3350 2    50   UnSpc ~ 0
+	4150 3200 4300 3200
+Text GLabel 5500 3150 2    50   UnSpc ~ 0
 VCC
 Wire Wire Line
-	6250 3350 6100 3350
-Text GLabel 6250 3200 2    50   UnSpc ~ 0
+	5500 3150 5350 3150
+Text GLabel 5500 3000 2    50   UnSpc ~ 0
 GND
 Wire Wire Line
-	6250 3200 6100 3200
+	5500 3000 5350 3000
 Wire Wire Line
 	2600 6550 3100 6550
 Wire Wire Line
@@ -510,45 +476,45 @@ GND
 $Comp
 L Connector:Conn_01x01_Male J3
 U 1 1 5DD96E41
-P 2150 3000
-F 0 "J3" H 2122 2932 50  0000 R CNN
-F 1 "Conn_01x01_Male" H 2122 3023 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 2150 3000 50  0001 C CNN
-F 3 "~" H 2150 3000 50  0001 C CNN
-	1    2150 3000
+P 1100 2900
+F 0 "J3" H 1072 2832 50  0000 R CNN
+F 1 "Conn_01x01_Male" H 1072 2923 50  0000 R CNN
+F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 2900 50  0001 C CNN
+F 3 "~" H 1100 2900 50  0001 C CNN
+	1    1100 2900
 	-1   0    0    1   
 $EndComp
 $Comp
 L Connector:Conn_01x01_Male J4
 U 1 1 5DD976E4
-P 2150 3200
-F 0 "J4" H 2122 3132 50  0000 R CNN
-F 1 "Conn_01x01_Male" H 2122 3223 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 2150 3200 50  0001 C CNN
-F 3 "~" H 2150 3200 50  0001 C CNN
-	1    2150 3200
+P 1100 3100
+F 0 "J4" H 1072 3032 50  0000 R CNN
+F 1 "Conn_01x01_Male" H 1072 3123 50  0000 R CNN
+F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3100 50  0001 C CNN
+F 3 "~" H 1100 3100 50  0001 C CNN
+	1    1100 3100
 	-1   0    0    1   
 $EndComp
-Text GLabel 1950 3000 0    50   Input ~ 0
+Text GLabel 900  2900 0    50   Input ~ 0
 TOUCH1
-Text GLabel 1950 3200 0    50   Input ~ 0
+Text GLabel 900  3100 0    50   Input ~ 0
 TOUCH2
 $Comp
 L Connector:Conn_01x03_Male J5
 U 1 1 5DD981EB
-P 2150 3650
-F 0 "J5" H 2122 3582 50  0000 R CNN
-F 1 "Conn_01x03_Male" H 2122 3673 50  0000 R CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical_SMD_Pin1Left" H 2150 3650 50  0001 C CNN
-F 3 "~" H 2150 3650 50  0001 C CNN
-	1    2150 3650
+P 2700 3100
+F 0 "J5" H 2672 3032 50  0000 R CNN
+F 1 "Conn_01x03_Male" H 2672 3123 50  0000 R CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical_SMD_Pin1Left" H 2700 3100 50  0001 C CNN
+F 3 "~" H 2700 3100 50  0001 C CNN
+	1    2700 3100
 	-1   0    0    1   
 $EndComp
-Text GLabel 1950 3750 0    50   UnSpc ~ 0
+Text GLabel 2500 3200 0    50   UnSpc ~ 0
 GND
-Text GLabel 1950 3650 0    50   Input ~ 0
+Text GLabel 2500 3100 0    50   Input ~ 0
 I2C_SCL
-Text GLabel 1950 3550 0    50   Input ~ 0
+Text GLabel 2500 3000 0    50   Input ~ 0
 I2C_SDA
 Wire Notes Line
 	8650 2750 450  2750
@@ -578,87 +544,6 @@ Connection ~ 10150 2800
 Wire Wire Line
 	10150 3000 10100 3000
 Connection ~ 10150 3000
-$Sheet
-S 5700 4100 750  1950
-U 5E3BA64A
-F0 "stm32" 50
-F1 "stm32.sch" 50
-F2 "EN_ESP" I L 5700 4150 50 
-F3 "G0_ESP" I L 5700 4250 50 
-F4 "INT_ESP" I L 5700 4350 50 
-F5 "D+" I R 6450 4150 50 
-F6 "D-" I R 6450 4250 50 
-F7 "i2c_SDA" I L 5700 4550 50 
-F8 "i2c_SCL" I L 5700 4450 50 
-F9 "R1" I R 6450 4450 50 
-F10 "G1" I R 6450 4550 50 
-F11 "B1" I R 6450 4650 50 
-F12 "R2" I R 6450 4750 50 
-F13 "G2" I R 6450 4850 50 
-F14 "B2" I R 6450 4950 50 
-F15 "TX" O L 5700 4650 50 
-F16 "RX" I L 5700 4750 50 
-F17 "TX2" O L 5700 4850 50 
-F18 "RX2" I L 5700 4950 50 
-F19 "ROW1" I L 5700 5150 50 
-F20 "ROW2" I L 5700 5250 50 
-F21 "ROW3" I L 5700 5350 50 
-F22 "ROW4" I L 5700 5450 50 
-F23 "COL1" I R 6450 5150 50 
-F24 "COL2" I R 6450 5250 50 
-F25 "COL3" I R 6450 5350 50 
-F26 "COL4" I R 6450 5450 50 
-F27 "L1" I L 5700 5700 50 
-F28 "L2" I L 5700 5800 50 
-F29 "L3" I L 5700 5900 50 
-F30 "L4" I L 5700 6000 50 
-F31 "L5" I R 6450 5700 50 
-F32 "L6" I R 6450 5800 50 
-F33 "L8" I R 6450 6000 50 
-F34 "L7" I R 6450 5900 50 
-$EndSheet
-Wire Wire Line
-	6550 5350 6450 5350
-Text GLabel 6550 5450 2    50   Input ~ 0
-COL4
-Wire Wire Line
-	6550 5450 6450 5450
-Wire Wire Line
-	5600 5450 5700 5450
-Wire Wire Line
-	5600 5350 5700 5350
-Wire Wire Line
-	5600 5250 5700 5250
-Wire Wire Line
-	5600 5150 5700 5150
-Wire Wire Line
-	6550 5150 6450 5150
-Wire Wire Line
-	6550 5250 6450 5250
-Text GLabel 5650 4450 0    50   Input ~ 0
-I2C_SCL
-Wire Wire Line
-	5650 4450 5700 4450
-Text GLabel 5650 4550 0    50   Input ~ 0
-I2C_SDA
-Wire Wire Line
-	5650 4550 5700 4550
-Text GLabel 5150 4750 0    50   Input ~ 0
-ESP_TX
-Wire Wire Line
-	5150 4750 5200 4750
-Text GLabel 5150 4650 0    50   Output ~ 0
-ESP_RX
-Wire Wire Line
-	5150 4650 5200 4650
-Text GLabel 5650 4250 0    50   Output ~ 0
-ESP_FLASH
-Wire Wire Line
-	5650 4250 5700 4250
-Text GLabel 5650 4150 0    50   Output ~ 0
-ESP_EN
-Wire Wire Line
-	5650 4150 5700 4150
 Text GLabel 7450 1400 0    50   UnSpc ~ 0
 VCC
 Text GLabel 7450 1200 0    50   UnSpc ~ 0
@@ -743,413 +628,108 @@ Text GLabel 7750 850  0    50   Output ~ 0
 ESP_RX
 Text GLabel 7750 750  0    50   Input ~ 0
 ESP_TX
-Text GLabel 6500 4250 2    50   BiDi ~ 0
-USB_DN
-Wire Wire Line
-	6500 4250 6450 4250
-Text GLabel 6500 4150 2    50   BiDi ~ 0
-USB_DP
-Wire Wire Line
-	6500 4150 6450 4150
-$Sheet
-S 5700 6600 850  900 
-U 5E7D231B
-F0 "led_matrix" 50
-F1 "led_matrix.sch" 50
-F2 "R1" I R 6550 6700 50 
-F3 "R2" I R 6550 7000 50 
-F4 "G1" I R 6550 6800 50 
-F5 "B1" I R 6550 6900 50 
-F6 "G2" I R 6550 7100 50 
-F7 "B2" I R 6550 7200 50 
-F8 "L1" I L 5700 6700 50 
-F9 "L2" I L 5700 6800 50 
-F10 "L3" I L 5700 6900 50 
-F11 "L4" I L 5700 7000 50 
-F12 "L5" I L 5700 7100 50 
-F13 "L6" I L 5700 7200 50 
-F14 "L7" I L 5700 7300 50 
-F15 "L8" I L 5700 7400 50 
-$EndSheet
-Wire Bus Line
-	5500 6250 6650 6250
-Connection ~ 5500 6250
-Entry Wire Line
-	5500 5800 5600 5700
-Wire Wire Line
-	5600 5700 5700 5700
-Entry Wire Line
-	5500 5900 5600 5800
-Entry Wire Line
-	5500 6000 5600 5900
-Entry Wire Line
-	5500 6100 5600 6000
-Wire Wire Line
-	5700 5800 5600 5800
-Wire Wire Line
-	5700 5900 5600 5900
-Wire Wire Line
-	5700 6000 5600 6000
-Entry Wire Line
-	6650 5800 6550 5700
-Entry Wire Line
-	6650 5900 6550 5800
-Entry Wire Line
-	6650 6000 6550 5900
-Entry Wire Line
-	6650 6100 6550 6000
-Wire Wire Line
-	6450 6000 6550 6000
-Wire Wire Line
-	6550 5900 6450 5900
-Wire Wire Line
-	6450 5800 6550 5800
-Wire Wire Line
-	6550 5700 6450 5700
-Text Label 5600 5700 0    50   ~ 0
-L1
-Text Label 5600 5800 0    50   ~ 0
-L2
-Text Label 5600 5900 0    50   ~ 0
-L3
-Text Label 5600 6000 0    50   ~ 0
-L4
-Text Label 6450 5700 0    50   ~ 0
-L5
-Text Label 6450 5800 0    50   ~ 0
-L6
-Text Label 6450 6000 0    50   ~ 0
-L8
-Text Label 6450 5900 0    50   ~ 0
-L7
-Entry Wire Line
-	5500 6600 5600 6700
-Entry Wire Line
-	5500 6700 5600 6800
-Entry Wire Line
-	5500 6800 5600 6900
-Entry Wire Line
-	5500 6900 5600 7000
-Entry Wire Line
-	5500 7000 5600 7100
-Entry Wire Line
-	5500 7100 5600 7200
-Entry Wire Line
-	5500 7200 5600 7300
-Entry Wire Line
-	5500 7300 5600 7400
-Wire Wire Line
-	5600 7400 5700 7400
-Wire Wire Line
-	5700 7300 5600 7300
-Wire Wire Line
-	5600 7200 5700 7200
-Wire Wire Line
-	5600 7100 5700 7100
-Wire Wire Line
-	5600 7000 5700 7000
-Wire Wire Line
-	5600 6900 5700 6900
-Wire Wire Line
-	5600 6800 5700 6800
-Wire Wire Line
-	5600 6700 5700 6700
-Text Label 5600 6700 0    50   ~ 0
-L1
-Text Label 5600 6800 0    50   ~ 0
-L2
-Text Label 5600 6900 0    50   ~ 0
-L3
-Text Label 5600 7000 0    50   ~ 0
-L4
-Text Label 5600 7100 0    50   ~ 0
-L5
-Text Label 5600 7200 0    50   ~ 0
-L6
-Text Label 5600 7300 0    50   ~ 0
-L7
-Text Label 5600 7400 0    50   ~ 0
-L8
-$Comp
-L Device:R R?
-U 1 1 5E8DAADE
-P 6700 4450
-AR Path="/5DC753C3/5E8DAADE" Ref="R?"  Part="1" 
-AR Path="/5E8DAADE" Ref="R6"  Part="1" 
-F 0 "R6" V 6600 4450 50  0000 C CNN
-F 1 "1k2" V 6700 4450 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 6630 4450 50  0001 C CNN
-F 3 "~" H 6700 4450 50  0001 C CNN
-F 4 "C22765" H 6700 4450 50  0001 C CNN "LCSC"
-	1    6700 4450
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E8DC2C2
-P 6700 4550
-AR Path="/5DC753C3/5E8DC2C2" Ref="R?"  Part="1" 
-AR Path="/5E8DC2C2" Ref="R26"  Part="1" 
-F 0 "R26" V 6600 4550 50  0000 C CNN
-F 1 "1k2" V 6700 4550 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 6630 4550 50  0001 C CNN
-F 3 "~" H 6700 4550 50  0001 C CNN
-F 4 "C22765" H 6700 4550 50  0001 C CNN "LCSC"
-	1    6700 4550
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E8DC3BF
-P 6700 4650
-AR Path="/5DC753C3/5E8DC3BF" Ref="R?"  Part="1" 
-AR Path="/5E8DC3BF" Ref="R28"  Part="1" 
-F 0 "R28" V 6600 4650 50  0000 C CNN
-F 1 "1k2" V 6700 4650 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 6630 4650 50  0001 C CNN
-F 3 "~" H 6700 4650 50  0001 C CNN
-F 4 "C22765" H 6700 4650 50  0001 C CNN "LCSC"
-	1    6700 4650
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E8DC555
-P 6700 4750
-AR Path="/5DC753C3/5E8DC555" Ref="R?"  Part="1" 
-AR Path="/5E8DC555" Ref="R30"  Part="1" 
-F 0 "R30" V 6600 4750 50  0000 C CNN
-F 1 "1k2" V 6700 4750 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 6630 4750 50  0001 C CNN
-F 3 "~" H 6700 4750 50  0001 C CNN
-F 4 "C22765" H 6700 4750 50  0001 C CNN "LCSC"
-	1    6700 4750
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E8DC740
-P 6700 4850
-AR Path="/5DC753C3/5E8DC740" Ref="R?"  Part="1" 
-AR Path="/5E8DC740" Ref="R33"  Part="1" 
-F 0 "R33" V 6600 4850 50  0000 C CNN
-F 1 "1k2" V 6700 4850 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 6630 4850 50  0001 C CNN
-F 3 "~" H 6700 4850 50  0001 C CNN
-F 4 "C22765" H 6700 4850 50  0001 C CNN "LCSC"
-	1    6700 4850
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E8DC875
-P 6700 4950
-AR Path="/5DC753C3/5E8DC875" Ref="R?"  Part="1" 
-AR Path="/5E8DC875" Ref="R34"  Part="1" 
-F 0 "R34" V 6600 4950 50  0000 C CNN
-F 1 "1k2" V 6700 4950 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 6630 4950 50  0001 C CNN
-F 3 "~" H 6700 4950 50  0001 C CNN
-F 4 "C22765" H 6700 4950 50  0001 C CNN "LCSC"
-	1    6700 4950
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	6450 4950 6550 4950
-Wire Wire Line
-	6450 4850 6550 4850
-Wire Wire Line
-	6450 4750 6550 4750
-Wire Wire Line
-	6450 4650 6550 4650
-Wire Wire Line
-	6550 4550 6450 4550
-Wire Wire Line
-	6450 4450 6550 4450
-Entry Wire Line
-	6950 4450 7050 4550
-Entry Wire Line
-	6950 4550 7050 4650
-Entry Wire Line
-	6950 4650 7050 4750
-Entry Wire Line
-	6950 4750 7050 4850
-Entry Wire Line
-	6950 4850 7050 4950
-Entry Wire Line
-	6950 4950 7050 5050
-Wire Bus Line
-	7050 6450 6700 6450
-Wire Wire Line
-	6850 4950 6950 4950
-Wire Wire Line
-	6850 4850 6950 4850
-Wire Wire Line
-	6850 4750 6950 4750
-Wire Wire Line
-	6850 4650 6950 4650
-Wire Wire Line
-	6850 4550 6950 4550
-Wire Wire Line
-	6850 4450 6950 4450
-Text Label 6850 4450 0    50   ~ 0
-R1
-Text Label 6850 4550 0    50   ~ 0
-G1
-Text Label 6850 4650 0    50   ~ 0
-B1
-Text Label 6850 4750 0    50   ~ 0
-R2
-Text Label 6850 4850 0    50   ~ 0
-G2
-Text Label 6850 4950 0    50   ~ 0
-B2
-Entry Wire Line
-	6700 6600 6600 6700
-Entry Wire Line
-	6700 6700 6600 6800
-Entry Wire Line
-	6700 6800 6600 6900
-Entry Wire Line
-	6700 6900 6600 7000
-Entry Wire Line
-	6700 7000 6600 7100
-Entry Wire Line
-	6700 7100 6600 7200
-Wire Wire Line
-	6550 7200 6600 7200
-Wire Wire Line
-	6550 7100 6600 7100
-Wire Wire Line
-	6550 7000 6600 7000
-Wire Wire Line
-	6550 6900 6600 6900
-Wire Wire Line
-	6550 6800 6600 6800
-Wire Wire Line
-	6550 6700 6600 6700
-Text Label 6600 6700 0    50   ~ 0
-R1
-Text Label 6600 6800 0    50   ~ 0
-G1
-Text Label 6600 6900 0    50   ~ 0
-B1
-Text Label 6600 7000 0    50   ~ 0
-R2
-Text Label 6600 7100 0    50   ~ 0
-G2
-Text Label 6600 7200 0    50   ~ 0
-B2
 Wire Wire Line
 	1050 4750 1400 4750
 Text GLabel 3100 6350 2    50   Input ~ 0
 SD_MOSI
-Text GLabel 5650 4850 0    50   Output ~ 0
-ESP_RX2
-Wire Wire Line
-	5650 4850 5700 4850
-Text GLabel 5650 4950 0    50   Input ~ 0
-ESP_TX2
-Wire Wire Line
-	5650 4950 5700 4950
-Text GLabel 3100 6850 2    50   Output ~ 0
+Text GLabel 3100 6950 2    50   Output ~ 0
 ESP_TX2
 Wire Wire Line
 	2600 6850 3100 6850
 Wire Wire Line
 	2600 6950 3100 6950
-Text GLabel 3100 6950 2    50   Input ~ 0
+Text GLabel 3100 7050 2    50   Input ~ 0
 ESP_RX2
 Wire Wire Line
 	2600 4750 3000 4750
 Wire Wire Line
-	6200 4000 4850 4000
+	5450 3800 4100 3800
 Wire Wire Line
-	4800 3900 6150 3900
+	4050 3700 5400 3700
 Wire Wire Line
-	6150 3800 6100 3800
+	5400 3600 5350 3600
 Wire Wire Line
-	6150 3900 6150 3800
+	5400 3700 5400 3600
 Wire Wire Line
-	6100 3700 6200 3700
+	5350 3500 5450 3500
 Wire Wire Line
-	6200 3700 6200 4000
+	5450 3500 5450 3800
 $Comp
 L Connector_Generic:Conn_01x04 J7
 U 1 1 5E4457C1
-P 4450 4000
-F 0 "J7" H 4368 3575 50  0000 C CNN
-F 1 "Conn_01x04" H 4368 3666 50  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Horizontal" H 4450 4000 50  0001 C CNN
-F 3 "~" H 4450 4000 50  0001 C CNN
-	1    4450 4000
+P 3700 3800
+F 0 "J7" H 3618 3375 50  0000 C CNN
+F 1 "Conn_01x04" H 3618 3466 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Horizontal" H 3700 3800 50  0001 C CNN
+F 3 "~" H 3700 3800 50  0001 C CNN
+	1    3700 3800
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	4850 4000 4850 4100
+	4100 3800 4100 3900
 Wire Wire Line
-	4850 4100 4650 4100
+	4100 3900 3900 3900
 Wire Wire Line
-	4800 3900 4800 4000
+	4050 3700 4050 3800
 Wire Wire Line
-	4800 4000 4650 4000
+	4050 3800 3900 3800
 Wire Wire Line
-	5050 3800 4650 3800
+	4300 3600 3900 3600
 Wire Wire Line
-	5050 3700 4750 3700
+	4300 3500 4000 3500
 Wire Wire Line
-	4750 3700 4750 3900
+	4000 3500 4000 3700
 Wire Wire Line
-	4750 3900 4650 3900
+	4000 3700 3900 3700
 $Comp
 L Device:R R?
 U 1 1 5E48C29E
-P 3450 3450
+P 2600 3700
 AR Path="/5DC753C3/5E48C29E" Ref="R?"  Part="1" 
 AR Path="/5E48C29E" Ref="R5"  Part="1" 
-F 0 "R5" V 3350 3450 50  0000 C CNN
-F 1 "1k2" V 3450 3450 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 3380 3450 50  0001 C CNN
-F 3 "~" H 3450 3450 50  0001 C CNN
-F 4 "C22765" H 3450 3450 50  0001 C CNN "LCSC"
-	1    3450 3450
+F 0 "R5" V 2500 3700 50  0000 C CNN
+F 1 "1k2" V 2600 3700 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 2530 3700 50  0001 C CNN
+F 3 "~" H 2600 3700 50  0001 C CNN
+F 4 "C22765" H 2600 3700 50  0001 C CNN "LCSC"
+	1    2600 3700
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R R?
 U 1 1 5E48FC2B
-P 3700 3450
+P 2850 3700
 AR Path="/5DC753C3/5E48FC2B" Ref="R?"  Part="1" 
 AR Path="/5E48FC2B" Ref="R9"  Part="1" 
-F 0 "R9" V 3600 3450 50  0000 C CNN
-F 1 "1k2" V 3700 3450 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 3630 3450 50  0001 C CNN
-F 3 "~" H 3700 3450 50  0001 C CNN
-F 4 "C22765" H 3700 3450 50  0001 C CNN "LCSC"
-	1    3700 3450
+F 0 "R9" V 2750 3700 50  0000 C CNN
+F 1 "1k2" V 2850 3700 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 2780 3700 50  0001 C CNN
+F 3 "~" H 2850 3700 50  0001 C CNN
+F 4 "C22765" H 2850 3700 50  0001 C CNN "LCSC"
+	1    2850 3700
 	1    0    0    -1  
 $EndComp
-Text GLabel 3550 3200 1    50   UnSpc ~ 0
+Text GLabel 2700 3450 1    50   UnSpc ~ 0
 3V3
 Wire Wire Line
-	3550 3200 3550 3300
+	2700 3450 2700 3550
 Wire Wire Line
-	3550 3300 3450 3300
+	2700 3550 2600 3550
 Wire Wire Line
-	3550 3300 3700 3300
-Connection ~ 3550 3300
-Text GLabel 3350 3700 0    50   Input ~ 0
+	2700 3550 2850 3550
+Connection ~ 2700 3550
+Text GLabel 2500 3950 0    50   Input ~ 0
 I2C_SCL
 Wire Wire Line
-	3350 3700 3450 3700
+	2500 3950 2600 3950
 Wire Wire Line
-	3450 3700 3450 3600
-Text GLabel 3800 3700 2    50   Input ~ 0
+	2600 3950 2600 3850
+Text GLabel 2950 3950 2    50   Input ~ 0
 I2C_SDA
 Wire Wire Line
-	3800 3700 3700 3700
+	2950 3950 2850 3950
 Wire Wire Line
-	3700 3700 3700 3600
+	2850 3950 2850 3850
 $Comp
 L Device:R R?
 U 1 1 5E4C0F2B
@@ -1291,10 +871,8 @@ Wire Wire Line
 	3900 1150 3900 1850
 Wire Wire Line
 	3900 1850 4100 1850
-Wire Notes Line
-	8650 2750 8650 6550
 $Sheet
-S 7250 4900 1050 650 
+S 6650 1800 1050 650 
 U 5E464BBE
 F0 "Power" 50
 F1 "Power.sch" 50
@@ -1304,43 +882,29 @@ Text GLabel 3100 5850 2    50   Output ~ 0
 $Comp
 L Connector:TestPoint TP5
 U 1 1 5E4C8039
-P 4750 4650
-F 0 "TP5" V 4945 4722 50  0000 C CNN
-F 1 "TestPoint" V 4854 4722 50  0000 C CNN
-F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 4950 4650 50  0001 C CNN
-F 3 "~" H 4950 4650 50  0001 C CNN
-	1    4750 4650
+P 6250 3500
+F 0 "TP5" V 6445 3572 50  0000 C CNN
+F 1 "TestPoint" V 6354 3572 50  0000 C CNN
+F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 6450 3500 50  0001 C CNN
+F 3 "~" H 6450 3500 50  0001 C CNN
+	1    6250 3500
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Connector:TestPoint TP6
 U 1 1 5E4C9456
-P 4750 4750
-F 0 "TP6" V 4945 4822 50  0000 C CNN
-F 1 "TestPoint" V 4854 4822 50  0000 C CNN
-F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 4950 4750 50  0001 C CNN
-F 3 "~" H 4950 4750 50  0001 C CNN
-	1    4750 4750
+P 6250 3600
+F 0 "TP6" V 6445 3672 50  0000 C CNN
+F 1 "TestPoint" V 6354 3672 50  0000 C CNN
+F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 6450 3600 50  0001 C CNN
+F 3 "~" H 6450 3600 50  0001 C CNN
+	1    6250 3600
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	4750 4650 4750 4550
+	6250 3500 6250 3400
 Wire Wire Line
-	4750 4550 5200 4550
-Wire Wire Line
-	5200 4550 5200 4650
-Connection ~ 5200 4650
-Wire Wire Line
-	5200 4650 5700 4650
-Wire Wire Line
-	4750 4750 4750 4850
-Wire Wire Line
-	4750 4850 5200 4850
-Wire Wire Line
-	5200 4850 5200 4750
-Connection ~ 5200 4750
-Wire Wire Line
-	5200 4750 5700 4750
+	6250 3600 6250 3700
 Wire Wire Line
 	2300 1550 2300 1600
 Wire Wire Line
@@ -1369,14 +933,520 @@ Wire Wire Line
 Connection ~ 2300 1600
 Wire Wire Line
 	2300 1600 2300 1700
+Text GLabel 3850 4750 2    50   Input ~ 0
+STM32_IRQ
+Text GLabel 3100 6650 2    50   Input ~ 0
+TOUCH3
+Wire Wire Line
+	3850 4750 3600 4750
+Wire Wire Line
+	3600 4750 3600 4950
+Connection ~ 3600 4950
+Wire Wire Line
+	3600 4950 3800 4950
+NoConn ~ 3100 6150
+NoConn ~ 3100 6250
+Text Notes 2300 4750 2    50   ~ 0
+T
+Text Notes 2300 4950 2    50   ~ 0
+T
+Text Notes 2300 5150 2    50   ~ 0
+T
+Text Notes 2300 5350 2    50   ~ 0
+T
+Text Notes 2300 5450 2    50   ~ 0
+T
+Text Notes 2300 5550 2    50   ~ 0
+T
+Text Notes 2300 5650 2    50   ~ 0
+T
+Text Notes 2300 6650 2    50   ~ 0
+T
+Text Notes 2300 6750 2    50   ~ 0
+T
+Text Notes 2300 6850 2    50   ~ 0
+T
+$Comp
+L Connector:Conn_01x01_Male J9
+U 1 1 5F202E16
+P 1100 3300
+F 0 "J9" H 1072 3232 50  0000 R CNN
+F 1 "Conn_01x01_Male" H 1072 3323 50  0000 R CNN
+F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3300 50  0001 C CNN
+F 3 "~" H 1100 3300 50  0001 C CNN
+	1    1100 3300
+	-1   0    0    1   
+$EndComp
+Text GLabel 900  3300 0    50   Input ~ 0
+TOUCH3
+$Comp
+L Connector:Conn_01x01_Male J10
+U 1 1 5F210E91
+P 1100 3500
+F 0 "J10" H 1072 3432 50  0000 R CNN
+F 1 "Conn_01x01_Male" H 1072 3523 50  0000 R CNN
+F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3500 50  0001 C CNN
+F 3 "~" H 1100 3500 50  0001 C CNN
+	1    1100 3500
+	-1   0    0    1   
+$EndComp
+Text GLabel 900  3500 0    50   Input ~ 0
+TOUCH4
+$Comp
+L Connector:Conn_01x01_Male J11
+U 1 1 5F21EE72
+P 1100 3700
+F 0 "J11" H 1072 3632 50  0000 R CNN
+F 1 "Conn_01x01_Male" H 1072 3723 50  0000 R CNN
+F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3700 50  0001 C CNN
+F 3 "~" H 1100 3700 50  0001 C CNN
+	1    1100 3700
+	-1   0    0    1   
+$EndComp
+Text GLabel 900  3700 0    50   Input ~ 0
+TOUCH5
+Text Notes -4700 4000 0    157  ~ 0
+TODO:\n\n- Audio and battery pins SMD\n- Power switch\n- N-fets on RGB[1-2]\n- More touch pins op ESP32\n- Interrupt pin from STM to ESP
+Wire Notes Line
+	6050 1600 8650 1600
+Wire Notes Line
+	8650 1600 8650 6550
+Wire Wire Line
+	6700 3600 7200 3600
+Connection ~ 6700 3600
+Wire Wire Line
+	6700 3700 6700 3600
+Wire Wire Line
+	6250 3700 6700 3700
+Wire Wire Line
+	6700 3500 7200 3500
+Connection ~ 6700 3500
+Wire Wire Line
+	6700 3400 6700 3500
+Wire Wire Line
+	6250 3400 6700 3400
+Wire Wire Line
+	7150 3800 7200 3800
+Text GLabel 7150 3800 0    50   Input ~ 0
+ESP_TX2
+Wire Wire Line
+	7150 3700 7200 3700
+Text GLabel 7150 3700 0    50   Output ~ 0
+ESP_RX2
+Text Label 8100 6050 0    50   ~ 0
+B2
+Text Label 8100 5950 0    50   ~ 0
+G2
+Text Label 8100 5850 0    50   ~ 0
+R2
+Text Label 8100 5750 0    50   ~ 0
+B1
+Text Label 8100 5650 0    50   ~ 0
+G1
+Text Label 8100 5550 0    50   ~ 0
+R1
+Wire Wire Line
+	8050 5550 8100 5550
+Wire Wire Line
+	8050 5650 8100 5650
+Wire Wire Line
+	8050 5750 8100 5750
+Wire Wire Line
+	8050 5850 8100 5850
+Wire Wire Line
+	8050 5950 8100 5950
+Wire Wire Line
+	8050 6050 8100 6050
+Entry Wire Line
+	8200 5950 8100 6050
+Entry Wire Line
+	8200 5850 8100 5950
+Entry Wire Line
+	8200 5750 8100 5850
+Entry Wire Line
+	8200 5650 8100 5750
+Entry Wire Line
+	8200 5550 8100 5650
+Entry Wire Line
+	8200 5450 8100 5550
+Text Label 8350 3800 0    50   ~ 0
+B2
+Text Label 8350 3700 0    50   ~ 0
+G2
+Text Label 8350 3600 0    50   ~ 0
+R2
+Text Label 8350 3500 0    50   ~ 0
+B1
+Text Label 8350 3400 0    50   ~ 0
+G1
+Text Label 8350 3300 0    50   ~ 0
+R1
+Wire Wire Line
+	8350 3300 8450 3300
+Wire Wire Line
+	8350 3400 8450 3400
+Wire Wire Line
+	8350 3500 8450 3500
+Wire Wire Line
+	8350 3600 8450 3600
+Wire Wire Line
+	8350 3700 8450 3700
+Wire Wire Line
+	8350 3800 8450 3800
 Wire Bus Line
-	6650 5800 6650 6250
+	8550 5300 8200 5300
+Entry Wire Line
+	8450 3800 8550 3900
+Entry Wire Line
+	8450 3700 8550 3800
+Entry Wire Line
+	8450 3600 8550 3700
+Entry Wire Line
+	8450 3500 8550 3600
+Entry Wire Line
+	8450 3400 8550 3500
+Entry Wire Line
+	8450 3300 8550 3400
+Wire Wire Line
+	7950 3300 8050 3300
+Wire Wire Line
+	8050 3400 7950 3400
+Wire Wire Line
+	7950 3500 8050 3500
+Wire Wire Line
+	7950 3600 8050 3600
+Wire Wire Line
+	7950 3700 8050 3700
+Wire Wire Line
+	7950 3800 8050 3800
+$Comp
+L Device:R R?
+U 1 1 5E8DC875
+P 8200 3800
+AR Path="/5DC753C3/5E8DC875" Ref="R?"  Part="1" 
+AR Path="/5E8DC875" Ref="R34"  Part="1" 
+F 0 "R34" V 8100 3800 50  0000 C CNN
+F 1 "1k2" V 8200 3800 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 8130 3800 50  0001 C CNN
+F 3 "~" H 8200 3800 50  0001 C CNN
+F 4 "C22765" H 8200 3800 50  0001 C CNN "LCSC"
+	1    8200 3800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E8DC740
+P 8200 3700
+AR Path="/5DC753C3/5E8DC740" Ref="R?"  Part="1" 
+AR Path="/5E8DC740" Ref="R33"  Part="1" 
+F 0 "R33" V 8100 3700 50  0000 C CNN
+F 1 "1k2" V 8200 3700 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 8130 3700 50  0001 C CNN
+F 3 "~" H 8200 3700 50  0001 C CNN
+F 4 "C22765" H 8200 3700 50  0001 C CNN "LCSC"
+	1    8200 3700
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E8DC555
+P 8200 3600
+AR Path="/5DC753C3/5E8DC555" Ref="R?"  Part="1" 
+AR Path="/5E8DC555" Ref="R30"  Part="1" 
+F 0 "R30" V 8100 3600 50  0000 C CNN
+F 1 "1k2" V 8200 3600 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 8130 3600 50  0001 C CNN
+F 3 "~" H 8200 3600 50  0001 C CNN
+F 4 "C22765" H 8200 3600 50  0001 C CNN "LCSC"
+	1    8200 3600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E8DC3BF
+P 8200 3500
+AR Path="/5DC753C3/5E8DC3BF" Ref="R?"  Part="1" 
+AR Path="/5E8DC3BF" Ref="R28"  Part="1" 
+F 0 "R28" V 8100 3500 50  0000 C CNN
+F 1 "1k2" V 8200 3500 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 8130 3500 50  0001 C CNN
+F 3 "~" H 8200 3500 50  0001 C CNN
+F 4 "C22765" H 8200 3500 50  0001 C CNN "LCSC"
+	1    8200 3500
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E8DC2C2
+P 8200 3400
+AR Path="/5DC753C3/5E8DC2C2" Ref="R?"  Part="1" 
+AR Path="/5E8DC2C2" Ref="R26"  Part="1" 
+F 0 "R26" V 8100 3400 50  0000 C CNN
+F 1 "1k2" V 8200 3400 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 8130 3400 50  0001 C CNN
+F 3 "~" H 8200 3400 50  0001 C CNN
+F 4 "C22765" H 8200 3400 50  0001 C CNN "LCSC"
+	1    8200 3400
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E8DAADE
+P 8200 3300
+AR Path="/5DC753C3/5E8DAADE" Ref="R?"  Part="1" 
+AR Path="/5E8DAADE" Ref="R6"  Part="1" 
+F 0 "R6" V 8100 3300 50  0000 C CNN
+F 1 "1k2" V 8200 3300 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 8130 3300 50  0001 C CNN
+F 3 "~" H 8200 3300 50  0001 C CNN
+F 4 "C22765" H 8200 3300 50  0001 C CNN "LCSC"
+	1    8200 3300
+	0    -1   -1   0   
+$EndComp
+Text Label 7100 6250 0    50   ~ 0
+L8
+Text Label 7100 6150 0    50   ~ 0
+L7
+Text Label 7100 6050 0    50   ~ 0
+L6
+Text Label 7100 5950 0    50   ~ 0
+L5
+Text Label 7100 5850 0    50   ~ 0
+L4
+Text Label 7100 5750 0    50   ~ 0
+L3
+Text Label 7100 5650 0    50   ~ 0
+L2
+Text Label 7100 5550 0    50   ~ 0
+L1
+Wire Wire Line
+	7100 5550 7200 5550
+Wire Wire Line
+	7100 5650 7200 5650
+Wire Wire Line
+	7100 5750 7200 5750
+Wire Wire Line
+	7100 5850 7200 5850
+Wire Wire Line
+	7100 5950 7200 5950
+Wire Wire Line
+	7100 6050 7200 6050
+Wire Wire Line
+	7200 6150 7100 6150
+Wire Wire Line
+	7100 6250 7200 6250
+Entry Wire Line
+	7000 6150 7100 6250
+Entry Wire Line
+	7000 6050 7100 6150
+Entry Wire Line
+	7000 5950 7100 6050
+Entry Wire Line
+	7000 5850 7100 5950
+Entry Wire Line
+	7000 5750 7100 5850
+Entry Wire Line
+	7000 5650 7100 5750
+Entry Wire Line
+	7000 5550 7100 5650
+Entry Wire Line
+	7000 5450 7100 5550
+Text Label 7950 4750 0    50   ~ 0
+L7
+Text Label 7950 4850 0    50   ~ 0
+L8
+Text Label 7950 4650 0    50   ~ 0
+L6
+Text Label 7950 4550 0    50   ~ 0
+L5
+Text Label 7100 4850 0    50   ~ 0
+L4
+Text Label 7100 4750 0    50   ~ 0
+L3
+Text Label 7100 4650 0    50   ~ 0
+L2
+Text Label 7100 4550 0    50   ~ 0
+L1
+Wire Wire Line
+	8050 4550 7950 4550
+Wire Wire Line
+	7950 4650 8050 4650
+Wire Wire Line
+	8050 4750 7950 4750
+Wire Wire Line
+	7950 4850 8050 4850
+Entry Wire Line
+	8150 4950 8050 4850
+Entry Wire Line
+	8150 4850 8050 4750
+Entry Wire Line
+	8150 4750 8050 4650
+Entry Wire Line
+	8150 4650 8050 4550
+Wire Wire Line
+	7200 4850 7100 4850
+Wire Wire Line
+	7200 4750 7100 4750
+Wire Wire Line
+	7200 4650 7100 4650
+Entry Wire Line
+	7000 4950 7100 4850
+Entry Wire Line
+	7000 4850 7100 4750
+Entry Wire Line
+	7000 4750 7100 4650
+Wire Wire Line
+	7100 4550 7200 4550
+Entry Wire Line
+	7000 4650 7100 4550
+Connection ~ 7000 5100
 Wire Bus Line
-	5500 5800 5500 6250
+	7000 5100 8150 5100
+$Sheet
+S 7200 5450 850  900 
+U 5E7D231B
+F0 "led_matrix" 50
+F1 "led_matrix.sch" 50
+F2 "R1" I R 8050 5550 50 
+F3 "R2" I R 8050 5850 50 
+F4 "G1" I R 8050 5650 50 
+F5 "B1" I R 8050 5750 50 
+F6 "G2" I R 8050 5950 50 
+F7 "B2" I R 8050 6050 50 
+F8 "L1" I L 7200 5550 50 
+F9 "L2" I L 7200 5650 50 
+F10 "L3" I L 7200 5750 50 
+F11 "L4" I L 7200 5850 50 
+F12 "L5" I L 7200 5950 50 
+F13 "L6" I L 7200 6050 50 
+F14 "L7" I L 7200 6150 50 
+F15 "L8" I L 7200 6250 50 
+$EndSheet
+Wire Wire Line
+	8000 3000 7950 3000
+Text GLabel 8000 3000 2    50   BiDi ~ 0
+USB_DP
+Wire Wire Line
+	8000 3100 7950 3100
+Text GLabel 8000 3100 2    50   BiDi ~ 0
+USB_DN
+Wire Wire Line
+	7150 3000 7200 3000
+Text GLabel 7150 3000 0    50   Output ~ 0
+ESP_EN
+Wire Wire Line
+	7150 3100 7200 3100
+Text GLabel 7150 3100 0    50   Output ~ 0
+ESP_FLASH
+Wire Wire Line
+	6650 3500 6700 3500
+Text GLabel 6650 3500 0    50   Output ~ 0
+ESP_RX
+Wire Wire Line
+	6650 3600 6700 3600
+Text GLabel 6650 3600 0    50   Input ~ 0
+ESP_TX
+Wire Wire Line
+	7150 3400 7200 3400
+Text GLabel 7150 3400 0    50   Input ~ 0
+I2C_SDA
+Wire Wire Line
+	7150 3300 7200 3300
+Text GLabel 7150 3300 0    50   Input ~ 0
+I2C_SCL
+Wire Wire Line
+	8050 4100 7950 4100
+Wire Wire Line
+	8050 4000 7950 4000
+Wire Wire Line
+	7100 4000 7200 4000
+Wire Wire Line
+	7100 4100 7200 4100
+Wire Wire Line
+	7100 4200 7200 4200
+Wire Wire Line
+	7100 4300 7200 4300
+Wire Wire Line
+	8050 4300 7950 4300
+Text GLabel 8050 4300 2    50   Input ~ 0
+COL4
+Wire Wire Line
+	8050 4200 7950 4200
+$Sheet
+S 7200 2950 750  1950
+U 5E3BA64A
+F0 "stm32" 50
+F1 "stm32.sch" 50
+F2 "EN_ESP" I L 7200 3000 50 
+F3 "G0_ESP" I L 7200 3100 50 
+F4 "INT_ESP" I L 7200 3200 50 
+F5 "D+" I R 7950 3000 50 
+F6 "D-" I R 7950 3100 50 
+F7 "i2c_SDA" I L 7200 3400 50 
+F8 "i2c_SCL" I L 7200 3300 50 
+F9 "R1" I R 7950 3300 50 
+F10 "G1" I R 7950 3400 50 
+F11 "B1" I R 7950 3500 50 
+F12 "R2" I R 7950 3600 50 
+F13 "G2" I R 7950 3700 50 
+F14 "B2" I R 7950 3800 50 
+F15 "TX" O L 7200 3500 50 
+F16 "RX" I L 7200 3600 50 
+F17 "TX2" O L 7200 3700 50 
+F18 "RX2" I L 7200 3800 50 
+F19 "ROW1" I L 7200 4000 50 
+F20 "ROW2" I L 7200 4100 50 
+F21 "ROW3" I L 7200 4200 50 
+F22 "ROW4" I L 7200 4300 50 
+F23 "COL1" I R 7950 4000 50 
+F24 "COL2" I R 7950 4100 50 
+F25 "COL3" I R 7950 4200 50 
+F26 "COL4" I R 7950 4300 50 
+F27 "L1" I L 7200 4550 50 
+F28 "L2" I L 7200 4650 50 
+F29 "L3" I L 7200 4750 50 
+F30 "L4" I L 7200 4850 50 
+F31 "L5" I R 7950 4550 50 
+F32 "L6" I R 7950 4650 50 
+F33 "L8" I R 7950 4850 50 
+F34 "L7" I R 7950 4750 50 
+$EndSheet
+Text GLabel 8050 4100 2    50   Input ~ 0
+COL2
+Text GLabel 8050 4000 2    50   Input ~ 0
+COL1
+Text GLabel 8050 4200 2    50   Input ~ 0
+COL3
+Text GLabel 7100 4300 0    50   Input ~ 0
+ROW4
+Text GLabel 7100 4200 0    50   Input ~ 0
+ROW3
+Text GLabel 7100 4100 0    50   Input ~ 0
+ROW2
+Text GLabel 7100 4000 0    50   Input ~ 0
+ROW1
+Text Notes 4350 5400 0    50   ~ 0
+Sets VDD_SDIO to 1.8V when driven HIGH
+Text Notes 4350 5000 0    50   ~ 0
+Enables serial bootloader when\nESP_FLASH is driven LOW
+Text Notes 4350 5250 0    50   ~ 0
+Changes SDIO timing when driven LOW
+Text Notes 4350 5650 0    50   ~ 0
+Hides bootloader output when driven LOW
+Wire Wire Line
+	2600 5350 3800 5350
 Wire Bus Line
-	7050 4550 7050 6450
+	7000 4650 7000 5100
 Wire Bus Line
-	6700 6450 6700 7100
+	8150 4650 8150 5100
 Wire Bus Line
-	5500 6250 5500 7300
+	8200 5300 8200 5950
+Wire Bus Line
+	8550 3400 8550 5300
+Wire Bus Line
+	7000 5100 7000 6150
+Text GLabel 3100 5550 2    50   Input ~ 0
+TOUCH4
+Text GLabel 3100 5450 2    50   Input ~ 0
+TOUCH5
 $EndSCHEMATC
