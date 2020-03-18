@@ -306,7 +306,7 @@ Text GLabel 3100 5750 2    50   Input ~ 0
 I2S_BCK
 Wire Wire Line
 	3100 5150 2600 5150
-Text GLabel 3100 6850 2    50   Input ~ 0
+Text GLabel 3100 6650 2    50   Input ~ 0
 TOUCH1
 Wire Wire Line
 	3100 5450 2600 5450
@@ -314,7 +314,7 @@ Wire Wire Line
 	3100 5650 2600 5650
 Wire Wire Line
 	3100 5550 2600 5550
-Text GLabel 3100 6750 2    50   Input ~ 0
+Text GLabel 3100 6850 2    50   Input ~ 0
 TOUCH2
 Text GLabel 3100 5950 2    50   Input ~ 0
 SD_SCK
@@ -935,7 +935,7 @@ Wire Wire Line
 	2300 1600 2300 1700
 Text GLabel 3850 4750 2    50   Input ~ 0
 STM32_IRQ
-Text GLabel 3100 6650 2    50   Input ~ 0
+Text GLabel 3100 6750 2    50   Input ~ 0
 TOUCH3
 Wire Wire Line
 	3850 4750 3600 4750
@@ -1006,7 +1006,7 @@ $EndComp
 Text GLabel 900  3700 0    50   Input ~ 0
 TOUCH5
 Text Notes -4700 4000 0    157  ~ 0
-TODO:\n\n- Audio and battery pins SMD\n- Power switch\n- N-fets on RGB[1-2]\n- More touch pins op ESP32\n- Interrupt pin from STM to ESP
+TODO:\n\n- Audio and battery pins SMD\n- Power switch\n- N-fets on RGB[1-2]\n- Interrupt pin from STM to ESP
 Wire Notes Line
 	6050 1600 8650 1600
 Wire Notes Line
