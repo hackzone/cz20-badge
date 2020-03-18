@@ -23,7 +23,7 @@ void button_task() {
 
 		switch(button_row) {
 		case 0:
-			button_state |= ((GPIOA->IDR >> 4) & 0x000F);
+			button_state = ((GPIOA->IDR >> 4) & 0x000F);
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, 0);
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
 			break;
@@ -47,5 +47,6 @@ void button_task() {
 			}
 			break;
 		}
+		button_row = (button_row + 1) % 4;
 	}
 }
