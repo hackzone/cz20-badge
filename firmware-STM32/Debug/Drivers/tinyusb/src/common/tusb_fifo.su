@@ -1,0 +1,13 @@
+tusb_common.h:100:24:tu_min16	16	static
+tusb_fifo.h:102:20:tu_fifo_empty	16	static
+tusb_fifo.h:107:20:tu_fifo_full	16	static
+tusb_fifo.h:117:24:tu_fifo_remaining	16	static
+tusb_fifo.c:58:6:tu_fifo_config	24	static
+tusb_fifo.c:75:13:_tu_ff_pull	16	static
+tusb_fifo.c:86:13:_tu_ff_push	16	static
+tusb_fifo.c:120:6:tu_fifo_read	16	static
+tusb_fifo.c:149:10:tu_fifo_read_n	32	static
+tusb_fifo.c:188:6:tu_fifo_peek_at	32	static
+tusb_fifo.c:218:6:tu_fifo_write	16	static
+tusb_fifo.c:246:10:tu_fifo_write_n	32	static
+tusb_fifo.c:279:6:tu_fifo_clear	16	static

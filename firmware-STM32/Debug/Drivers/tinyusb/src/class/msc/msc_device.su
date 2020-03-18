@@ -1,0 +1,15 @@
+tusb_types.h:459:31:tu_desc_next	24	static
+tusb_common.h:101:24:tu_min32	16	static
+tusb_common.h:144:24:tu_bit_test	16	static
+msc_device.c:76:24:rdwr10_get_lba	24	static
+msc_device.c:89:24:rdwr10_get_blockcount	24	static
+msc_device.c:132:6:tud_msc_set_sense	16	static
+msc_device.c:146:6:mscd_init	8	static
+msc_device.c:151:6:mscd_reset	16	static
+msc_device.c:157:6:mscd_open	48	static,ignoring_inline_asm
+msc_device.c:179:6:mscd_control_request	24	static
+msc_device.c:212:6:mscd_control_complete	16	static
+msc_device.c:223:9:proc_builtin_scsi	144	static
+msc_device.c:394:6:mscd_xfer_cb	96	static,ignoring_inline_asm
+msc_device.c:636:13:proc_read10_cmd	56	static,ignoring_inline_asm
+msc_device.c:676:13:proc_write10_cmd	40	static,ignoring_inline_asm

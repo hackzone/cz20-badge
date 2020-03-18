@@ -1,0 +1,5 @@
+i2c_handler.c:15:6:HAL_I2C_AddrCallback	16	static
+i2c_handler.c:27:6:HAL_I2C_SlaveTxCpltCallback	16	static
+i2c_handler.c:32:6:HAL_I2C_SlaveRxCpltCallback	16	static
+i2c_handler.c:43:6:HAL_I2C_ListenCpltCallback	16	static
+i2c_handler.c:47:10:getMemory	16	static

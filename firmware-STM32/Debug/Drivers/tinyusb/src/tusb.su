@@ -1,0 +1,2 @@
+tusb.c:40:6:tusb_init	16	static,ignoring_inline_asm
+tusb.c:58:6:tusb_inited	4	static

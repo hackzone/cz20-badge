@@ -1,0 +1,17 @@
+tusb_types.h:440:26:tu_edpt_dir	16	static
+tusb_types.h:459:31:tu_desc_next	24	static
+tusb_types.h:470:23:tu_desc_len	16	static
+tusb_fifo.h:112:24:tu_fifo_count	16	static
+midi_device.c:78:6:tud_midi_n_mounted	24	static
+midi_device.c:87:10:tud_midi_n_available	16	static
+midi_device.c:93:10:tud_midi_n_read	24	static
+midi_device.c:99:6:tud_midi_n_read_flush	16	static
+midi_device.c:105:6:midi_rx_done_cb	32	static
+midi_device.c:132:13:maybe_transmit	24	static,ignoring_inline_asm
+midi_device.c:147:10:tud_midi_n_write	40	static,ignoring_inline_asm
+midi_device.c:224:6:midid_init	24	static
+midi_device.c:243:6:midid_reset	24	static
+midi_device.c:256:6:midid_open	56	static,ignoring_inline_asm
+midi_device.c:315:6:midid_control_complete	16	static
+midi_device.c:322:6:midid_control_request	16	static
+midi_device.c:331:6:midid_xfer_cb	32	static,ignoring_inline_asm

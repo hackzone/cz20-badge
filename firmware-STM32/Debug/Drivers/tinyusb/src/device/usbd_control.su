@@ -1,0 +1,10 @@
+tusb_types.h:440:26:tu_edpt_dir	16	static
+tusb_common.h:100:24:tu_min16	16	static
+usbd_control.c:61:20:_status_stage_xact	16	static
+usbd_control.c:68:6:tud_control_status	16	static
+usbd_control.c:81:13:_data_stage_xact	24	static
+usbd_control.c:96:6:tud_control_xfer	40	static,ignoring_inline_asm
+usbd_control.c:122:6:usbd_control_reset	8	static
+usbd_control.c:128:6:usbd_control_set_complete_callback	16	static
+usbd_control.c:134:6:usbd_control_set_request	16	static
+usbd_control.c:145:6:usbd_control_xfer_cb	32	static,ignoring_inline_asm
