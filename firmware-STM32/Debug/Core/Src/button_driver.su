@@ -1,2 +1,0 @@
-button_driver.c:16:6:button_init	8	static
-button_driver.c:20:6:button_task	8	static
