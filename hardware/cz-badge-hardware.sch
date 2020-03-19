@@ -119,8 +119,6 @@ Text GLabel 900  5050 0    50   Input ~ 0
 VBAT_SENSE
 Wire Wire Line
 	3100 7050 2600 7050
-Wire Wire Line
-	2600 4950 3600 4950
 Wire Notes Line
 	2550 5650 4350 5650
 Wire Notes Line
@@ -498,23 +496,6 @@ Text GLabel 900  2900 0    50   Input ~ 0
 TOUCH1
 Text GLabel 900  3100 0    50   Input ~ 0
 TOUCH2
-$Comp
-L Connector:Conn_01x03_Male J5
-U 1 1 5DD981EB
-P 2700 3100
-F 0 "J5" H 2672 3032 50  0000 R CNN
-F 1 "Conn_01x03_Male" H 2672 3123 50  0000 R CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical_SMD_Pin1Left" H 2700 3100 50  0001 C CNN
-F 3 "~" H 2700 3100 50  0001 C CNN
-	1    2700 3100
-	-1   0    0    1   
-$EndComp
-Text GLabel 2500 3200 0    50   UnSpc ~ 0
-GND
-Text GLabel 2500 3100 0    50   Input ~ 0
-I2C_SCL
-Text GLabel 2500 3000 0    50   Input ~ 0
-I2C_SDA
 Wire Notes Line
 	8650 2750 450  2750
 Wire Wire Line
@@ -543,10 +524,6 @@ Connection ~ 10150 2800
 Wire Wire Line
 	10150 3000 10100 3000
 Connection ~ 10150 3000
-Text GLabel 7450 1400 0    50   UnSpc ~ 0
-VCC
-Text GLabel 7450 1200 0    50   UnSpc ~ 0
-VCC
 Wire Wire Line
 	7550 1200 7450 1200
 Wire Wire Line
@@ -653,25 +630,12 @@ Wire Wire Line
 	5350 3500 5450 3500
 Wire Wire Line
 	5450 3500 5450 3800
-$Comp
-L Connector_Generic:Conn_01x04 J7
-U 1 1 5E4457C1
-P 3700 3800
-F 0 "J7" H 3618 3375 50  0000 C CNN
-F 1 "Conn_01x04" H 3618 3466 50  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Horizontal" H 3700 3800 50  0001 C CNN
-F 3 "~" H 3700 3800 50  0001 C CNN
-	1    3700 3800
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	4100 3800 4100 3900
 Wire Wire Line
 	4100 3900 3900 3900
 Wire Wire Line
 	4050 3700 4050 3800
-Wire Wire Line
-	4050 3800 3900 3800
 Wire Wire Line
 	4300 3600 3900 3600
 Wire Wire Line
@@ -932,18 +896,8 @@ Wire Wire Line
 Connection ~ 2300 1600
 Wire Wire Line
 	2300 1600 2300 1700
-Text GLabel 3850 4750 2    50   Input ~ 0
-STM32_IRQ
 Text GLabel 3100 6750 2    50   Input ~ 0
 TOUCH3
-Wire Wire Line
-	3850 4750 3600 4750
-Wire Wire Line
-	3600 4750 3600 4950
-Connection ~ 3600 4950
-Wire Wire Line
-	3600 4950 3800 4950
-NoConn ~ 3100 6150
 NoConn ~ 3100 6250
 Text Notes 2300 4750 2    50   ~ 0
 T
@@ -1004,8 +958,6 @@ F 3 "~" H 1100 3700 50  0001 C CNN
 $EndComp
 Text GLabel 900  3700 0    50   Input ~ 0
 TOUCH5
-Text Notes -4700 4000 0    157  ~ 0
-TODO:\n\n- Audio and battery pins SMD\n- Power switch\n- Interrupt pin from STM to ESP
 Wire Notes Line
 	6050 1600 8650 1600
 Wire Notes Line
@@ -1438,6 +1390,44 @@ Text GLabel 3100 5550 2    50   Input ~ 0
 TOUCH4
 Text GLabel 3100 5450 2    50   Input ~ 0
 TOUCH5
+Wire Wire Line
+	4050 3800 3900 3800
+$Comp
+L Connector_Generic:Conn_01x08 J7
+U 1 1 5E7705B5
+P 3700 4000
+F 0 "J7" H 3618 3375 50  0000 C CNN
+F 1 "Conn_01x08" H 3618 3466 50  0000 C CNN
+F 2 "smd_header:PinSocket_1x08_P2.54mm_Horizontal" H 3700 4000 50  0001 C CNN
+F 3 "~" H 3700 4000 50  0001 C CNN
+	1    3700 4000
+	-1   0    0    1   
+$EndComp
+Text GLabel 4050 4000 2    50   UnSpc ~ 0
+GND
+Wire Wire Line
+	4050 4000 3900 4000
+Text GLabel 4050 4300 2    50   UnSpc ~ 0
+3V3
+Wire Wire Line
+	4050 4300 3900 4300
+Text GLabel 4050 4100 2    50   Input ~ 0
+I2C_SCL
+Wire Wire Line
+	4050 4100 3900 4100
+Text GLabel 4050 4200 2    50   Input ~ 0
+I2C_SDA
+Wire Wire Line
+	4050 4200 3900 4200
+Text GLabel 7450 1200 0    50   UnSpc ~ 0
+3V3
+Text GLabel 7450 1400 0    50   UnSpc ~ 0
+3V3
+Wire Wire Line
+	2600 4950 3800 4950
+Wire Wire Line
+	7150 3200 7200 3200
+NoConn ~ 3100 6150
 Wire Bus Line
 	7000 4650 7000 5100
 Wire Bus Line

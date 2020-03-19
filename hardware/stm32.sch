@@ -907,4 +907,5 @@ Text GLabel 1350 3100 3    50   UnSpc ~ 0
 GND
 Text GLabel 1150 3550 3    50   UnSpc ~ 0
 GND
+NoConn ~ 4500 3300
 $EndSCHEMATC
