@@ -131,6 +131,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_I2C_EnableListen_IT(&hi2c1);
   tusb_init();
+  uart_init();
   init_led();
   button_init();
   HAL_TIM_Base_Start_IT(&htim1);
@@ -141,6 +142,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
 	  tud_task(); // tinyusb device task
 	  led_blinking_task();
 		#if CFG_TUD_CDC

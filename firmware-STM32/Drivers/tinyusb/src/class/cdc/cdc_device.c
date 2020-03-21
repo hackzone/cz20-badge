@@ -348,12 +348,15 @@ bool cdcd_control_request(uint8_t rhport, tusb_control_request_t const * request
       //        This signal corresponds to V.24 signal 108/2 and RS-232 signal DTR (Data Terminal Ready)
       // Bit 1: Carrier control for half-duplex modems.
       //        This signal corresponds to V.24 signal 105 and RS-232 signal RTS (Request to Send)
-      //p_cdc->line_state = (uint8_t) request->wValue;
-    	p_cdc->line_state = 0x03;
+
+      //      p_cdc->line_state = (uint8_t) request->wValue;
+	  p_cdc->line_state = 0x03; // Needed because otherwise no data comes through somehow
+      bool dtr = tu_bit_test(request->wValue, 0);
+      bool rts = tu_bit_test(request->wValue, 1);
       tud_control_status(rhport, request);
 
       // Invoke callback
-      //if ( tud_cdc_line_state_cb) tud_cdc_line_state_cb(itf, tu_bit_test(request->wValue, 0), tu_bit_test(request->wValue, 1));
+      if ( tud_cdc_line_state_cb) tud_cdc_line_state_cb(itf, dtr, rts);
     break;
 
     default: return false; // stall unsupported request
