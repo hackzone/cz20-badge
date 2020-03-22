@@ -297,7 +297,7 @@ Text GLabel 3100 5150 2    50   Input ~ 0
 I2S_WS
 Wire Wire Line
 	3100 5250 2600 5250
-Text GLabel 3100 5750 2    50   Input ~ 0
+Text GLabel 3100 6150 2    50   Input ~ 0
 I2S_BCK
 Wire Wire Line
 	3100 5150 2600 5150
@@ -838,7 +838,7 @@ U 5E464BBE
 F0 "Power" 50
 F1 "Power.sch" 50
 $EndSheet
-Text GLabel 3100 5850 2    50   Output ~ 0
+Text GLabel 3100 6250 2    50   Output ~ 0
 ~CHARGE_ENABLE
 $Comp
 L Connector:TestPoint TP5
@@ -896,7 +896,6 @@ Wire Wire Line
 	2300 1600 2300 1700
 Text GLabel 3100 6750 2    50   Input ~ 0
 TOUCH3
-NoConn ~ 3100 6250
 Text Notes 2300 4750 2    50   ~ 0
 T
 Text Notes 2300 4950 2    50   ~ 0
@@ -1425,17 +1424,6 @@ Wire Wire Line
 	2600 4950 3800 4950
 Wire Wire Line
 	7150 3200 7200 3200
-NoConn ~ 3100 6150
-Wire Bus Line
-	7000 4650 7000 5100
-Wire Bus Line
-	8150 4650 8150 5100
-Wire Bus Line
-	8200 5300 8200 5950
-Wire Bus Line
-	8550 3400 8550 5300
-Wire Bus Line
-	7000 5100 7000 6150
 $Comp
 L Connector:TestPoint TP7
 U 1 1 5E78D123
@@ -1447,4 +1435,16 @@ F 3 "~" H 3200 4550 50  0001 C CNN
 	1    3000 4550
 	1    0    0    -1  
 $EndComp
+NoConn ~ 3100 5750
+NoConn ~ 3100 5850
+Wire Bus Line
+	7000 4650 7000 5100
+Wire Bus Line
+	8150 4650 8150 5100
+Wire Bus Line
+	8200 5300 8200 5950
+Wire Bus Line
+	8550 3400 8550 5300
+Wire Bus Line
+	7000 5100 7000 6150
 $EndSCHEMATC
