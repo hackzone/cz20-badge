@@ -236,11 +236,12 @@ void DMA1_Channel7_IRQHandler(void)
 void TIM1_UP_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_UP_IRQn 0 */
-  static uint16_t line_select = 0x0100;
-  HAL_GPIO_WritePin(GPIOB, 0xFF00, 1);
-  HAL_GPIO_WritePin(GPIOB, line_select, 0);
-  HAL_GPIO_WritePin(GPIOB, getOutput_led(line_select), 0);
-  line_select = line_select == 0x8000 ? 0x0100 : line_select << 1;
+  static uint16_t line_select = 0x0100; // Start with gpio PB8
+  HAL_GPIO_WritePin(GPIOB, 0xFF00, 1); // Disable all row selectors (at gpio PB8-15)
+  HAL_GPIO_WritePin(GPIOB, line_select, 0); // Enable one row selector BJT
+  //  HAL_GPIO_WritePin(GPIOB, getOutput_led(line_select), 1); // Enable the needed RGB n-FETs
+    HAL_GPIO_WritePin(GPIOB, 0b011110, 1); // Enable all green n-FETs
+  line_select = line_select == 0x8000 ? 0x0100 : line_select << 1; // Cycle through all row selectors at PB8-15
   /* USER CODE END TIM1_UP_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_UP_IRQn 1 */
@@ -254,7 +255,7 @@ void TIM1_UP_IRQHandler(void)
 void TIM1_CC_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_CC_IRQn 0 */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5, 1); //Clear all outputs
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5, 0); //Clear all outputs
   /* USER CODE END TIM1_CC_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_CC_IRQn 1 */

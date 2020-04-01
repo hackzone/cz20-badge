@@ -29,7 +29,7 @@ uint8_t getOutput_led(uint16_t lineselect) {
 	static uint8_t pos;
 	uint8_t id = 31-__builtin_clz(lineselect >> 8);
 	uint8_t return_val = outputmap[id][bitplane[pos]];
-	if(lineselect == 0x8000) pos++;
+	if(lineselect == 0x8000) pos++; // If the current row is the last (at gpio PB15), get next bitplane
 	if(pos == 128) pos = 0;
 	return return_val;
 }
