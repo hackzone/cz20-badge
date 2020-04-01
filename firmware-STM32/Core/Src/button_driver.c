@@ -6,6 +6,7 @@
  */
 #include "button_driver.h"
 #include "i2c_handler.h"
+#include "interrupt_pin.h"
 
 uint32_t lastbutton_tick = 0;
 uint32_t button_row = 0; //Row selector
@@ -14,7 +15,7 @@ uint32_t button_state_prev = 0;
 uint16_t *i2c_buttonstate;
 
 void button_init() {
-	i2c_buttonstate = (uint16_t *) getMemory(1);
+	i2c_buttonstate = (uint16_t *) getI2CMemory(4);
 }
 
 void button_task() {
@@ -44,6 +45,9 @@ void button_task() {
 			if(button_state_prev != button_state) {	//Changes in button matrix
 				*i2c_buttonstate = button_state;
 				button_state_prev = button_state;
+
+				addInterruptReason(INTERRUPT_REASON_BUTTON);
+				setInterruptPin(); // Assert the interrupt pin to let the ESP32 know there is new data
 			}
 			break;
 		}
