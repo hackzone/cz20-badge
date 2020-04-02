@@ -11,6 +11,6 @@
 #include "main.h"
 
 void init_led();
-void handle_led();
+void led_task();
 uint8_t getOutput_led(uint16_t lineselect);
 #endif /* INC_LED_DRIVER_H_ */

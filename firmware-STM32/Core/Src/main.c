@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "tusb.h"
+#include "i2c_handler.h"
 #include "usb_descriptors.h"
 #include "button_driver.h"
 #include "led_driver.h"
@@ -85,7 +86,7 @@ enum  {
 static uint32_t blink_interval_ms = BLINK_NOT_MOUNTED;
 uint32_t last_tick;
 
-void led_blinking_task(void);
+void led_task(void);
 void usb_device_task(void);
 void cdc_task(void);
 void hid_task(void);
@@ -144,7 +145,6 @@ int main(void)
   {
 
 	  tud_task(); // tinyusb device task
-	  led_blinking_task();
 		#if CFG_TUD_CDC
 				cdc_task();
 		#endif
@@ -157,6 +157,7 @@ int main(void)
 				midi_task();
 		#endif
 
+		led_task();
 		button_task();
 
 		if(last_tick != HAL_GetTick()) {
@@ -558,59 +559,40 @@ void tud_resume_cb(void)
 
 void hid_task(void)
 {
-  // Poll every 10ms
-  const uint32_t interval_ms = 2000;
-  static uint32_t start_ms = 0;
+	bool should_pause = false;
+	uint16_t* button_state = (uint16_t*) getI2CMemory(4);
+	uint8_t* hid_keyboard_dirty = (uint8_t*) getI2CMemory(71);
+	uint8_t* hid_mouse_dirty = (uint8_t*) getI2CMemory(77);
 
-  if ( board_millis() - start_ms < interval_ms) return; // not enough time
-  start_ms += interval_ms;
+	// Perform wake-up over USB if any button is pressed
+	if ( tud_suspended() && *button_state )
+	{
+		// Wake up host if we are in suspend mode
+		// and REMOTE_WAKEUP feature is enabled by host
+		tud_remote_wakeup();
+	}
 
-  uint32_t const btn = 0;
+	if(*hid_keyboard_dirty && tud_hid_ready()) {
+		uint8_t* key_modifier = (uint8_t*) getI2CMemory(64);
+		uint8_t* keycodes = (uint8_t*) getI2CMemory(65);
+		tud_hid_keyboard_report(REPORT_ID_KEYBOARD, *key_modifier, keycodes);
 
-  // Remote wakeup
-  if ( tud_suspended() && btn )
-  {
-    // Wake up host if we are in suspend mode
-    // and REMOTE_WAKEUP feature is enabled by host
-    tud_remote_wakeup();
-  }
+		*hid_keyboard_dirty = 0;
+		should_pause = true;
+	}
 
-  /*------------- Mouse -------------*/
-  if ( tud_hid_ready() )
-  {
-    if ( btn )
-    {
-      int8_t const delta = 5;
+	if(*hid_mouse_dirty && tud_hid_ready()) {
+		if(should_pause) {
+			// delay a bit before attempt to send mouse report
+			HAL_Delay(10);
+		}
 
-      // no button, right + down, no scroll pan
-      tud_hid_mouse_report(REPORT_ID_MOUSE, 0x00, delta, delta, 0, 0);
+		int8_t* mouse_data = (int8_t*) getI2CMemory(72);
 
-      // delay a bit before attempt to send keyboard report
-      //board_delay(10);
-    }
-  }
-
-  /*------------- Keyboard -------------*/
-  if ( tud_hid_ready() )
-  {
-    // use to avoid send multiple consecutive zero report for keyboard
-    static bool has_key = false;
-
-    if ( !btn )
-    {
-      uint8_t keycode[6] = { 0 };
-      keycode[0] = HID_KEY_A;
-
-      tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
-
-      has_key = true;
-    }else
-    {
-      // send empty key report if previously has key pressed
-      if (has_key) tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, NULL);
-      has_key = false;
-    }
-  }
+		// Data in order: buttons bitmask, X, Y, scroll, pan
+		tud_hid_mouse_report(REPORT_ID_MOUSE, *((uint8_t*)mouse_data), *(mouse_data+1), *(mouse_data+2), *(mouse_data+3), *(mouse_data+4));
+		*hid_mouse_dirty = 0;
+	}
 }
 
 
@@ -646,9 +628,6 @@ void tud_hid_set_report_cb(uint8_t report_id, hid_report_type_t report_type, uin
 //--------------------------------------------------------------------+
 
 #if CFG_TUD_MIDI
-// Variable that holds the current position in the sequence.
-uint32_t note_pos = 0;
-
 // Store example melody as an array of note values
 uint8_t note_sequence[] =
         {
@@ -659,30 +638,16 @@ uint8_t note_sequence[] =
 
 void midi_task(void)
 {
-    static uint32_t start_ms = 0;
+	// Check and send MIDI data in any of the 4 data buffers
+	for(uint8_t i = 0; i < 4; i++) {
+		uint8_t* midi_data = (uint8_t*) getI2CMemory(78 + i * 4);
+		uint8_t* dirty_byte = midi_data + 3;
 
-    // send note every 286 ms
-    if (board_millis() - start_ms < 286) { return; } // not enough time
-    start_ms += 286;
-
-    // Previous positions in the note sequence.
-    int previous = note_pos - 1;
-
-    // If we currently are at position 0, set the
-    // previous position to the last note in the sequence.
-    if (previous < 0) previous = sizeof(note_sequence) - 1;
-
-    // Send Note On for current position at full velocity (127) on channel 1.
-    tudi_midi_write24(0, 0x90, note_sequence[note_pos], 127);
-
-    // Send Note Off for previous note.
-    tudi_midi_write24(0, 0x80, note_sequence[previous], 0);
-
-    // Increment position
-    note_pos++;
-
-    // If we are at the end of the sequence, start over.
-    if (note_pos >= sizeof(note_sequence)) note_pos = 0;
+		if(*dirty_byte) {
+			tudi_midi_write24(0, *midi_data, *(midi_data+1), *(midi_data+2));
+			*dirty_byte = 0;
+		}
+	}
 }
 #endif
 
@@ -691,21 +656,6 @@ uint32_t board_millis(void)
   return HAL_GetTick();
 }
 
-//--------------------------------------------------------------------+
-// BLINKING TASK
-//--------------------------------------------------------------------+
-void led_blinking_task(void)
-{
-  static uint32_t start_ms = 0;
-  static bool led_state = false;
-
-  // Blink every interval ms
-  if ( board_millis() - start_ms < blink_interval_ms) return; // not enough time
-  start_ms += blink_interval_ms;
-
-  //board_led_write(led_state);
-  led_state = 1 - led_state; // toggle
-}
 /* USER CODE END 4 */
 
 /**

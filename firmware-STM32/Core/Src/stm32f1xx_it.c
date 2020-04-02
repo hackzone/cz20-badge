@@ -239,8 +239,7 @@ void TIM1_UP_IRQHandler(void)
   static uint16_t line_select = 0x0100; // Start with gpio PB8
   HAL_GPIO_WritePin(GPIOB, 0xFF00, 1); // Disable all row selectors (at gpio PB8-15)
   HAL_GPIO_WritePin(GPIOB, line_select, 0); // Enable one row selector BJT
-  //  HAL_GPIO_WritePin(GPIOB, getOutput_led(line_select), 1); // Enable the needed RGB n-FETs
-    HAL_GPIO_WritePin(GPIOB, 0b011110, 1); // Enable all green n-FETs
+    HAL_GPIO_WritePin(GPIOB, getOutput_led(line_select), 1); // Enable the needed RGB n-FETs
   line_select = line_select == 0x8000 ? 0x0100 : line_select << 1; // Cycle through all row selectors at PB8-15
   /* USER CODE END TIM1_UP_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
