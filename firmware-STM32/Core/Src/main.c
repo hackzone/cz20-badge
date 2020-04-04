@@ -574,7 +574,7 @@ void hid_task(void)
 
 	if(*hid_keyboard_dirty && tud_hid_ready()) {
 		uint8_t* key_modifier = (uint8_t*) getI2CMemory(64);
-		uint8_t* keycodes = (uint8_t*) getI2CMemory(65);
+		uint8_t* keycodes = (uint8_t*) getI2CMemory(65); // 6 bytes
 		tud_hid_keyboard_report(REPORT_ID_KEYBOARD, *key_modifier, keycodes);
 
 		*hid_keyboard_dirty = 0;
