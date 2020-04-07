@@ -42,8 +42,6 @@ GND
 Wire Wire Line
 	1300 3450 1400 3450
 Wire Wire Line
-	2400 3550 2400 3450
-Wire Wire Line
 	2400 3450 2350 3450
 Wire Wire Line
 	1400 3850 1400 3450
@@ -356,8 +354,6 @@ Wire Wire Line
 	4350 4300 4350 4200
 Wire Wire Line
 	2400 3950 2400 3850
-Text HLabel 2400 3950 2    50   Input ~ 0
-5V
 $Comp
 L Device:C C11
 U 1 1 5DD7FE4B
@@ -380,18 +376,6 @@ F 2 "Capacitor_SMD:C_0805_2012Metric" H 1838 3700 50  0001 C CNN
 F 3 "~" H 1800 3850 50  0001 C CNN
 F 4 "C16780" H 1800 3850 50  0001 C CNN "LCSC"
 	1    1800 3850
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Ferrite_Bead FB1
-U 1 1 5DF0F498
-P 2400 3700
-F 0 "FB1" H 2537 3746 50  0000 L CNN
-F 1 "100Ohm@100MHz" H 2537 3655 50  0000 L CNN
-F 2 "Inductor_SMD:L_0805_2012Metric" V 2330 3700 50  0001 C CNN
-F 3 "~" H 2400 3700 50  0001 C CNN
-F 4 "C1017" H 2400 3700 50  0001 C CNN "LCSC"
-	1    2400 3700
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -453,7 +437,6 @@ Connection ~ 1800 4000
 Connection ~ 1400 3850
 Wire Wire Line
 	2400 3550 2200 3550
-Connection ~ 2400 3550
 Text HLabel 7050 3900 1    50   Input ~ 0
 5V
 Text HLabel 7050 2600 3    50   Input ~ 0
@@ -504,4 +487,130 @@ $EndComp
 Wire Wire Line
 	3050 3500 3050 3450
 Connection ~ 3050 3450
+Text GLabel 2400 3950 3    50   UnSpc ~ 0
+3V3
+$Comp
+L Device:R R28
+U 1 1 5EE31536
+P 2400 3700
+F 0 "R28" V 2193 3700 50  0000 C CNN
+F 1 "10" V 2284 3700 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 2330 3700 50  0001 C CNN
+F 3 "~" H 2400 3700 50  0001 C CNN
+F 4 "" H 2400 3700 50  0001 C CNN "LCSC"
+	1    2400 3700
+	1    0    0    1   
+$EndComp
+Connection ~ 2400 3550
+Wire Wire Line
+	2400 3450 2400 3550
+Text GLabel 1000 4600 0    50   UnSpc ~ 0
+VCC
+Wire Wire Line
+	1000 4600 1050 4600
+Text GLabel 1500 5100 0    50   UnSpc ~ 0
+GND
+Text Notes 1300 4250 0    98   ~ 0
+3V power
+$Comp
+L Device:C C?
+U 1 1 5EE458A4
+P 1100 4400
+AR Path="/5EE458A4" Ref="C?"  Part="1" 
+AR Path="/5E4377A8/5EE458A4" Ref="C?"  Part="1" 
+AR Path="/5E464BBE/5EE458A4" Ref="C?"  Part="1" 
+F 0 "C?" V 848 4400 50  0000 C CNN
+F 1 "1uF" V 939 4400 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 1138 4250 50  0001 C CNN
+F 3 "~" H 1100 4400 50  0001 C CNN
+F 4 "C15849" H 1100 4400 50  0001 C CNN "LCSC"
+	1    1100 4400
+	0    -1   1    0   
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 5EE458AB
+P 2200 4400
+AR Path="/5EE458AB" Ref="C?"  Part="1" 
+AR Path="/5E4377A8/5EE458AB" Ref="C?"  Part="1" 
+AR Path="/5E464BBE/5EE458AB" Ref="C?"  Part="1" 
+F 0 "C?" V 1948 4400 50  0000 C CNN
+F 1 "1uF" V 2039 4400 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 2238 4250 50  0001 C CNN
+F 3 "~" H 2200 4400 50  0001 C CNN
+F 4 "C15849" H 2200 4400 50  0001 C CNN "LCSC"
+	1    2200 4400
+	0    -1   1    0   
+$EndComp
+Text GLabel 950  4400 0    50   UnSpc ~ 0
+GND
+Wire Wire Line
+	1250 4400 1250 4500
+Wire Wire Line
+	1250 4500 1150 4500
+Wire Wire Line
+	1150 4500 1150 4550
+Wire Wire Line
+	1150 4550 1050 4550
+Wire Wire Line
+	1050 4550 1050 4600
+Connection ~ 1050 4600
+Wire Wire Line
+	2050 4400 2050 4500
+Wire Wire Line
+	2050 4500 2150 4500
+Wire Wire Line
+	2150 4500 2150 4550
+Wire Wire Line
+	2150 4550 2250 4550
+Wire Wire Line
+	2250 4550 2250 4600
+Connection ~ 2250 4600
+Text GLabel 2350 4400 2    50   UnSpc ~ 0
+GND
+$Comp
+L Regulator_Linear:MIC5504-3.3YM5 U?
+U 1 1 5EE458C0
+P 1650 4700
+F 0 "U?" H 1650 5067 50  0000 C CNN
+F 1 " HX9193-33GB" H 1650 4976 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23-5" H 1650 4300 50  0001 C CNN
+F 3 "" H 1400 4950 50  0001 C CNN
+F 4 "C296123" H 1650 4700 50  0001 C CNN "LCSC"
+	1    1650 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2050 4600 2250 4600
+Wire Wire Line
+	1050 4600 1150 4600
+Wire Wire Line
+	1650 5100 1650 5000
+Wire Wire Line
+	1500 5100 1650 5100
+Wire Wire Line
+	1250 4800 1150 4800
+Wire Wire Line
+	1150 4800 1150 4600
+Connection ~ 1150 4600
+Wire Wire Line
+	1150 4600 1250 4600
+$Comp
+L Device:R R?
+U 1 1 5EE48409
+P 2550 3700
+F 0 "R?" V 2343 3700 50  0000 C CNN
+F 1 "10" V 2434 3700 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 2480 3700 50  0001 C CNN
+F 3 "~" H 2550 3700 50  0001 C CNN
+F 4 "" H 2550 3700 50  0001 C CNN "LCSC"
+	1    2550 3700
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	2400 3550 2550 3550
+Wire Wire Line
+	2550 3850 2550 4600
+Wire Wire Line
+	2250 4600 2550 4600
 $EndSCHEMATC

@@ -242,13 +242,9 @@ Wire Wire Line
 	3800 3100 3800 3350
 Wire Wire Line
 	3900 3200 4500 3200
-Text HLabel 3250 3100 0    50   Input ~ 0
-EN_ESP
 Wire Wire Line
 	3250 3100 3800 3100
 Connection ~ 3800 3100
-Text HLabel 3250 3200 0    50   Input ~ 0
-G0_ESP
 Wire Wire Line
 	3250 3200 3900 3200
 Connection ~ 3900 3200
@@ -284,26 +280,10 @@ Text GLabel 6400 4150 1    50   UnSpc ~ 0
 3V3
 Wire Wire Line
 	6400 4150 6400 4250
-Text HLabel 4400 4200 0    50   Input ~ 0
-i2c_SDA
 Text HLabel 4400 4100 0    50   Input ~ 0
 i2c_SCL
 Wire Wire Line
 	4400 4100 4500 4100
-Text HLabel 2550 2600 1    50   Input ~ 0
-R1
-Text HLabel 2350 3150 1    50   Input ~ 0
-G1
-Text HLabel 1950 2600 1    50   Input ~ 0
-B1
-Text HLabel 1150 3150 1    50   Input ~ 0
-R2
-Text HLabel 1350 2600 1    50   Input ~ 0
-G2
-Text HLabel 1750 3150 1    50   Input ~ 0
-B2
-Wire Wire Line
-	4400 4200 4500 4200
 Text HLabel 5900 3700 2    50   Output ~ 0
 TX
 Wire Wire Line
@@ -339,165 +319,6 @@ Wire Wire Line
 Wire Wire Line
 	5900 4200 5800 4200
 Wire Wire Line
-	2050 6750 2500 6750
-Text HLabel 2600 7200 3    50   Input ~ 0
-L3
-Wire Wire Line
-	2600 7200 2600 7150
-Wire Wire Line
-	2600 7150 2550 7150
-Text HLabel 2950 6800 3    50   Input ~ 0
-L4
-Wire Wire Line
-	2950 6800 2950 6750
-Wire Wire Line
-	2950 6750 2900 6750
-$Comp
-L Device:R R?
-U 1 1 5E691ABC
-P 2350 6450
-AR Path="/5DC753C3/5E691ABC" Ref="R?"  Part="1" 
-AR Path="/5E691ABC" Ref="R?"  Part="1" 
-AR Path="/5E3BA64A/5E691ABC" Ref="R35"  Part="1" 
-F 0 "R35" V 2143 6450 50  0000 C CNN
-F 1 "680" V 2234 6450 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 2280 6450 50  0001 C CNN
-F 3 "~" H 2350 6450 50  0001 C CNN
-F 4 "C23228" H 2350 6450 50  0001 C CNN "LCSC"
-	1    2350 6450
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E691AC6
-P 2700 6250
-AR Path="/5DC753C3/5E691AC6" Ref="R?"  Part="1" 
-AR Path="/5E691AC6" Ref="R?"  Part="1" 
-AR Path="/5E3BA64A/5E691AC6" Ref="R39"  Part="1" 
-F 0 "R39" V 2493 6250 50  0000 C CNN
-F 1 "680" V 2584 6250 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 2630 6250 50  0001 C CNN
-F 3 "~" H 2700 6250 50  0001 C CNN
-F 4 "C23228" H 2700 6250 50  0001 C CNN "LCSC"
-	1    2700 6250
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2700 6400 2700 6450
-Wire Wire Line
-	2350 6850 2350 6600
-Wire Wire Line
-	2450 6100 2700 6100
-Text GLabel 3050 7350 3    50   UnSpc ~ 0
-VCC
-Wire Wire Line
-	3050 7350 3050 7150
-Wire Wire Line
-	3050 7150 3150 7150
-Wire Wire Line
-	3050 7150 3050 6750
-Wire Wire Line
-	3050 6750 3500 6750
-Connection ~ 3050 7150
-Text HLabel 3600 7200 3    50   Input ~ 0
-L5
-Wire Wire Line
-	3600 7200 3600 7150
-Wire Wire Line
-	3600 7150 3550 7150
-Text HLabel 3950 6800 3    50   Input ~ 0
-L6
-Wire Wire Line
-	3950 6800 3950 6750
-Wire Wire Line
-	3950 6750 3900 6750
-$Comp
-L Device:R R?
-U 1 1 5E6C7496
-P 3350 6450
-AR Path="/5DC753C3/5E6C7496" Ref="R?"  Part="1" 
-AR Path="/5E6C7496" Ref="R?"  Part="1" 
-AR Path="/5E3BA64A/5E6C7496" Ref="R38"  Part="1" 
-F 0 "R38" V 3143 6450 50  0000 C CNN
-F 1 "680" V 3234 6450 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 3280 6450 50  0001 C CNN
-F 3 "~" H 3350 6450 50  0001 C CNN
-F 4 "C23228" H 3350 6450 50  0001 C CNN "LCSC"
-	1    3350 6450
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E6C74A0
-P 3700 6250
-AR Path="/5DC753C3/5E6C74A0" Ref="R?"  Part="1" 
-AR Path="/5E6C74A0" Ref="R?"  Part="1" 
-AR Path="/5E3BA64A/5E6C74A0" Ref="R42"  Part="1" 
-F 0 "R42" V 3493 6250 50  0000 C CNN
-F 1 "680" V 3584 6250 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 3630 6250 50  0001 C CNN
-F 3 "~" H 3700 6250 50  0001 C CNN
-F 4 "C23228" H 3700 6250 50  0001 C CNN "LCSC"
-	1    3700 6250
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3700 6400 3700 6450
-Wire Wire Line
-	3350 6850 3350 6600
-Text GLabel 4050 7350 3    50   UnSpc ~ 0
-VCC
-Wire Wire Line
-	4050 7150 4150 7150
-Wire Wire Line
-	4050 6750 4500 6750
-Text HLabel 4600 7200 3    50   Input ~ 0
-L7
-Wire Wire Line
-	4600 7200 4600 7150
-Wire Wire Line
-	4600 7150 4550 7150
-Wire Wire Line
-	4950 6800 4950 6750
-Wire Wire Line
-	4950 6750 4900 6750
-$Comp
-L Device:R R?
-U 1 1 5E6C74CF
-P 4350 6450
-AR Path="/5DC753C3/5E6C74CF" Ref="R?"  Part="1" 
-AR Path="/5E6C74CF" Ref="R?"  Part="1" 
-AR Path="/5E3BA64A/5E6C74CF" Ref="R36"  Part="1" 
-F 0 "R36" V 4143 6450 50  0000 C CNN
-F 1 "680" V 4234 6450 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 4280 6450 50  0001 C CNN
-F 3 "~" H 4350 6450 50  0001 C CNN
-F 4 "C23228" H 4350 6450 50  0001 C CNN "LCSC"
-	1    4350 6450
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E6C74D9
-P 4700 6250
-AR Path="/5DC753C3/5E6C74D9" Ref="R?"  Part="1" 
-AR Path="/5E6C74D9" Ref="R?"  Part="1" 
-AR Path="/5E3BA64A/5E6C74D9" Ref="R40"  Part="1" 
-F 0 "R40" V 4493 6250 50  0000 C CNN
-F 1 "680" V 4584 6250 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 4630 6250 50  0001 C CNN
-F 3 "~" H 4700 6250 50  0001 C CNN
-F 4 "C23228" H 4700 6250 50  0001 C CNN "LCSC"
-	1    4700 6250
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4700 6400 4700 6450
-Wire Wire Line
-	4350 6850 4350 6600
-Wire Wire Line
-	4450 6100 4700 6100
-Wire Wire Line
 	5900 3500 5800 3500
 Text HLabel 5900 3600 2    50   Input ~ 0
 ROW2
@@ -511,78 +332,6 @@ Text HLabel 5900 5000 2    50   Input ~ 0
 ROW4
 Wire Wire Line
 	5900 5000 5800 5000
-$Comp
-L Device:Q_PNP_BEC Q1
-U 1 1 5E7B805F
-P 2350 7050
-F 0 "Q1" H 2541 7004 50  0000 L CNN
-F 1 "PMBT3906,215" H 2541 7095 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 2550 7150 50  0001 C CNN
-F 3 "~" H 2350 7050 50  0001 C CNN
-F 4 "C8670" H 2350 7050 50  0001 C CNN "LCSC"
-	1    2350 7050
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:Q_PNP_BEC Q5
-U 1 1 5E7B84BA
-P 2700 6650
-F 0 "Q5" H 2891 6604 50  0000 L CNN
-F 1 "PMBT3906,215" H 2891 6695 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 2900 6750 50  0001 C CNN
-F 3 "~" H 2700 6650 50  0001 C CNN
-F 4 "C8670" H 2700 6650 50  0001 C CNN "LCSC"
-	1    2700 6650
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:Q_PNP_BEC Q4
-U 1 1 5E7B8A59
-P 3350 7050
-F 0 "Q4" H 3541 7004 50  0000 L CNN
-F 1 "PMBT3906,215" H 3541 7095 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 3550 7150 50  0001 C CNN
-F 3 "~" H 3350 7050 50  0001 C CNN
-F 4 "C8670" H 3350 7050 50  0001 C CNN "LCSC"
-	1    3350 7050
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:Q_PNP_BEC Q8
-U 1 1 5E7B8E9C
-P 3700 6650
-F 0 "Q8" H 3891 6604 50  0000 L CNN
-F 1 "PMBT3906,215" H 3891 6695 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 3900 6750 50  0001 C CNN
-F 3 "~" H 3700 6650 50  0001 C CNN
-F 4 "C8670" H 3700 6650 50  0001 C CNN "LCSC"
-	1    3700 6650
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:Q_PNP_BEC Q2
-U 1 1 5E7B9253
-P 4350 7050
-F 0 "Q2" H 4541 7004 50  0000 L CNN
-F 1 "PMBT3906,215" H 4541 7095 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 4550 7150 50  0001 C CNN
-F 3 "~" H 4350 7050 50  0001 C CNN
-F 4 "C8670" H 4350 7050 50  0001 C CNN "LCSC"
-	1    4350 7050
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:Q_PNP_BEC Q6
-U 1 1 5E7B979E
-P 4700 6650
-F 0 "Q6" H 4891 6604 50  0000 L CNN
-F 1 "PMBT3906,215" H 4891 6695 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 4900 6750 50  0001 C CNN
-F 3 "~" H 4700 6650 50  0001 C CNN
-F 4 "C8670" H 4700 6650 50  0001 C CNN "LCSC"
-	1    4700 6650
-	0    1    1    0   
-$EndComp
 $Comp
 L Device:Crystal_GND24_Small Y1
 U 1 1 5E3ED918
@@ -616,10 +365,6 @@ Wire Wire Line
 Connection ~ 4200 2850
 Wire Wire Line
 	4200 2850 4250 2850
-Text HLabel 4950 6800 3    50   Input ~ 0
-L8
-Wire Wire Line
-	4500 4600 4450 4600
 $Comp
 L Connector_Generic:Conn_01x03 J6
 U 1 1 5E568FFD
@@ -646,131 +391,6 @@ Wire Wire Line
 Wire Wire Line
 	3250 2600 4500 2600
 Wire Wire Line
-	4050 7350 4050 7150
-Connection ~ 4050 7150
-Wire Wire Line
-	4050 7150 4050 6750
-Wire Wire Line
-	4450 4600 4450 6100
-Wire Wire Line
-	4350 4700 4350 6300
-Wire Wire Line
-	4350 4700 4500 4700
-Wire Wire Line
-	3700 4500 3700 6100
-Wire Wire Line
-	3350 4800 3350 6300
-Wire Wire Line
-	2450 4300 2450 6100
-Text HLabel 1600 7200 3    50   Input ~ 0
-L1
-$Comp
-L Device:Q_PNP_BEC Q7
-U 1 1 5E7B4F4B
-P 1700 6650
-F 0 "Q7" H 1891 6604 50  0000 L CNN
-F 1 "PMBT3906,215" H 1891 6695 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 1900 6750 50  0001 C CNN
-F 3 "~" H 1700 6650 50  0001 C CNN
-F 4 "C8670" H 1700 6650 50  0001 C CNN "LCSC"
-	1    1700 6650
-	0    1    1    0   
-$EndComp
-Connection ~ 2050 7150
-Wire Wire Line
-	2050 7150 2050 6750
-Wire Wire Line
-	2050 7150 2150 7150
-Wire Wire Line
-	2050 7350 2050 7150
-Text GLabel 2050 7350 3    50   UnSpc ~ 0
-VCC
-Wire Wire Line
-	1350 6850 1350 6600
-Wire Wire Line
-	1700 6400 1700 6450
-$Comp
-L Device:R R?
-U 1 1 5E67AE14
-P 1700 6250
-AR Path="/5DC753C3/5E67AE14" Ref="R?"  Part="1" 
-AR Path="/5E67AE14" Ref="R?"  Part="1" 
-AR Path="/5E3BA64A/5E67AE14" Ref="R41"  Part="1" 
-F 0 "R41" V 1493 6250 50  0000 C CNN
-F 1 "680" V 1584 6250 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 1630 6250 50  0001 C CNN
-F 3 "~" H 1700 6250 50  0001 C CNN
-F 4 "C23228" H 1700 6250 50  0001 C CNN "LCSC"
-	1    1700 6250
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5E679B50
-P 1350 6450
-AR Path="/5DC753C3/5E679B50" Ref="R?"  Part="1" 
-AR Path="/5E679B50" Ref="R?"  Part="1" 
-AR Path="/5E3BA64A/5E679B50" Ref="R37"  Part="1" 
-F 0 "R37" V 1143 6450 50  0000 C CNN
-F 1 "680" V 1234 6450 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 1280 6450 50  0001 C CNN
-F 3 "~" H 1350 6450 50  0001 C CNN
-F 4 "C23228" H 1350 6450 50  0001 C CNN "LCSC"
-	1    1350 6450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1950 6750 1900 6750
-Wire Wire Line
-	1950 6800 1950 6750
-Text HLabel 1950 6800 3    50   Input ~ 0
-L2
-Wire Wire Line
-	1600 7150 1550 7150
-Wire Wire Line
-	1600 7200 1600 7150
-Connection ~ 1050 7150
-Wire Wire Line
-	1050 6750 1500 6750
-Wire Wire Line
-	1050 7150 1050 6750
-Wire Wire Line
-	1050 7150 1150 7150
-Wire Wire Line
-	1050 7350 1050 7150
-Text GLabel 1050 7350 3    50   UnSpc ~ 0
-VCC
-$Comp
-L Device:Q_PNP_BEC Q3
-U 1 1 5E65B1D9
-P 1350 7050
-F 0 "Q3" H 1541 7004 50  0000 L CNN
-F 1 "PMBT3906,215" H 1541 7095 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 1550 7150 50  0001 C CNN
-F 3 "~" H 1350 7050 50  0001 C CNN
-F 4 "C8670" H 1350 7050 50  0001 C CNN "LCSC"
-	1    1350 7050
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	3700 4500 4500 4500
-Wire Wire Line
-	3350 4800 4500 4800
-Wire Wire Line
-	2450 4300 4500 4300
-Wire Wire Line
-	1700 6100 1700 4400
-Wire Wire Line
-	1700 4400 4500 4400
-Wire Wire Line
-	1350 5000 1350 6300
-Wire Wire Line
-	1350 5000 4500 5000
-Wire Wire Line
-	2350 4900 2350 6300
-Wire Wire Line
-	2350 4900 4500 4900
-Wire Wire Line
 	3250 3400 3500 3400
 Wire Wire Line
 	3800 3450 3900 3450
@@ -781,131 +401,21 @@ Wire Wire Line
 Wire Wire Line
 	3500 3400 3500 3450
 Connection ~ 3500 3400
-$Comp
-L Transistor_FET:DMN2050L Q?
-U 1 1 5F5B6334
-P 2650 2900
-AR Path="/5E464BBE/5F5B6334" Ref="Q?"  Part="1" 
-AR Path="/5E3BA64A/5F5B6334" Ref="Q17"  Part="1" 
-F 0 "Q17" V 2800 2700 50  0000 L CNN
-F 1 "AO3400 (A09T)" V 2850 2800 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 2850 2825 50  0001 L CIN
-F 3 "http://www.aosmd.com/pdfs/datasheet/ao3400.pdf" H 2650 2900 50  0001 L CNN
-F 4 "C20917" H 2650 2900 50  0001 C CNN "LCSC"
-	1    2650 2900
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	2850 3500 2850 2900
-Wire Wire Line
-	2850 3500 4500 3500
-Wire Wire Line
-	2550 2600 2550 2700
-$Comp
-L Transistor_FET:DMN2050L Q?
-U 1 1 5F5D5517
-P 2450 3350
-AR Path="/5E464BBE/5F5D5517" Ref="Q?"  Part="1" 
-AR Path="/5E3BA64A/5F5D5517" Ref="Q20"  Part="1" 
-F 0 "Q20" V 2600 3150 50  0000 L CNN
-F 1 "AO3400 (A09T)" V 2700 2950 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 2650 3275 50  0001 L CIN
-F 3 "http://www.aosmd.com/pdfs/datasheet/ao3400.pdf" H 2450 3350 50  0001 L CNN
-F 4 "C20917" H 2450 3350 50  0001 C CNN "LCSC"
-	1    2450 3350
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Transistor_FET:DMN2050L Q?
-U 1 1 5F5FA06E
-P 2050 2900
-AR Path="/5E464BBE/5F5FA06E" Ref="Q?"  Part="1" 
-AR Path="/5E3BA64A/5F5FA06E" Ref="Q16"  Part="1" 
-F 0 "Q16" V 2200 2700 50  0000 L CNN
-F 1 "AO3400 (A09T)" V 2300 2850 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 2250 2825 50  0001 L CIN
-F 3 "http://www.aosmd.com/pdfs/datasheet/ao3400.pdf" H 2050 2900 50  0001 L CNN
-F 4 "C20917" H 2050 2900 50  0001 C CNN "LCSC"
-	1    2050 2900
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	1950 2600 1950 2700
-$Comp
-L Transistor_FET:DMN2050L Q?
-U 1 1 5F5FA076
-P 1850 3350
-AR Path="/5E464BBE/5F5FA076" Ref="Q?"  Part="1" 
-AR Path="/5E3BA64A/5F5FA076" Ref="Q19"  Part="1" 
-F 0 "Q19" V 2000 3150 50  0000 L CNN
-F 1 "AO3400 (A09T)" V 2100 2950 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 2050 3275 50  0001 L CIN
-F 3 "http://www.aosmd.com/pdfs/datasheet/ao3400.pdf" H 1850 3350 50  0001 L CNN
-F 4 "C20917" H 1850 3350 50  0001 C CNN "LCSC"
-	1    1850 3350
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Transistor_FET:DMN2050L Q?
-U 1 1 5F606C2A
-P 1450 2900
-AR Path="/5E464BBE/5F606C2A" Ref="Q?"  Part="1" 
-AR Path="/5E3BA64A/5F606C2A" Ref="Q15"  Part="1" 
-F 0 "Q15" V 1600 2700 50  0000 L CNN
-F 1 "AO3400 (A09T)" V 1700 2850 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 1650 2825 50  0001 L CIN
-F 3 "http://www.aosmd.com/pdfs/datasheet/ao3400.pdf" H 1450 2900 50  0001 L CNN
-F 4 "C20917" H 1450 2900 50  0001 C CNN "LCSC"
-	1    1450 2900
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	1350 2600 1350 2700
-$Comp
-L Transistor_FET:DMN2050L Q?
-U 1 1 5F606C32
-P 1250 3350
-AR Path="/5E464BBE/5F606C32" Ref="Q?"  Part="1" 
-AR Path="/5E3BA64A/5F606C32" Ref="Q18"  Part="1" 
-F 0 "Q18" V 1400 3150 50  0000 L CNN
-F 1 "AO3400 (A09T)" V 1500 2950 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 1450 3275 50  0001 L CIN
-F 3 "http://www.aosmd.com/pdfs/datasheet/ao3400.pdf" H 1250 3350 50  0001 L CNN
-F 4 "C20917" H 1250 3350 50  0001 C CNN "LCSC"
-	1    1250 3350
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	2650 3600 2650 3350
-Wire Wire Line
-	2650 3600 4500 3600
-Wire Wire Line
-	2250 3700 2250 2900
-Wire Wire Line
-	2250 3700 4500 3700
-Wire Wire Line
-	2050 3800 2050 3350
-Wire Wire Line
-	2050 3800 4500 3800
-Wire Wire Line
-	1650 3900 1650 2900
-Wire Wire Line
-	1650 3900 4500 3900
-Wire Wire Line
-	1450 4000 1450 3350
-Wire Wire Line
-	1450 4000 4500 4000
-Text GLabel 2550 3100 3    50   UnSpc ~ 0
-GND
-Text GLabel 2350 3550 3    50   UnSpc ~ 0
-GND
-Text GLabel 1750 3550 3    50   UnSpc ~ 0
-GND
-Text GLabel 1950 3100 3    50   UnSpc ~ 0
-GND
-Text GLabel 1350 3100 3    50   UnSpc ~ 0
-GND
-Text GLabel 1150 3550 3    50   UnSpc ~ 0
-GND
 NoConn ~ 4500 3300
+Text HLabel 3250 3200 0    50   Input ~ 0
+G0_ESP
+Text HLabel 3250 3100 0    50   Input ~ 0
+EN_ESP
+Wire Wire Line
+	4400 4200 4500 4200
+Text HLabel 4400 4200 0    50   Input ~ 0
+i2c_SDA
+Text HLabel 3650 4850 0    50   Output ~ 0
+OE
+Text HLabel 3650 4950 0    50   Output ~ 0
+CLK
+Text HLabel 3650 5050 0    50   Output ~ 0
+SDI
+Text HLabel 3650 5150 0    50   Output ~ 0
+LE
 $EndSCHEMATC
