@@ -410,12 +410,20 @@ Wire Wire Line
 	4400 4200 4500 4200
 Text HLabel 4400 4200 0    50   Input ~ 0
 i2c_SDA
-Text HLabel 3650 4850 0    50   Output ~ 0
+Text HLabel 4250 4900 0    50   Output ~ 0
 OE
-Text HLabel 3650 4950 0    50   Output ~ 0
+Text HLabel 4250 4800 0    50   Output ~ 0
 CLK
-Text HLabel 3650 5050 0    50   Output ~ 0
-SDI
-Text HLabel 3650 5150 0    50   Output ~ 0
+Text HLabel 4250 4700 0    50   Output ~ 0
 LE
+Wire Wire Line
+	4250 5000 4500 5000
+Text HLabel 4250 5000 0    50   Output ~ 0
+SDI
+Wire Wire Line
+	4250 4800 4500 4800
+Wire Wire Line
+	4500 4700 4250 4700
+Wire Wire Line
+	4250 4900 4500 4900
 $EndSCHEMATC
