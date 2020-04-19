@@ -1,0 +1,18 @@
+div.filebrowser {
+  width: 20%;
+  height: 800px;
+  border: 1px solid #808080;
+  float: left;
+}
+
+#wrapper {
+  width: 90%;
+  overflow: auto;
+  border: 1px solid black;
+}
+
+#editor {
+  width: 70%;
+  height:800px;
+  border: 1px solid green;
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Campzone Badge2020 dev</title>
+	<link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+	<h1>filebrowser</h1>
+	<button onclick="connect()">Connect</button> 
+	<div id="wrapper"></div>
+		<div id="filebrowser" class="filebrowser"></div>
+
+		<div id="editor">print("Hello world")
+		</div>
+	</div>
+
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>	
+	<script>
+	// ajax demo
+	$('#filebrowser').jstree({
+		'core' : {
+			'data' : {
+				"url" : "./root.json",
+				"dataType" : "json" // needed only if you do not supply JSON headers
+			}
+		}
+	});
+	
+	</script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/ace/1.4.11/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/python");
+</script>
+
+<script>
+	var device;
+	var payload="";
+
+	function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+	let readLoop = () => {
+		let decoder = new TextDecoder();
+      	device.transferIn(3, 64).then(result => {
+        console.log('Received: ' + decoder.decode(result.data));
+		payload = payload + decoder.decode(result.data);
+		console.log(payload)
+		if(IsJsonString(payload)) {
+			console.log("Valid json found")
+			$('#filebrowser').jstree(true).settings.core.data = JSON.parse(payload);
+			$('#filebrowser').jstree(true).refresh();
+		}
+        readLoop();
+      }, error => {
+        this.onReceiveError(error);
+      });
+    };
+
+	function connect() {
+	
+
+navigator.usb.requestDevice({ filters: [{ vendorId: 0xcafe }] })
+.then(selectedDevice => {
+   device = selectedDevice;
+   return device.open(); // Begin a session.
+ })
+.then(() => device.selectConfiguration(1)) // Select configuration #1 for the device.
+.then(() => device.claimInterface(2)) // Request exclusive control over interface #2.
+.then(() => device.controlTransferOut({
+    requestType: 'class',
+    recipient: 'interface',
+    request: 0x22,
+    value: 0x02,
+    index: 0x02})) // Ready to receive data
+.then(() => {readLoop()}); // Waiting for 64 bytes of data from endpoint #5.
+	}
+</script>
+
+</body>
+</html>
