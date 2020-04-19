@@ -93,14 +93,14 @@ void cdc_task(void)
 void webusb_task(void)
 {
     // connected and there are data available
-    if ( tud_vendor_available() && huart1.gState == HAL_UART_STATE_READY)
-    {
+    if ( tud_vendor_available()) {
+    	if(huart1.gState == HAL_UART_STATE_READY) {
       // read and echo back
       uint16_t count = tud_vendor_read(WebusbRxBuffer, WEBUSB_RX_SIZE);
       if(HAL_UART_Transmit_DMA(&huart1, WebusbRxBuffer, count) != HAL_OK) {
     	  count++;
       }
-
+     }
     }
     //tud_vendor_write_flush();
 
