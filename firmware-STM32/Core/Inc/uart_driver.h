@@ -12,8 +12,10 @@
 #include "tusb.h"
 
 void cdc_task(void);
+void webusb_task(void);
 void uart_init(void);
 void UART_Early_Exit(UART_HandleTypeDef *huart, uint32_t CNDTR);
 void UART_Reset(void);
+void WebUSB_Reset(void);
 
 #endif /* INC_UART_DRIVER_H_ */

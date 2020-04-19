@@ -65,6 +65,8 @@ TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
+DMA_HandleTypeDef hdma_usart1_rx;
+DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart2_rx;
 DMA_HandleTypeDef hdma_usart2_tx;
 
@@ -137,8 +139,8 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_I2C1_Init();
-  MX_USART1_UART_Init();
-  MX_USART2_UART_Init();
+  //MX_USART1_UART_Init();
+  //MX_USART2_UART_Init();
   MX_USB_PCD_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
@@ -169,7 +171,7 @@ int main(void)
 				midi_task();
 		#endif
 
-		webserial_task();
+		webusb_task();
 
 		led_task();
 		button_task();
@@ -191,6 +193,23 @@ int main(void)
 
 			if(hdma_usart2_rx.State == HAL_DMA_STATE_READY) {
 				UART_Reset();
+			}
+
+			if (huart1.Instance->SR & UART_FLAG_IDLE && hdma_usart1_rx.State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */
+			{
+				volatile uint32_t tmp; /* Must be volatile to prevent optimizations */
+				tmp = huart1.Instance->SR; /* Read status register */
+				tmp = huart1.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
+
+				uint32_t cndtr = huart1.hdmarx->Instance->CNDTR;
+				if(cndtr < 256) {
+					HAL_UART_AbortReceive(&huart1);
+					UART_Early_Exit(&huart1, cndtr);
+				}
+			}
+
+			if(hdma_usart1_rx.State == HAL_DMA_STATE_READY) {
+				WebUSB_Reset();
 			}
 		}
     /* USER CODE END WHILE */
@@ -459,6 +478,12 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Channel4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel4_IRQn);
+  /* DMA1_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
   /* DMA1_Channel6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
@@ -696,11 +721,6 @@ bool tud_vendor_control_request_cb(uint8_t rhport, tusb_control_request_t const 
       // Webserial simulate the CDC_REQUEST_SET_CONTROL_LINE_STATE (0x22) to
       // connect and disconnect.
       web_serial_connected = (request->wValue != 0);
-      if(request->wValue == 1) {
-    	  tud_vendor_write_str("\r\nTinyUSB WebUSB A example\r\n");
-      } else if(request->wValue == 2) {
-    	  tud_vendor_write_str("[{\"id\":1,\"icon\":\"far fa-folder\",\"text\":\"Root node\",\"children\":[{\"id\":2,\"icon\":\"far fa-file\",\"text\":\"Child node 1\"},{\"id\":3,\"icon\":\"far fa-file\",\"text\":\"Child node 2\"}]}]");
-      }
 
       // Always lit LED if connected
       if ( web_serial_connected )
@@ -733,21 +753,6 @@ bool tud_vendor_control_complete_cb(uint8_t rhport, tusb_control_request_t const
 
   // nothing to do
   return true;
-}
-
-void webserial_task(void)
-{
-  if ( web_serial_connected )
-  {
-    if ( tud_vendor_available() )
-    {
-      uint8_t buf[64];
-      uint32_t count = tud_vendor_read(buf, sizeof(buf));
-
-      // echo back to both web serial and cdc
-      //echo_all(buf, count);
-    }
-  }
 }
 
 uint32_t board_millis(void)
