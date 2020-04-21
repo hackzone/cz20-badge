@@ -4,3 +4,9 @@
 [submodule "firmware-STM32/tinyusb"]
 	path = firmware-STM32/tinyusb/
 	url = git@github.com:hathach/tinyusb.git
+[submodule "badgeteam-fsoveruart"]
+	path = badgeteam-fsoveruart
+	url = https://github.com/jorisplusplus/badgeteam-fsoveruart
+[submodule "firmware-ESP32"]
+	path = firmware-ESP32
+	url = https://github.com/jorisplusplus/badgeteam-fsoveruart
