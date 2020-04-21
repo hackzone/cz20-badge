@@ -4,12 +4,19 @@
 	<meta charset="UTF-8">
 	<title>Campzone Badge2020 dev</title>
 	<link rel="stylesheet" href="./style.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 	<h1>filebrowser</h1>
 	<button onclick="connect()">Connect</button>
-	<button onclick="refreshFiles()">Refresh files</button> 
 	<div id="wrapper"></div>
+		<div id="icons">
+			<button class="btn" onclick="trash_ui()"><i class="fa fa-trash"></i></button>
+			<button class="btn" onclick="save_ui()"><i class="fa fa-save"></i></button>
+			<button class="btn" onclick="mkdir_ui()"><i class="fa fa-folder-plus"></i></button>
+			<button class="btn" onclick="mkfile_ui()"><i class="fa fa-file"></i></button>
+			<button class="btn" onclick="sync_ui()"><i class="fa fa-sync"></i></button>
+		</div>
 		<div id="filebrowser" class="filebrowser"></div>
 
 		<div id="editor">print("Hello world")
@@ -20,27 +27,9 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
-<script src='https://kit.fontawesome.com/a076d05399.js'></script>	
-	<script>
-	// ajax demo
-	$('#filebrowser').jstree({
-		'core' : {
-			'data' : {
-				"url" : "./root.json",
-				"dataType" : "json" // needed only if you do not supply JSON headers
-			}
-		}
-	});
-	
-	</script>
-
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/ace/1.4.11/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="Queue.js" type="text/javascript"></script>
-<script src="app.js" type="text/javascript"></script>
-<script>
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/python");
-</script>
+<script src="app.js" type="text/javascript"></script>	
 </body>
 </html>
