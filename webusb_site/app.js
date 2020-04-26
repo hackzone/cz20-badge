@@ -197,19 +197,6 @@ function treechanged(e, data) {
     }
 }
 
-function treerenamed(e, data) {
-    console.log(data);
-    node = data["node"];
-    text = data["text"];
-    old = data["old"]
-    if(node['icon'] == "far fa-file") {
-        var path = getnodepath(node);
-        console.log(path);
-    } else if(text != old) {
-        $("#filebrowser").jstree('rename_node', node , old);
-    }
-}
-
 function handlePacket(id, data) {
     switch(id) {
         case 4096:
@@ -332,8 +319,18 @@ function sync_ui() {
 }
 
 function rename_ui() {
-    var node = $("#filebrowser").jstree("get_selected",true)[0];
-    $('#filebrowser').jstree(true).edit(node);
+    var filename = prompt("Please enter new filename", "");
+    if (filename != null) {
+        var node = $("#filebrowser").jstree("get_selected",true)[0];
+        var source = getnodepath(node);
+        if(isfile(node)) {
+            node = $('#filebrowser').jstree(true).get_node(node["parent"]);
+        } else {
+            return;
+        }
+        file = getnodepath(node) + "/" + filename;
+        movefile(source, file);
+    }
 }
 
 function save_ui() {
@@ -440,7 +437,6 @@ document.getElementById('file-input')
 //Init jstree
 $('#filebrowser')
 .on('changed.jstree', treechanged)
-.on('rename_node.jstree', treerenamed)
 .jstree({
     "core" : {
         "multiple" : false,
