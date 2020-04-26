@@ -100,6 +100,8 @@ function delfile(dir_name) {
     device.transferOut(3, buffer);
 }
 
+
+
 function duplicatefile(source, destination) {
     buffer = buildpacket(source.length+1+destination.length+1, 4100);
     for(var i = 0; i<source.length; i++) {
@@ -127,17 +129,34 @@ function movefile(source, destination) {
         buffer[8+source.length+1+i] = destination.charCodeAt(i);
     }
     buffer[8+source.length+1+destination.length] = 0;
-    //queue.enqueue(buffer);
+
+    console.log("Sending command...");
+    device.transferOut(3, buffer);
+}
+
+function copyfile(source, destination) {
+    buffer = buildpacket(source.length+1+destination.length+1, 4100);
+    for(var i = 0; i<source.length; i++) {
+        buffer[8+i] = source.charCodeAt(i);
+    }
+    buffer[8+source.length] = 0;
+    
+    for(var i = 0; i<destination.length; i++) {
+        buffer[8+source.length+1+i] = destination.charCodeAt(i);
+    }
+    buffer[8+source.length+1+destination.length] = 0;
+
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
 
 function savetextfile(filename, contents) {
+    console.log(filename)
     buffer = buildpacketWithFilename(contents.length, 4098, filename);    
     for(var i = 0; i<contents.length; i++) {
         buffer[8+filename.length+1+i] = contents.charCodeAt(i);
     }
-    //queue.enqueue(buffer);
+
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
@@ -145,10 +164,13 @@ function savetextfile(filename, contents) {
 function savefile(filename, contents) {
     buffer = buildpacketWithFilename(contents.byteLength, 4098, filename);
     new Uint8Array(buffer, 8+filename.length+1, contents.byteLength).set(new Uint8Array(contents.buffer));    
-    for(var i = 0; i<contents.length; i++) {
-        buffer[8+filename.length+1+i] = contents.charCodeAt(i);
-    }
-    //queue.enqueue(buffer);
+
+    console.log("Sending command...");
+    device.transferOut(3, buffer);
+}
+
+function createfolder(folder) {
+    buffer = buildpacketWithFilename(0, 4102, folder);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
@@ -169,6 +191,7 @@ function treechanged(e, data) {
                 }
             }
             console.log(dir_name);
+            editor_filename = dir_name;
             readfile(dir_name);
         }
     }
@@ -318,8 +341,75 @@ function save_ui() {
     savetextfile(editor_filename, contents);
 }
 
+function mkdir_ui() {
+    var folder_name = prompt("Please enter foldername", "New folder");
+    if (folder_name != null) {
+        var node = $("#filebrowser").jstree("get_selected",true)[0];
+        console.log(node);
+        if(isfile(node)) {
+            node = $('#filebrowser').jstree(true).get_node(node["parent"]);
+        }
+        folder = getnodepath(node) + "/" + folder_name;
+        console.log(folder);
+        createfolder(folder);
+    }   
+}
+
+function mkfile_ui() {
+    var filename = prompt("Please enter filename", "New file.py");
+    if (filename != null) {
+        var node = $("#filebrowser").jstree("get_selected",true)[0];
+        console.log(node);
+        if(isfile(node)) {
+            node = $('#filebrowser').jstree(true).get_node(node["parent"]);
+        }
+        file = getnodepath(node) + "/" + filename;
+        console.log(file);
+        createfile(file);
+    }   
+}
+
 function upload_ui() {
     $('#file-input').trigger('click');
+}
+
+
+var filetocopy = "";
+var filetocut = "";
+
+function copy_ui() {
+    filetocut = "";
+    var node = $("#filebrowser").jstree("get_selected",true)[0];
+    if(!isfile(node)) return;
+    
+    file = getnodepath(node);
+    filetocopy = file;
+    document.getElementById("paste_btn").disabled = false;    
+}
+
+function cut_ui() {
+    filetocopy = "";
+    var node = $("#filebrowser").jstree("get_selected",true)[0];
+    if(!isfile(node)) return;
+    
+    file = getnodepath(node);
+    filetocut = file;
+    document.getElementById("paste_btn").disabled = false;    
+}
+
+function paste_ui() {
+    document.getElementById("paste_btn").disabled = true;
+    var node = $("#filebrowser").jstree("get_selected",true)[0];
+    if(isfile(node)) {
+        node = $('#filebrowser').jstree(true).get_node(node["parent"]);
+    }
+    folder = getnodepath(node) + "/";
+    console.log(folder);
+    if(filetocut != "") {
+        movefile(filetocut, folder);
+    } else if(filetocopy != "") {
+        copyfile(filetocopy, folder);
+    }
 }
 
 function readSingleFile(e) {
@@ -356,22 +446,5 @@ $('#filebrowser')
         "multiple" : false,
         "data" : fetch_dir,
         "check_callback" : true
-    },
-    "dnd" : {
-        "drag_finish" : function () { 
-            console.log("DRAG"); 
-        },
-        "drag_check" : function (data) {
-            console.log(data.r)
-            if(data.r["icon"] != "far fa-folder") {
-                return false;
-            }
-            return { 
-                after : false, 
-                before : false, 
-                inside : true 
-            };
-        }
-    },
-    "plugins" : ["dnd"]
+    }
 });
