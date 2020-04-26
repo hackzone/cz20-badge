@@ -10,12 +10,16 @@
 	<h1>filebrowser</h1>
 	<button onclick="connect()">Connect</button>
 	<div id="wrapper"></div>
+		<input id="file-input" type="file" name="name" style="display: none;" />
+		
 		<div id="icons">
 			<button class="btn" onclick="trash_ui()"><i class="fa fa-trash"></i></button>
 			<button class="btn" onclick="save_ui()"><i class="fa fa-save"></i></button>
 			<button class="btn" onclick="mkdir_ui()"><i class="fa fa-folder-plus"></i></button>
 			<button class="btn" onclick="mkfile_ui()"><i class="fa fa-file"></i></button>
 			<button class="btn" onclick="sync_ui()"><i class="fa fa-sync"></i></button>
+			<button class="btn" onclick="rename_ui()"><i class="far fa-file-alt"></i></button>
+			<button class="btn" onclick="upload_ui()"><i class="fas fa-upload"></i></button>
 		</div>
 		<div id="filebrowser" class="filebrowser"></div>
 

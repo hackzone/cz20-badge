@@ -2,6 +2,7 @@
 var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/python");
+var editor_filename = "";
 
 var device;
 var queue = new Queue();
@@ -20,6 +21,15 @@ function buildpacket(size, command) {
     new DataView(arraybuffer).setUint32(2, size, true);
     buffer[6] = 0xDE;
     buffer[7] = 0xAD;
+    return buffer;
+}
+
+function buildpacketWithFilename(size, command, filename) {
+    buffer = buildpacket(filename.length+1+size, command);
+    for(var i = 0; i<filename.length; i++) {
+        buffer[8+i] = filename.charCodeAt(i);
+    }
+    buffer[8+filename.length] = 0;
     return buffer;
 }
 
@@ -73,33 +83,71 @@ function fetch_dir(obj, cb) {
 }
 
 function readfile(dir_name) {
-    buffer = buildpacket(dir_name.length+1, 4097);
-    for(var i = 0; i<dir_name.length; i++) {
-        buffer[8+i] = dir_name.charCodeAt(i);
-    }
-    buffer[8+dir_name.length] = 0;
-    //queue.enqueue(buffer);
+    buffer = buildpacketWithFilename(0, 4097, dir_name);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
 
 function createfile(dir_name) {
-    buffer = buildpacket(dir_name.length+1, 4098);
-    for(var i = 0; i<dir_name.length; i++) {
-        buffer[8+i] = dir_name.charCodeAt(i);
-    }
-    buffer[8+dir_name.length] = 0;
-    //queue.enqueue(buffer);
+    buffer = buildpacketWithFilename(0, 4098, dir_name);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
 
 function delfile(dir_name) {
-    buffer = buildpacket(dir_name.length+1, 4099);
-    for(var i = 0; i<dir_name.length; i++) {
-        buffer[8+i] = dir_name.charCodeAt(i);
+    buffer = buildpacketWithFilename(0, 4099, dir_name);
+    console.log("Sending command...");
+    device.transferOut(3, buffer);
+}
+
+function duplicatefile(source, destination) {
+    buffer = buildpacket(source.length+1+destination.length+1, 4100);
+    for(var i = 0; i<source.length; i++) {
+        buffer[8+i] = source.charCodeAt(i);
     }
-    buffer[8+dir_name.length] = 0;
+    buffer[8+source.length] = 0;
+    
+    for(var i = 0; i<destination.length; i++) {
+        buffer[8+source.length+1+i] = destination.charCodeAt(i);
+    }
+    buffer[8+source.length+1+destination.length] = 0;
+    //queue.enqueue(buffer);
+    console.log("Sending command...");
+    device.transferOut(3, buffer);
+}
+
+function movefile(source, destination) {
+    buffer = buildpacket(source.length+1+destination.length+1, 4101);
+    for(var i = 0; i<source.length; i++) {
+        buffer[8+i] = source.charCodeAt(i);
+    }
+    buffer[8+source.length] = 0;
+    
+    for(var i = 0; i<destination.length; i++) {
+        buffer[8+source.length+1+i] = destination.charCodeAt(i);
+    }
+    buffer[8+source.length+1+destination.length] = 0;
+    //queue.enqueue(buffer);
+    console.log("Sending command...");
+    device.transferOut(3, buffer);
+}
+
+function savetextfile(filename, contents) {
+    buffer = buildpacketWithFilename(contents.length, 4098, filename);    
+    for(var i = 0; i<contents.length; i++) {
+        buffer[8+filename.length+1+i] = contents.charCodeAt(i);
+    }
+    //queue.enqueue(buffer);
+    console.log("Sending command...");
+    device.transferOut(3, buffer);
+}
+
+function savefile(filename, contents) {
+    buffer = buildpacketWithFilename(contents.byteLength, 4098, filename);
+    new Uint8Array(buffer, 8+filename.length+1, contents.byteLength).set(new Uint8Array(contents.buffer));    
+    for(var i = 0; i<contents.length; i++) {
+        buffer[8+filename.length+1+i] = contents.charCodeAt(i);
+    }
     //queue.enqueue(buffer);
     console.log("Sending command...");
     device.transferOut(3, buffer);
@@ -114,10 +162,8 @@ function treechanged(e, data) {
         if(obj["parents"]) { //We have parent, time to construct dir structure
             dir_name = "/" + obj["text"];
             for(const par_id of obj["parents"]) {
-                console.log(par_id);
                 if(par_id != "#") {
                     var node = $('#filebrowser').jstree(true).get_node(par_id);
-                    console.log(node);
                     var folder_name = node["text"];
                     dir_name = "/" + folder_name + dir_name;
                 }
@@ -125,6 +171,19 @@ function treechanged(e, data) {
             console.log(dir_name);
             readfile(dir_name);
         }
+    }
+}
+
+function treerenamed(e, data) {
+    console.log(data);
+    node = data["node"];
+    text = data["text"];
+    old = data["old"]
+    if(node['icon'] == "far fa-file") {
+        var path = getnodepath(node);
+        console.log(path);
+    } else if(text != old) {
+        $("#filebrowser").jstree('rename_node', node , old);
     }
 }
 
@@ -140,7 +199,13 @@ function handlePacket(id, data) {
                 var child = {};
                 child["text"] = dir_structure[i].substr(1);
                 if(type) {
-                    child["icon"] = "far fa-folder";
+                    if(dir_structure[i] == "dflash") {
+                        child["icon"] = "fas fa-microchip";
+                    } else if(dir_structure[i] == "dsdcard") {
+                        child["icon"] = "fas fa-sd-card";
+                    } else {
+                        child["icon"] = "far fa-folder";
+                    }
                 } else {
                     child["icon"] = "far fa-file";
                 }
@@ -243,10 +308,70 @@ function sync_ui() {
     }
 }
 
-//Init jstree
-$('#filebrowser').on('changed.jstree', treechanged).jstree({
-    'core' : {
-        "multiple" : false,
-        'data' : fetch_dir
+function rename_ui() {
+    var node = $("#filebrowser").jstree("get_selected",true)[0];
+    $('#filebrowser').jstree(true).edit(node);
+}
+
+function save_ui() {
+    contents = editor.getValue();
+    savetextfile(editor_filename, contents);
+}
+
+function upload_ui() {
+    $('#file-input').trigger('click');
+}
+
+function readSingleFile(e) {
+    var file = e.target.files[0];
+    if (!file) {
+      return;
     }
+    console.log(file);
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var node = $("#filebrowser").jstree("get_selected",true)[0];
+        console.log(node);
+        if(isfile(node)) {
+            node = $('#filebrowser').jstree(true).get_node(node["parent"]);
+        }
+        filedir = getnodepath(node) + "/" + file["name"];
+        console.log(filedir);
+        var arrayBuffer = reader.result;
+        console.log(arrayBuffer);
+        savefile(filedir, arrayBuffer);
+    }
+    reader.readAsArrayBuffer(file);
+  }
+
+document.getElementById('file-input')
+  .addEventListener('change', readSingleFile, false);
+
+//Init jstree
+$('#filebrowser')
+.on('changed.jstree', treechanged)
+.on('rename_node.jstree', treerenamed)
+.jstree({
+    "core" : {
+        "multiple" : false,
+        "data" : fetch_dir,
+        "check_callback" : true
+    },
+    "dnd" : {
+        "drag_finish" : function () { 
+            console.log("DRAG"); 
+        },
+        "drag_check" : function (data) {
+            console.log(data.r)
+            if(data.r["icon"] != "far fa-folder") {
+                return false;
+            }
+            return { 
+                after : false, 
+                before : false, 
+                inside : true 
+            };
+        }
+    },
+    "plugins" : ["dnd"]
 });
