@@ -60,6 +60,10 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
 #define BUTTON_TICK 5
+#define UART_SERIAL huart2
+
+#define UART_WEBUSB huart1
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

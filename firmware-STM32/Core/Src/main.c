@@ -61,6 +61,8 @@ void webserial_task(void);
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 
+SPI_HandleTypeDef hspi2;
+
 TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart1;
@@ -85,6 +87,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USB_PCD_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_SPI2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -143,6 +146,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USB_PCD_Init();
   MX_TIM1_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   HAL_I2C_EnableListen_IT(&hi2c1);
   tusb_init();
@@ -158,7 +162,7 @@ int main(void)
   while (1)
   {
 
-	  tud_task(); // tinyusb device task
+	  	tud_task(); // tinyusb device task
 		#if CFG_TUD_CDC
 				cdc_task();
 		#endif
@@ -173,42 +177,42 @@ int main(void)
 
 		webusb_task();
 
-		led_task();
-		button_task();
+		//led_task();
+		//button_task();
 
 		if(last_tick != HAL_GetTick()) {
 			last_tick = HAL_GetTick();
-			if (huart2.Instance->SR & UART_FLAG_IDLE && hdma_usart2_rx.State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */
+			if (UART_SERIAL.Instance->SR & UART_FLAG_IDLE && UART_SERIAL.hdmarx->State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */
 			{
 				volatile uint32_t tmp; /* Must be volatile to prevent optimizations */
-				tmp = huart2.Instance->SR; /* Read status register */
-				tmp = huart2.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
+				tmp = UART_SERIAL.Instance->SR; /* Read status register */
+				tmp = UART_SERIAL.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
 
-				uint32_t cndtr = huart2.hdmarx->Instance->CNDTR;
+				uint32_t cndtr = UART_SERIAL.hdmarx->Instance->CNDTR;
 				if(cndtr < 256) {
-					HAL_UART_AbortReceive(&huart2);
-					UART_Early_Exit(&huart2, cndtr);
+					HAL_UART_AbortReceive(&UART_SERIAL);
+					UART_Early_Exit(&UART_SERIAL, cndtr);
 				}
 			}
 
-			if(hdma_usart2_rx.State == HAL_DMA_STATE_READY) {
+			if(UART_SERIAL.hdmarx->State == HAL_DMA_STATE_READY) {
 				UART_Reset();
 			}
 
-			if (huart1.Instance->SR & UART_FLAG_IDLE && hdma_usart1_rx.State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */
+			if (UART_WEBUSB.Instance->SR & UART_FLAG_IDLE && UART_WEBUSB.hdmarx->State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */
 			{
 				volatile uint32_t tmp; /* Must be volatile to prevent optimizations */
-				tmp = huart1.Instance->SR; /* Read status register */
-				tmp = huart1.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
+				tmp = UART_WEBUSB.Instance->SR; /* Read status register */
+				tmp = UART_WEBUSB.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
 
-				uint32_t cndtr = huart1.hdmarx->Instance->CNDTR;
+				uint32_t cndtr = UART_WEBUSB.hdmarx->Instance->CNDTR;
 				if(cndtr < 256) {
-					HAL_UART_AbortReceive(&huart1);
-					UART_Early_Exit(&huart1, cndtr);
+					HAL_UART_AbortReceive(&UART_WEBUSB);
+					UART_Early_Exit(&UART_WEBUSB, cndtr);
 				}
 			}
 
-			if(hdma_usart1_rx.State == HAL_DMA_STATE_READY) {
+			if(UART_WEBUSB.hdmarx->State == HAL_DMA_STATE_READY) {
 				WebUSB_Reset();
 			}
 		}
@@ -294,6 +298,44 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+  * @brief SPI2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI2_Init(void)
+{
+
+  /* USER CODE BEGIN SPI2_Init 0 */
+
+  /* USER CODE END SPI2_Init 0 */
+
+  /* USER CODE BEGIN SPI2_Init 1 */
+
+  /* USER CODE END SPI2_Init 1 */
+  /* SPI2 parameter configuration*/
+  hspi2.Instance = SPI2;
+  hspi2.Init.Mode = SPI_MODE_MASTER;
+  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi2.Init.NSS = SPI_NSS_SOFT;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi2.Init.CRCPolynomial = 10;
+  if (HAL_SPI_Init(&hspi2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI2_Init 2 */
+
+  /* USER CODE END SPI2_Init 2 */
 
 }
 
@@ -512,15 +554,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_14, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_8|GPIO_PIN_15, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 
-                          |GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13 
-                          |GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_8|GPIO_PIN_9, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PC13 PC14 */
   GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14;
@@ -529,35 +563,24 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PA0 PA1 PA8 PA15 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_8|GPIO_PIN_15;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PA4 PA5 PA6 PA7 */
-  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+  /*Configure GPIO pins : PA0 PA4 PA5 PA6 
+                           PA7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6 
+                          |GPIO_PIN_7;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB0 PB1 PB2 PB3 
-                           PB4 PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 
-                          |GPIO_PIN_4|GPIO_PIN_5;
+  /*Configure GPIO pins : PB0 PB1 PB2 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB10 PB11 PB12 PB13 
-                           PB14 PB15 PB8 PB9 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13 
-                          |GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_8|GPIO_PIN_9;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  /*Configure GPIO pin : PB3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
