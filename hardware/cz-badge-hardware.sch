@@ -570,7 +570,7 @@ Wire Wire Line
 	1050 4750 1400 4750
 Text GLabel 3100 6350 2    50   Output ~ 0
 SD_MOSI
-Text GLabel 3100 6750 2    50   Output ~ 0
+Text GLabel 3100 5350 2    50   Output ~ 0
 ESP_TX2
 Wire Wire Line
 	2600 6850 3100 6850
@@ -856,7 +856,7 @@ Wire Wire Line
 Connection ~ 2300 1600
 Wire Wire Line
 	2300 1600 2300 1700
-Text GLabel 3100 5350 2    50   Input ~ 0
+Text GLabel 3100 6750 2    50   Input ~ 0
 TOUCH3
 Text Notes 2300 4750 2    50   ~ 0
 T
