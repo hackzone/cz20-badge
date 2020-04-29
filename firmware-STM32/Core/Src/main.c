@@ -29,6 +29,7 @@
 #include "button_driver.h"
 #include "led_driver.h"
 #include "uart_driver.h"
+#include "interrupt_pin.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -446,10 +447,10 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel6_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
   /* DMA1_Channel7_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
 
 }
@@ -559,6 +560,7 @@ void tud_resume_cb(void)
 
 void hid_task(void)
 {
+	bool written = false;
 	bool should_pause = false;
 	uint16_t* button_state = (uint16_t*) getI2CMemory(4);
 	uint8_t* hid_keyboard_dirty = (uint8_t*) getI2CMemory(71);
@@ -578,6 +580,7 @@ void hid_task(void)
 		tud_hid_keyboard_report(REPORT_ID_KEYBOARD, *key_modifier, keycodes);
 
 		*hid_keyboard_dirty = 0;
+		written = true;
 		should_pause = true;
 	}
 
@@ -592,6 +595,12 @@ void hid_task(void)
 		// Data in order: buttons bitmask, X, Y, scroll, pan
 		tud_hid_mouse_report(REPORT_ID_MOUSE, *((uint8_t*)mouse_data), *(mouse_data+1), *(mouse_data+2), *(mouse_data+3), *(mouse_data+4));
 		*hid_mouse_dirty = 0;
+		written = true;
+	}
+
+	if(written) {
+		addInterruptReason(INTERRUPT_REASON_HID_WRITTEN);
+		setInterruptPin();
 	}
 }
 
@@ -638,6 +647,8 @@ uint8_t note_sequence[] =
 
 void midi_task(void)
 {
+	bool written = false;
+
 	// Check and send MIDI data in any of the 4 data buffers
 	for(uint8_t i = 0; i < 4; i++) {
 		uint8_t* midi_data = (uint8_t*) getI2CMemory(78 + i * 4);
@@ -646,7 +657,13 @@ void midi_task(void)
 		if(*dirty_byte) {
 			tudi_midi_write24(0, *midi_data, *(midi_data+1), *(midi_data+2));
 			*dirty_byte = 0;
+			written = true;
 		}
+	}
+
+	if(written) {
+		addInterruptReason(INTERRUPT_REASON_MIDI_WRITTEN);
+		setInterruptPin();
 	}
 }
 #endif

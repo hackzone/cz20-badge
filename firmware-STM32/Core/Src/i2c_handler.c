@@ -58,17 +58,17 @@ void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, ui
 	  if(TransferDirection == 1) {	//Write
 		  HAL_I2C_Slave_Seq_Receive_IT(hi2c, i2cbuf, 1, I2C_FIRST_FRAME);
 	  } else {	//Read
-		  if(address == 0) {
-			  resetInterruptPin(); // Reset the interrupt pin when the pin reason register has been read
-			  clearInterruptReason();
-		  }
-
 		  HAL_I2C_Slave_Seq_Transmit_IT(hi2c, &i2cregisters[address], 1, I2C_FIRST_FRAME);
 	  }
   }
 }
 
 void HAL_I2C_SlaveTxCpltCallback(I2C_HandleTypeDef *hi2c) {
+    if(address == 0) {
+	    resetInterruptPin(); // Reset the interrupt pin when the pin reason register has been read
+	    clearInterruptReason();
+    }
+
 	address++;
 	HAL_I2C_Slave_Seq_Transmit_IT(hi2c, &i2cregisters[address], 1, I2C_FIRST_FRAME);
 }

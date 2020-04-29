@@ -20,4 +20,6 @@ SourceFiles#1=/Users/tom/Git/cz20-badge/firmware-STM32/Core/Src/stm32f1xx_hal_ms
 SourceFiles#2=/Users/tom/Git/cz20-badge/firmware-STM32/Core/Src/main.c
 SourceFolderListSize=1
 SourcePath#0=/Users/tom/Git/cz20-badge/firmware-STM32/Core/Src
+HeaderFiles=;
+SourceFiles=;
 

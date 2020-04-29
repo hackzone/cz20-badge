@@ -13,6 +13,8 @@
 #define INTERRUPT_REASON_GENERAL 1
 #define INTERRUPT_REASON_BUTTON 2
 #define INTERRUPT_REASON_MIDI 4
+#define INTERRUPT_REASON_HID_WRITTEN 8
+#define INTERRUPT_REASON_MIDI_WRITTEN 16
 
 void setInterruptPin();
 void resetInterruptPin();
