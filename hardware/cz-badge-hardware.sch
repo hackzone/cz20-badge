@@ -456,7 +456,7 @@ U 1 1 5DD96E41
 P 1100 2900
 F 0 "J3" H 1072 2832 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 2923 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 2900 50  0001 C CNN
+F 2 "buttons:arrow_left" H 1100 2900 50  0001 C CNN
 F 3 "~" H 1100 2900 50  0001 C CNN
 	1    1100 2900
 	-1   0    0    1   
@@ -467,7 +467,7 @@ U 1 1 5DD976E4
 P 1100 3100
 F 0 "J4" H 1072 3032 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 3123 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3100 50  0001 C CNN
+F 2 "buttons:arrow_right" H 1100 3100 50  0001 C CNN
 F 3 "~" H 1100 3100 50  0001 C CNN
 	1    1100 3100
 	-1   0    0    1   
@@ -904,7 +904,7 @@ U 1 1 5F202E16
 P 1100 3300
 F 0 "J9" H 1072 3232 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 3323 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3300 50  0001 C CNN
+F 2 "buttons:home" H 1100 3300 50  0001 C CNN
 F 3 "~" H 1100 3300 50  0001 C CNN
 	1    1100 3300
 	-1   0    0    1   
@@ -917,7 +917,7 @@ U 1 1 5F210E91
 P 1100 3500
 F 0 "J10" H 1072 3432 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 3523 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3500 50  0001 C CNN
+F 2 "buttons:cross" H 1100 3500 50  0001 C CNN
 F 3 "~" H 1100 3500 50  0001 C CNN
 	1    1100 3500
 	-1   0    0    1   
@@ -930,7 +930,7 @@ U 1 1 5F21EE72
 P 1100 3700
 F 0 "J11" H 1072 3632 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 3723 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3700 50  0001 C CNN
+F 2 "buttons:check" H 1100 3700 50  0001 C CNN
 F 3 "~" H 1100 3700 50  0001 C CNN
 	1    1100 3700
 	-1   0    0    1   
