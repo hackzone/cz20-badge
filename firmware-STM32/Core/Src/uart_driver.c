@@ -28,7 +28,7 @@ extern UART_HandleTypeDef UART_WEBUSB;
 void ComPort_Config(void);
 
 void uart_init(void) {
-	UART_SERIAL.Instance = USART2;
+	UART_SERIAL.Instance = USART1;
 	UART_SERIAL.Init.BaudRate = 115200;
 	UART_SERIAL.Init.WordLength = UART_WORDLENGTH_8B;
 	UART_SERIAL.Init.StopBits = UART_STOPBITS_1;
@@ -48,7 +48,7 @@ void uart_init(void) {
 		Error_Handler();
 	}
 
-	UART_WEBUSB.Instance = USART1;
+	UART_WEBUSB.Instance = USART2;
 	UART_WEBUSB.Init.BaudRate = 256000;
 	UART_WEBUSB.Init.WordLength = UART_WORDLENGTH_8B;
 	UART_WEBUSB.Init.StopBits = UART_STOPBITS_1;

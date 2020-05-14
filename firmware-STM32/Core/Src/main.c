@@ -142,15 +142,16 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_I2C1_Init();
-  MX_USART1_UART_Init();
-  MX_USART2_UART_Init();
+  //MX_USART1_UART_Init();
+  //MX_USART2_UART_Init();
   MX_USB_PCD_Init();
-  //MX_TIM1_Init();
-  //MX_SPI2_Init();
+  MX_TIM1_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   HAL_I2C_EnableListen_IT(&hi2c1);
-  tusb_init();
   uart_init();
+  tusb_init();
+
   init_led();
   button_init();
   //HAL_TIM_Base_Start_IT(&htim1);
@@ -177,8 +178,8 @@ int main(void)
 
 		webusb_task();
 
-		//led_task();
-		//button_task();
+		led_task();
+		button_task();
 
 		if(last_tick != HAL_GetTick()) {
 			last_tick = HAL_GetTick();
