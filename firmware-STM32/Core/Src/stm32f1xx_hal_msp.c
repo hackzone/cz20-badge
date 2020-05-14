@@ -116,9 +116,9 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c)
     /* Peripheral clock enable */
     __HAL_RCC_I2C1_CLK_ENABLE();
     /* I2C1 interrupt Init */
-    HAL_NVIC_SetPriority(I2C1_EV_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(I2C1_EV_IRQn, 2, 0);
     HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
-    HAL_NVIC_SetPriority(I2C1_ER_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(I2C1_ER_IRQn, 2, 0);
     HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
   /* USER CODE BEGIN I2C1_MspInit 1 */
 
@@ -237,11 +237,6 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
   /* USER CODE END TIM1_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_TIM1_CLK_ENABLE();
-    /* TIM1 interrupt Init */
-    HAL_NVIC_SetPriority(TIM1_UP_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(TIM1_UP_IRQn);
-    HAL_NVIC_SetPriority(TIM1_CC_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(TIM1_CC_IRQn);
   /* USER CODE BEGIN TIM1_MspInit 1 */
 
   /* USER CODE END TIM1_MspInit 1 */
@@ -264,10 +259,6 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
   /* USER CODE END TIM1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_TIM1_CLK_DISABLE();
-
-    /* TIM1 interrupt DeInit */
-    HAL_NVIC_DisableIRQ(TIM1_UP_IRQn);
-    HAL_NVIC_DisableIRQ(TIM1_CC_IRQn);
   /* USER CODE BEGIN TIM1_MspDeInit 1 */
 
   /* USER CODE END TIM1_MspDeInit 1 */
@@ -341,7 +332,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     __HAL_LINKDMA(huart,hdmatx,hdma_usart1_tx);
 
     /* USART1 interrupt Init */
-    HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART1_IRQn, 2, 0);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
   /* USER CODE BEGIN USART1_MspInit 1 */
 
@@ -404,7 +395,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     __HAL_LINKDMA(huart,hdmatx,hdma_usart2_tx);
 
     /* USART2 interrupt Init */
-    HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART2_IRQn, 2, 0);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspInit 1 */
 
@@ -487,6 +478,11 @@ void HAL_PCD_MspInit(PCD_HandleTypeDef* hpcd)
   /* USER CODE END USB_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_USB_CLK_ENABLE();
+    /* USB interrupt Init */
+    HAL_NVIC_SetPriority(USB_HP_CAN1_TX_IRQn, 1, 0);
+    HAL_NVIC_EnableIRQ(USB_HP_CAN1_TX_IRQn);
+    HAL_NVIC_SetPriority(USB_LP_CAN1_RX0_IRQn, 1, 0);
+    HAL_NVIC_EnableIRQ(USB_LP_CAN1_RX0_IRQn);
   /* USER CODE BEGIN USB_MspInit 1 */
 
   /* USER CODE END USB_MspInit 1 */
@@ -509,6 +505,10 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* hpcd)
   /* USER CODE END USB_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_USB_CLK_DISABLE();
+
+    /* USB interrupt DeInit */
+    HAL_NVIC_DisableIRQ(USB_HP_CAN1_TX_IRQn);
+    HAL_NVIC_DisableIRQ(USB_LP_CAN1_RX0_IRQn);
   /* USER CODE BEGIN USB_MspDeInit 1 */
 
   /* USER CODE END USB_MspDeInit 1 */
