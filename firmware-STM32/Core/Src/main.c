@@ -142,8 +142,8 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_I2C1_Init();
-  //MX_USART1_UART_Init();
-  //MX_USART2_UART_Init();
+  MX_USART1_UART_Init();
+  MX_USART2_UART_Init();
   MX_USB_PCD_Init();
   MX_TIM1_Init();
   MX_SPI2_Init();
@@ -152,7 +152,7 @@ int main(void)
   uart_init();
   tusb_init();
 
-  init_led();
+  init_led(hspi2);
   button_init();
   //HAL_TIM_Base_Start_IT(&htim1);
   //HAL_TIM_PWM_Start_IT(&htim1, TIM_CHANNEL_1);
@@ -321,16 +321,17 @@ static void MX_SPI2_Init(void)
   hspi2.Instance = SPI2;
   hspi2.Init.Mode = SPI_MODE_MASTER;
   hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi2.Init.DataSize = SPI_DATASIZE_16BIT;
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi2.Init.NSS = SPI_NSS_SOFT;
   hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi2.Init.FirstBit = SPI_FIRSTBIT_LSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
   hspi2.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi2) != HAL_OK)
+  volatile HAL_StatusTypeDef result = HAL_SPI_Init(&hspi2);
+  if (result != HAL_OK)
   {
     Error_Handler();
   }

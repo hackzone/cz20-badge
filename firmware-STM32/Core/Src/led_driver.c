@@ -8,16 +8,26 @@
 #include "led_driver.h"
 #include "i2c_handler.h"
 
-uint8_t bitplane[128] = {6, 5, 4, 3, 2, 1, 0, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5,
+SPI_HandleTypeDef* spi;
+uint8_t bitplane_index = 0;
+uint8_t bitplanes[128] = {6, 5, 4, 3, 2, 1, 0, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5,
 		4, 6, 6, 5, 6, 6, 5, 4, 3, 2, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5, 4, 6, 6
 		, 5, 6, 6, 5, 4, 3, 2, 1, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5,
 		 6, 6, 5, 4, 3, 2, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6};
 
-uint8_t outputmap[8][7] = {0};
+// 3 * 16 bits, on 7 different bitplanes
+uint16_t outputmap[7][3] = {{0xFFFF,0xFFFF,0xFFFF},
+		{0xFFFF,0xFFFF,0xFFFF},
+		{0xFFFF,0xFFFF,0xFFFF},
+		{0xFFFF,0xFFFF,0xFFFF},
+		{0xFFFF,0xFFFF,0xFFFF},
+		{0xFFFF,0xFFFF,0xFFFF},
+		{0xFFFF,0xFFFF,0xFFFF}};
 
 uint8_t logical_to_physical_sections[8] = {7, 1, 6, 0, 5, 2, 4, 3};
 
-void init_led() {
+void init_led(SPI_HandleTypeDef* spi_handle) {
+	spi = spi_handle;
 	// Debug lines
 //	uint8_t* dirty_byte = (uint8_t*) getI2CMemory(58);
 //	uint8_t* first_led = (uint8_t*) getI2CMemory(10);
@@ -28,10 +38,17 @@ void init_led() {
 }
 
 void led_task() {
+	uint8_t bitplane = bitplanes[bitplane_index];
 
-}
+	HAL_SPI_Init(spi);
 
-uint8_t getOutput_led(uint16_t lineselect) {
+	// Write bitplane to shift registers, latch, and enable output again
+	volatile HAL_StatusTypeDef result = HAL_SPI_Transmit(spi, (uint8_t*)outputmap[bitplane], 3, HAL_MAX_DELAY); // pointer has to be cast to 8 bit, but SPI still sends 3*16 bits
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1); // ~OE -> disable output
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 1); // LE -> Latch
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0); // ~OE -> enable output
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 0); // LE -> Stop latch
 
-	return 0;
+	bitplane_index++;
+	if(bitplane_index >= 128) { bitplane_index = 0; }
 }
