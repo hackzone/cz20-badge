@@ -38,7 +38,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define URL  "www.tinyusb.org/examples/webusb-serial"
+#define URL  "webusb.wittemanlabs.nl"
 
 const tusb_desc_webusb_url_t desc_url =
 {
