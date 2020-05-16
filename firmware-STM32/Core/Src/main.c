@@ -180,6 +180,13 @@ int main(void)
 
 		button_task();
 
+		uint8_t* dirty_byte = (uint8_t*) getI2CMemory(58);
+
+		if(*dirty_byte) {
+			update_outputmap();
+			*dirty_byte=0;
+		}
+
 		if(last_tick != HAL_GetTick()) {
 			last_tick = HAL_GetTick();
 			if (UART_SERIAL.Instance->SR & UART_FLAG_IDLE && UART_SERIAL.hdmarx->State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */

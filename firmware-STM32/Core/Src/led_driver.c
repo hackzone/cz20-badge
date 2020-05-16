@@ -34,37 +34,22 @@ uint8_t logical_to_physical_sections[8] = {7, 1, 6, 0, 5, 2, 4, 3};
 void init_led(SPI_HandleTypeDef* spi_handle, TIM_HandleTypeDef* tim_handle) {
 	spi = spi_handle;
 
-	uint8_t* disp = (uint8_t*) getI2CMemory(10);
-	disp[0] = 0xFF;
-	update_outputmap();
-
 	HAL_TIM_Base_Start_IT(tim_handle);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0); // ~OE -> enable output
 }
 
-uint32_t *alias_region   = (uint32_t *) 0x22000000;
-uint8_t *bitband_region = (uint8_t *) 0x20000000;
-
 void update_outputmap() {
 	uint8_t* first_led = (uint8_t*) getI2CMemory(10);
 	for(int bitplane = 1; bitplane < 8; bitplane++) {
+		uint32_t *alias_region = (uint32_t *) (((uint32_t) outputmap[bitplane-1]-0x20000000)*32+0x22000000);
 		for(int led_index = 0; led_index < 48; led_index++) {
 			alias_region[led_order[led_index]] = first_led[led_index] >> bitplane;
-		}
-		for(int i = 0; i < 6; i++) {
-			outputmap[bitplane-1][i] = bitband_region[i];
 		}
 	}
 }
 
 void led_task() {
 	uint8_t bitplane = bitplanes[bitplane_index];
-	uint8_t* dirty_byte = (uint8_t*) getI2CMemory(58);
-
-	if(*dirty_byte) {
-		update_outputmap();
-		*dirty_byte=0;
-	}
 
 	// Write bitplane to shift registers
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 0); // LE -> Stop latch

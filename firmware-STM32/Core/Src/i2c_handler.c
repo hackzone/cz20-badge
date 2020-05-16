@@ -88,6 +88,14 @@ void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c) {
 	HAL_I2C_EnableListen_IT(hi2c);
 }
 
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c) {
+    // ignore NACK errors
+    if (!(hi2c->ErrorCode & (~HAL_I2C_ERROR_AF)))
+        return;
+    // Continue listening
+    HAL_I2C_EnableListen_IT(hi2c);
+}
+
 uint8_t* getI2CMemory(uint32_t pos) {
 	return &i2cregisters[pos];
 }
