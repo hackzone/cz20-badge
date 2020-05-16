@@ -17,18 +17,18 @@ uint8_t bitplanes[128] = {6, 5, 4, 3, 2, 1, 0, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 
 
 // 3 * 16 bits, on 7 different bitplanes
 uint16_t outputmap[7][3] = {{0xFFFF,0xFFFF,0xFFFF},
-		{0x0000,0x0000,0x0000},
-		{0x0000,0x0000,0x0000},
-		{0x0000,0x0000,0x0000},
-		{0x0000,0x0000,0x0000},
-		{0x0000,0x0000,0x0000},
-		{0x0000,0x0000,0x0000}};
+		{0xF000,0x0000,0x0000},
+		{0xF000,0x0000,0x0000},
+		{0xF000,0x0000,0x0000},
+		{0xF000,0x0000,0x0000},
+		{0xF000,0x0000,0x0000},
+		{0xF000,0x0000,0x0000}};
 
 uint8_t logical_to_physical_sections[8] = {7, 1, 6, 0, 5, 2, 4, 3};
 
 void init_led(SPI_HandleTypeDef* spi_handle, TIM_HandleTypeDef* tim_handle) {
 	spi = spi_handle;
-	//HAL_TIM_Base_Start_IT(tim_handle);
+	HAL_TIM_Base_Start_IT(tim_handle);
 	// Debug lines
 //	uint8_t* dirty_byte = (uint8_t*) getI2CMemory(58);
 //	uint8_t* first_led = (uint8_t*) getI2CMemory(10);
