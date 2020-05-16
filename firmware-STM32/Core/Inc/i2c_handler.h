@@ -8,6 +8,9 @@
 #ifndef INC_I2C_HANDLER_H_
 #define INC_I2C_HANDLER_H_
 
+#define I2C_Timeout 5
+
+void i2c_watchdog();
 uint8_t* getI2CMemory(uint32_t pos);
 
 #endif /* INC_I2C_HANDLER_H_ */
