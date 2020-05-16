@@ -35,21 +35,16 @@ void init_led(SPI_HandleTypeDef* spi_handle) {
 //	*(first_led+4) = 0xFF; // 2nd led G
 //	*(first_led+8) = 0xFF; // 3rd led B
 //	*dirty_byte = 1;
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0); // ~OE -> enable output
 }
 
 void led_task() {
 	uint8_t bitplane = bitplanes[bitplane_index];
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0); // ~OE -> enable output
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 1); // LE -> Latch
 
 	// Write bitplane to shift registers, latch, and enable output again
 	volatile HAL_StatusTypeDef result = HAL_SPI_Transmit(spi, (uint8_t*)outputmap[bitplane], 6, HAL_MAX_DELAY);
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1); // ~OE -> disable output
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 1); // LE -> Latch
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, 1); // SPI_CLK rising
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, 0); // SPI_CLK falling
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0); // ~OE -> enable output
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 0); // LE -> Stop latch
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 1); // LE -> Latch
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 0); // LE -> Stop latch
 
 	bitplane_index++;
 	if(bitplane_index >= 128) { bitplane_index = 0; }
