@@ -36,10 +36,12 @@ void init_led(SPI_HandleTypeDef* spi_handle, TIM_HandleTypeDef* tim_handle) {
 //	*(first_led+4) = 0xFF; // 2nd led G
 //	*(first_led+8) = 0xFF; // 3rd led B
 //	*dirty_byte = 1;
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0); // ~OE -> enable output
 }
 
 void led_task() {
 	uint8_t bitplane = bitplanes[bitplane_index];
+
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0); // ~OE -> enable output
 
 
@@ -52,6 +54,7 @@ void led_task() {
 //	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0); // ~OE -> enable output
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 1); // LE -> Latch
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 0); // LE -> Stop latch
+
 
 	bitplane_index++;
 	if(bitplane_index >= 128) { bitplane_index = 0; }
