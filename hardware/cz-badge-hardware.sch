@@ -59,6 +59,7 @@ F 0 "C3" H 1165 4496 50  0000 L CNN
 F 1 "dnp" H 1165 4405 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 1088 4300 50  0001 C CNN
 F 3 "~" H 1050 4450 50  0001 C CNN
+F 4 "y" H 1050 4450 50  0001 C CNN "dnp"
 	1    1050 4450
 	-1   0    0    1   
 $EndComp
