@@ -131,10 +131,10 @@ AR Path="/5E44BF09" Ref="D?"  Part="1"
 AR Path="/5E4377A8/5E44BF09" Ref="D?"  Part="1" 
 AR Path="/5E464BBE/5E44BF09" Ref="D19"  Part="1" 
 F 0 "D19" H 3600 2284 50  0000 C CNN
-F 1 "3A 0.5 Vf" H 3600 2375 50  0000 C CNN
+F 1 "SS24" H 3600 2375 50  0000 C CNN
 F 2 "Diode_SMD:D_SMA" H 3600 2500 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Schottky-Barrier-Diodes-SBD_SS34_C183891.html" H 3600 2500 50  0001 C CNN
-F 4 "C2480" H 3600 2500 50  0001 C CNN "LCSC"
+F 4 "C181203" H 3600 2500 50  0001 C CNN "LCSC"
 	1    3600 2500
 	-1   0    0    1   
 $EndComp
