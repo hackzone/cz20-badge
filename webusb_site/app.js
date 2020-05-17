@@ -100,6 +100,11 @@ function delfile(dir_name) {
     device.transferOut(3, buffer);
 }
 
+function runfile(dir_name) {
+    buffer = buildpacketWithFilename(0, 0, dir_name);
+    console.log("Sending command...");
+    device.transferOut(3, buffer);
+}
 
 
 function duplicatefile(source, destination) {
@@ -336,6 +341,15 @@ function rename_ui() {
 function save_ui() {
     contents = editor.getValue();
     savetextfile(editor_filename, contents);
+}
+
+function startapp_ui() {
+    var node = $("#filebrowser").jstree("get_selected",true)[0];
+    console.log(node);
+    file = getnodepath(node);
+    console.log(file);
+    if(!isfile(node)) return;
+    runfile(file);
 }
 
 function mkdir_ui() {
