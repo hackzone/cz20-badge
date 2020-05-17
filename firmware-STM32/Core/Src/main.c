@@ -700,7 +700,15 @@ void midi_task(void)
 		addInterruptReason(INTERRUPT_REASON_MIDI_WRITTEN);
 		setInterruptPin();
 	}
+
+	if(tud_midi_available()) {
+		uint8_t data[64];
+		uint16_t count = tud_midi_read(data, 64);
+		//Do something with the data here
+	}
 }
+
+
 #endif
 
 //--------------------------------------------------------------------+
