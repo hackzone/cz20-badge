@@ -189,6 +189,7 @@ int main(void)
 				volatile uint32_t tmp; /* Must be volatile to prevent optimizations */
 				tmp = UART_SERIAL.Instance->SR; /* Read status register */
 				tmp = UART_SERIAL.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
+				UNUSED(tmp);
 
 				uint32_t cndtr = UART_SERIAL.hdmarx->Instance->CNDTR;
 				if(cndtr < 256) {
@@ -206,6 +207,7 @@ int main(void)
 				volatile uint32_t tmp; /* Must be volatile to prevent optimizations */
 				tmp = UART_WEBUSB.Instance->SR; /* Read status register */
 				tmp = UART_WEBUSB.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
+				UNUSED(tmp);
 
 				uint32_t cndtr = UART_WEBUSB.hdmarx->Instance->CNDTR;
 				if(cndtr < 256) {

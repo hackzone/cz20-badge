@@ -6,6 +6,7 @@
  */
 #include "stm32f1xx_hal.h"
 #include "i2c_handler.h"
+#include "led_driver.h"
 #include "interrupt_pin.h"
 
 /************* I2C Register space mapping *********************
