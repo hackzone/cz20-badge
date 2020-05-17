@@ -78,18 +78,6 @@ void HAL_MspInit(void)
   __HAL_RCC_PWR_CLK_ENABLE();
 
   /* System interrupt init*/
-  /* MemoryManagement_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(MemoryManagement_IRQn, 1, 0);
-  /* BusFault_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(BusFault_IRQn, 1, 0);
-  /* UsageFault_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(UsageFault_IRQn, 1, 0);
-  /* SVCall_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(SVCall_IRQn, 1, 0);
-  /* DebugMonitor_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DebugMonitor_IRQn, 1, 0);
-  /* PendSV_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(PendSV_IRQn, 1, 0);
 
   /** NOJTAG: JTAG-DP Disabled and SW-DP Enabled 
   */
@@ -128,15 +116,9 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c)
     /* Peripheral clock enable */
     __HAL_RCC_I2C1_CLK_ENABLE();
     /* I2C1 interrupt Init */
-<<<<<<< HEAD
-    HAL_NVIC_SetPriority(I2C1_EV_IRQn, 1, 0);
-    HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
-    HAL_NVIC_SetPriority(I2C1_ER_IRQn, 1, 0);
-=======
     HAL_NVIC_SetPriority(I2C1_EV_IRQn, 2, 0);
     HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
     HAL_NVIC_SetPriority(I2C1_ER_IRQn, 2, 0);
->>>>>>> webusb
     HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
   /* USER CODE BEGIN I2C1_MspInit 1 */
 
@@ -419,11 +401,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     __HAL_LINKDMA(huart,hdmatx,hdma_usart2_tx);
 
     /* USART2 interrupt Init */
-<<<<<<< HEAD
-    HAL_NVIC_SetPriority(USART2_IRQn, 1, 0);
-=======
     HAL_NVIC_SetPriority(USART2_IRQn, 2, 0);
->>>>>>> webusb
     HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspInit 1 */
 
