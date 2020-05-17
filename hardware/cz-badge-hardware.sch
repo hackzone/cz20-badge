@@ -107,24 +107,6 @@ Wire Notes Line
 	4350 5650 4350 5600
 Wire Notes Line
 	4350 5250 2650 5250
-$Comp
-L Device:R R?
-U 1 1 5DC9DC6D
-P 3950 5350
-AR Path="/5DC753C3/5DC9DC6D" Ref="R?"  Part="1" 
-AR Path="/5DC9DC6D" Ref="R12"  Part="1" 
-F 0 "R12" V 3900 5200 50  0000 C CNN
-F 1 "10k" V 3950 5350 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 3880 5350 50  0001 C CNN
-F 3 "~" H 3950 5350 50  0001 C CNN
-F 4 "C25804" H 3950 5350 50  0001 C CNN "LCSC"
-	1    3950 5350
-	0    1    1    0   
-$EndComp
-Text GLabel 4150 5350 2    50   UnSpc ~ 0
-GND
-Wire Wire Line
-	4150 5350 4100 5350
 Text GLabel 9600 5850 0    50   Output ~ 0
 VUSB_SENSE
 Text GLabel 9850 5450 1    50   UnSpc ~ 0
@@ -271,15 +253,15 @@ Wire Wire Line
 Connection ~ 3000 4750
 Wire Wire Line
 	3000 4750 3100 4750
-Text GLabel 3100 5650 2    50   Input ~ 0
+Text GLabel 3100 5650 2    50   Output ~ 0
 I2S_DATA
 Wire Wire Line
 	3100 5950 2600 5950
-Text GLabel 3100 5150 2    50   Input ~ 0
+Text GLabel 3100 5150 2    50   Output ~ 0
 I2S_WS
 Wire Wire Line
 	3100 5250 2600 5250
-Text GLabel 3100 6150 2    50   Input ~ 0
+Text GLabel 3100 6150 2    50   Output ~ 0
 I2S_BCK
 Wire Wire Line
 	3100 5150 2600 5150
@@ -293,7 +275,7 @@ Wire Wire Line
 	3100 5550 2600 5550
 Text GLabel 3100 6850 2    50   Input ~ 0
 TOUCH2
-Text GLabel 3100 5950 2    50   Input ~ 0
+Text GLabel 3100 5950 2    50   Output ~ 0
 SD_SCK
 Text GLabel 3100 6050 2    50   Input ~ 0
 SD_MISO
@@ -312,7 +294,7 @@ F 3 "http://katalog.we-online.de/em/datasheet/693072010801.pdf" H 5000 1450 50  
 $EndComp
 Text GLabel 3350 1550 0    50   Input ~ 0
 SD_SCK
-Text GLabel 3350 1750 0    50   Input ~ 0
+Text GLabel 3350 1750 0    50   Output ~ 0
 SD_MISO
 Text GLabel 3350 1350 0    50   Input ~ 0
 SD_MOSI
@@ -320,15 +302,15 @@ Text GLabel 3300 1450 0    50   UnSpc ~ 0
 3V3
 Text GLabel 3300 1650 0    50   UnSpc ~ 0
 GND
-Text GLabel 3100 5250 2    50   Input ~ 0
+Text GLabel 3100 5250 2    50   Output ~ 0
 SD_CS
 Text GLabel 3350 1250 0    50   Input ~ 0
 SD_CS
 Text GLabel 5800 2150 3    50   UnSpc ~ 0
 GND
-Text GLabel 3100 6450 2    50   Input ~ 0
+Text GLabel 3100 6450 2    50   Output ~ 0
 I2C_SCL
-Text GLabel 3100 6550 2    50   Input ~ 0
+Text GLabel 3100 6550 2    50   BiDi ~ 0
 I2C_SDA
 $Sheet
 S 4300 2900 1050 800 
@@ -456,7 +438,7 @@ U 1 1 5DD96E41
 P 1100 2900
 F 0 "J3" H 1072 2832 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 2923 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 2900 50  0001 C CNN
+F 2 "buttons:arrow_left" H 1100 2900 50  0001 C CNN
 F 3 "~" H 1100 2900 50  0001 C CNN
 	1    1100 2900
 	-1   0    0    1   
@@ -467,7 +449,7 @@ U 1 1 5DD976E4
 P 1100 3100
 F 0 "J4" H 1072 3032 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 3123 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3100 50  0001 C CNN
+F 2 "buttons:arrow_right" H 1100 3100 50  0001 C CNN
 F 3 "~" H 1100 3100 50  0001 C CNN
 	1    1100 3100
 	-1   0    0    1   
@@ -586,14 +568,12 @@ Text GLabel 7750 750  0    50   Input ~ 0
 ESP_TX
 Wire Wire Line
 	1050 4750 1400 4750
-Text GLabel 3100 6350 2    50   Input ~ 0
+Text GLabel 3100 6350 2    50   Output ~ 0
 SD_MOSI
-Text GLabel 3100 6950 2    50   Output ~ 0
+Text GLabel 3100 5350 2    50   Output ~ 0
 ESP_TX2
 Wire Wire Line
 	2600 6850 3100 6850
-Wire Wire Line
-	2600 6950 3100 6950
 Text GLabel 3100 7050 2    50   Input ~ 0
 ESP_RX2
 Wire Wire Line
@@ -904,7 +884,7 @@ U 1 1 5F202E16
 P 1100 3300
 F 0 "J9" H 1072 3232 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 3323 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3300 50  0001 C CNN
+F 2 "buttons:home" H 1100 3300 50  0001 C CNN
 F 3 "~" H 1100 3300 50  0001 C CNN
 	1    1100 3300
 	-1   0    0    1   
@@ -917,7 +897,7 @@ U 1 1 5F210E91
 P 1100 3500
 F 0 "J10" H 1072 3432 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 3523 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3500 50  0001 C CNN
+F 2 "buttons:cross" H 1100 3500 50  0001 C CNN
 F 3 "~" H 1100 3500 50  0001 C CNN
 	1    1100 3500
 	-1   0    0    1   
@@ -930,7 +910,7 @@ U 1 1 5F21EE72
 P 1100 3700
 F 0 "J11" H 1072 3632 50  0000 R CNN
 F 1 "Conn_01x01_Male" H 1072 3723 50  0000 R CNN
-F 2 "TestPoint:TestPoint_Pad_D4.0mm" H 1100 3700 50  0001 C CNN
+F 2 "buttons:check" H 1100 3700 50  0001 C CNN
 F 3 "~" H 1100 3700 50  0001 C CNN
 	1    1100 3700
 	-1   0    0    1   
@@ -1050,6 +1030,7 @@ F20 "OE" O L 7200 4550 50
 F21 "CLK" O L 7200 4650 50 
 F22 "SDI" O L 7200 4750 50 
 F23 "LE" O L 7200 4850 50 
+F24 "CTS2" I L 7200 3900 50 
 $EndSheet
 Text GLabel 8050 4100 2    50   Input ~ 0
 COL2
@@ -1073,8 +1054,6 @@ Text Notes 4350 5250 0    50   ~ 0
 Changes SDIO timing when driven LOW
 Text Notes 4350 5650 0    50   ~ 0
 Hides bootloader output when driven LOW
-Wire Wire Line
-	2600 5350 3800 5350
 Text GLabel 3100 5550 2    50   Input ~ 0
 TOUCH4
 Text GLabel 3100 5450 2    50   Input ~ 0
@@ -1087,8 +1066,8 @@ U 1 1 5E7705B5
 P 3700 4000
 F 0 "J7" H 3618 3375 50  0000 C CNN
 F 1 "Conn_01x08" H 3618 3466 50  0000 C CNN
-F 2 "smd_header:PinSocket_1x08_P2.54mm_Horizontal" H 3700 4000 50  0001 C CNN
-F 3 "~" H 3700 4000 50  0001 C CNN
+F 2 "lcsc:FFC-SMD_8P-P1.00_FFC10028-08SBD224K6M" H 3700 4000 50  0001 C CNN
+F 3 "https://lcsc.com/product-detail/FFC-FPC-Connectors_TXGA-FFC10028-08SBD224K6M_C456471.html" H 3700 4000 50  0001 C CNN
 	1    3700 4000
 	-1   0    0    1   
 $EndComp
@@ -1202,7 +1181,6 @@ F 3 "" H 10800 5350 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	10800 5350 10800 5500
-NoConn ~ 2600 4950
 Wire Wire Line
 	7200 4550 7100 4550
 Wire Wire Line
@@ -1227,4 +1205,14 @@ Wire Wire Line
 	6950 5800 6950 4850
 Wire Wire Line
 	6950 4850 7200 4850
+Text GLabel 3100 4950 2    50   Output ~ 0
+ESP_CTS2
+Wire Wire Line
+	3100 4950 2600 4950
+Text GLabel 7100 3900 0    50   Input ~ 0
+ESP_CTS2
+Wire Wire Line
+	7100 3900 7200 3900
+Wire Wire Line
+	3100 5350 2600 5350
 $EndSCHEMATC

@@ -25,23 +25,23 @@ void button_task() {
 		switch(button_row) {
 		case 0:
 			button_state = ((GPIOA->IDR >> 4) & 0x000F);
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, 0);
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 0);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, 1);
 			break;
 		case 1:
 			button_state |= ((GPIOA->IDR >> 4) & 0x000F) << 4;
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 1);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, 0);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, 1);
 			break;
 		case 2:
 			button_state |= ((GPIOA->IDR >> 4) & 0x000F) << 8;
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, 1);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, 0);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1);
 			break;
 		case 3:
 			button_state |= ((GPIOA->IDR >> 4) & 0x000F) << 12;
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, 0);
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, 1);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, 1);
 			if(button_state_prev != button_state) {	//Changes in button matrix
 				*i2c_buttonstate = button_state;
 				button_state_prev = button_state;

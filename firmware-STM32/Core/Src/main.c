@@ -39,6 +39,18 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define URL  "webusb.wittemanlabs.nl"
+
+const tusb_desc_webusb_url_t desc_url =
+{
+  .bLength         = 3 + sizeof(URL) - 1,
+  .bDescriptorType = 3, // WEBUSB URL type
+  .bScheme         = 1, // 0: http, 1: https
+  .url             = URL
+};
+
+static bool web_serial_connected = false;
+void webserial_task(void);
 
 /* USER CODE END PD */
 
@@ -50,10 +62,14 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 
+SPI_HandleTypeDef hspi2;
+
 TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
+DMA_HandleTypeDef hdma_usart1_rx;
+DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart2_rx;
 DMA_HandleTypeDef hdma_usart2_tx;
 
@@ -72,6 +88,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USB_PCD_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_SPI2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -130,14 +147,16 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USB_PCD_Init();
   MX_TIM1_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   HAL_I2C_EnableListen_IT(&hi2c1);
-  tusb_init();
   uart_init();
-  init_led();
+  tusb_init();
+
+  init_led(&hspi2, &htim1);
   button_init();
-  HAL_TIM_Base_Start_IT(&htim1);
-  HAL_TIM_PWM_Start_IT(&htim1, TIM_CHANNEL_1);
+
+  //HAL_TIM_PWM_Start_IT(&htim1, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -145,7 +164,7 @@ int main(void)
   while (1)
   {
 
-	  tud_task(); // tinyusb device task
+	  	tud_task(); // tinyusb device task
 		#if CFG_TUD_CDC
 				cdc_task();
 		#endif
@@ -158,26 +177,48 @@ int main(void)
 				midi_task();
 		#endif
 
-		led_task();
+		webusb_task();
+
 		button_task();
+
+		i2c_watchdog(&hi2c1);
 
 		if(last_tick != HAL_GetTick()) {
 			last_tick = HAL_GetTick();
-			if (huart2.Instance->SR & UART_FLAG_IDLE && hdma_usart2_rx.State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */
+			if (UART_SERIAL.Instance->SR & UART_FLAG_IDLE && UART_SERIAL.hdmarx->State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */
 			{
 				volatile uint32_t tmp; /* Must be volatile to prevent optimizations */
-				tmp = huart2.Instance->SR; /* Read status register */
-				tmp = huart2.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
+				tmp = UART_SERIAL.Instance->SR; /* Read status register */
+				tmp = UART_SERIAL.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
+				UNUSED(tmp);
 
-				uint32_t cndtr = huart2.hdmarx->Instance->CNDTR;
+				uint32_t cndtr = UART_SERIAL.hdmarx->Instance->CNDTR;
 				if(cndtr < 256) {
-					HAL_UART_AbortReceive(&huart2);
-					UART_Early_Exit(&huart2, cndtr);
+					HAL_UART_AbortReceive(&UART_SERIAL);
+					UART_Early_Exit(&UART_SERIAL, cndtr);
 				}
 			}
 
-			if(hdma_usart2_rx.State == HAL_DMA_STATE_READY) {
+			if(UART_SERIAL.hdmarx->State == HAL_DMA_STATE_READY) {
 				UART_Reset();
+			}
+
+			if (UART_WEBUSB.Instance->SR & UART_FLAG_IDLE && UART_WEBUSB.hdmarx->State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */
+			{
+				volatile uint32_t tmp; /* Must be volatile to prevent optimizations */
+				tmp = UART_WEBUSB.Instance->SR; /* Read status register */
+				tmp = UART_WEBUSB.Instance->DR; /* Read data register */ //This two reads clears the IDLE Flag
+				UNUSED(tmp);
+
+				uint32_t cndtr = UART_WEBUSB.hdmarx->Instance->CNDTR;
+				if(cndtr < 256) {
+					HAL_UART_AbortReceive(&UART_WEBUSB);
+					UART_Early_Exit(&UART_WEBUSB, cndtr);
+				}
+			}
+
+			if(UART_WEBUSB.hdmarx->State == HAL_DMA_STATE_READY) {
+				WebUSB_Reset();
 			}
 		}
     /* USER CODE END WHILE */
@@ -266,6 +307,44 @@ static void MX_I2C1_Init(void)
 }
 
 /**
+  * @brief SPI2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI2_Init(void)
+{
+
+  /* USER CODE BEGIN SPI2_Init 0 */
+
+  /* USER CODE END SPI2_Init 0 */
+
+  /* USER CODE BEGIN SPI2_Init 1 */
+
+  /* USER CODE END SPI2_Init 1 */
+  /* SPI2 parameter configuration*/
+  hspi2.Instance = SPI2;
+  hspi2.Init.Mode = SPI_MODE_MASTER;
+  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi2.Init.NSS = SPI_NSS_SOFT;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.FirstBit = SPI_FIRSTBIT_LSB;
+  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi2.Init.CRCPolynomial = 10;
+  if (HAL_SPI_Init(&hspi2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI2_Init 2 */
+
+  /* USER CODE END SPI2_Init 2 */
+
+}
+
+/**
   * @brief TIM1 Initialization Function
   * @param None
   * @retval None
@@ -279,8 +358,6 @@ static void MX_TIM1_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
   /* USER CODE BEGIN TIM1_Init 1 */
 
@@ -301,35 +378,9 @@ static void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 95;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
-  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-  if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
   {
     Error_Handler();
   }
@@ -446,6 +497,12 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Channel4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel4_IRQn);
+  /* DMA1_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
   /* DMA1_Channel6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
@@ -474,15 +531,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_14, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_8|GPIO_PIN_15, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 
-                          |GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13 
-                          |GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_8|GPIO_PIN_9, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_12 
+                          |GPIO_PIN_14|GPIO_PIN_3, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PC13 PC14 */
   GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14;
@@ -491,33 +541,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PA0 PA1 PA8 PA15 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_8|GPIO_PIN_15;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PA4 PA5 PA6 PA7 */
-  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+  /*Configure GPIO pins : PA0 PA4 PA5 PA6 
+                           PA7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6 
+                          |GPIO_PIN_7;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB0 PB1 PB2 PB3 
-                           PB4 PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 
-                          |GPIO_PIN_4|GPIO_PIN_5;
+  /*Configure GPIO pins : PB0 PB1 PB2 PB12 
+                           PB14 PB3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_12 
+                          |GPIO_PIN_14|GPIO_PIN_3;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PB10 PB11 PB12 PB13 
-                           PB14 PB15 PB8 PB9 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13 
-                          |GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_8|GPIO_PIN_9;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -667,6 +703,71 @@ void midi_task(void)
 	}
 }
 #endif
+
+//--------------------------------------------------------------------+
+// WebUSB use vendor class
+//--------------------------------------------------------------------+
+
+// Invoked when received VENDOR control request
+bool tud_vendor_control_request_cb(uint8_t rhport, tusb_control_request_t const * request)
+{
+  switch (request->bRequest)
+  {
+    case VENDOR_REQUEST_WEBUSB:
+      // match vendor request in BOS descriptor
+      // Get landing page url
+      return tud_control_xfer(rhport, request, (void*) &desc_url, desc_url.bLength);
+
+    case VENDOR_REQUEST_MICROSOFT:
+      if ( request->wIndex == 7 )
+      {
+        // Get Microsoft OS 2.0 compatible descriptor
+        uint16_t total_len;
+        memcpy(&total_len, desc_ms_os_20+8, 2);
+
+        return tud_control_xfer(rhport, request, (void*) desc_ms_os_20, total_len);
+      }else
+      {
+        return false;
+      }
+
+    case 0x22:
+      // Webserial simulate the CDC_REQUEST_SET_CONTROL_LINE_STATE (0x22) to
+      // connect and disconnect.
+      web_serial_connected = (request->wValue != 0);
+
+      // Always lit LED if connected
+      if ( web_serial_connected )
+      {
+        //board_led_write(true);
+        //blink_interval_ms = BLINK_ALWAYS_ON;
+
+
+      }else
+      {
+        blink_interval_ms = BLINK_MOUNTED;
+      }
+
+      // response with status OK
+      return tud_control_status(rhport, request);
+
+    default:
+      // stall unknown request
+      return false;
+  }
+
+  return true;
+}
+
+// Invoked when DATA Stage of VENDOR's request is complete
+bool tud_vendor_control_complete_cb(uint8_t rhport, tusb_control_request_t const * request)
+{
+  (void) rhport;
+  (void) request;
+
+  // nothing to do
+  return true;
+}
 
 uint32_t board_millis(void)
 {

@@ -285,22 +285,22 @@ i2c_SCL
 Wire Wire Line
 	4400 4100 4500 4100
 Text HLabel 5900 3700 2    50   Output ~ 0
-TX
+TX2
 Wire Wire Line
 	5900 3700 5800 3700
 Text HLabel 5900 3800 2    50   Input ~ 0
-RX
+RX2
 Wire Wire Line
 	5900 3800 5800 3800
 Text HLabel 5900 4400 2    50   Output ~ 0
-TX2
+TX
 Wire Wire Line
 	5900 4400 5800 4400
 Text HLabel 5900 4500 2    50   Input ~ 0
-RX2
+RX
 Wire Wire Line
 	5900 4500 5800 4500
-Text HLabel 5900 3500 2    50   Input ~ 0
+Text HLabel 4450 3500 0    50   Input ~ 0
 ROW1
 Text HLabel 5900 3900 2    50   Input ~ 0
 COL1
@@ -318,29 +318,21 @@ Wire Wire Line
 	5900 4100 5800 4100
 Wire Wire Line
 	5900 4200 5800 4200
-Wire Wire Line
-	5900 3500 5800 3500
-Text HLabel 5900 3600 2    50   Input ~ 0
+Text HLabel 4450 3600 0    50   Input ~ 0
 ROW2
-Wire Wire Line
-	5900 3600 5800 3600
-Text HLabel 5900 4300 2    50   Input ~ 0
+Text HLabel 4450 3700 0    50   Input ~ 0
 ROW3
-Wire Wire Line
-	5900 4300 5800 4300
-Text HLabel 5900 5000 2    50   Input ~ 0
+Text HLabel 4450 3800 0    50   Input ~ 0
 ROW4
-Wire Wire Line
-	5900 5000 5800 5000
 $Comp
 L Device:Crystal_GND24_Small Y1
 U 1 1 5E3ED918
 P 4100 2850
 F 0 "Y1" V 4054 2994 50  0000 L CNN
-F 1 "8MHz" V 4145 2994 50  0000 L CNN
+F 1 "16MHz" V 4145 2994 50  0000 L CNN
 F 2 "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm" H 4100 2850 50  0001 C CNN
 F 3 "~" H 4100 2850 50  0001 C CNN
-F 4 "C280087" H 4100 2850 50  0001 C CNN "LCSC"
+F 4 "C13738" H 4100 2850 50  0001 C CNN "LCSC"
 	1    4100 2850
 	0    1    1    0   
 $EndComp
@@ -426,4 +418,16 @@ Wire Wire Line
 	4500 4700 4250 4700
 Wire Wire Line
 	4250 4900 4500 4900
+Wire Wire Line
+	4450 3500 4500 3500
+Wire Wire Line
+	4450 3600 4500 3600
+Wire Wire Line
+	4450 3700 4500 3700
+Wire Wire Line
+	4450 3800 4500 3800
+Text HLabel 5900 3500 2    50   Input ~ 0
+CTS2
+Wire Wire Line
+	5900 3500 5800 3500
 $EndSCHEMATC

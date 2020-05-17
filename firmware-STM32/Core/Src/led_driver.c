@@ -8,65 +8,55 @@
 #include "led_driver.h"
 #include "i2c_handler.h"
 
-uint8_t bitplane[128] = {6, 5, 4, 3, 2, 1, 0, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5,
+SPI_HandleTypeDef* spi;
+uint8_t bitplane_index = 0;
+uint8_t bitplanes[128] = {6, 5, 4, 3, 2, 1, 0, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5,
 		4, 6, 6, 5, 6, 6, 5, 4, 3, 2, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5, 4, 6, 6
 		, 5, 6, 6, 5, 4, 3, 2, 1, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5,
 		 6, 6, 5, 4, 3, 2, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6, 6, 5, 4, 3, 6, 6, 5, 6, 6, 5, 4, 6, 6, 5, 6};
 
-uint8_t outputmap[8][7] = {0};
+uint8_t led_order[] = { 21,22,20, 1,2,0,    14,13,15, 26,25,27,
+						32,33,23, 4,5,3,    11,10,12, 47,46,24,
+						35,36,34, 7,16,6,   8,31,9,   44,43,45,
+						38,39,37, 18,19,17, 29,28,30, 41,40,42};
+
+// 3 * 16 bits, on 7 different bitplanes
+uint8_t outputmap[7][6] = {{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+		{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+		{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+		{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+		{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+		{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+		{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
 
 uint8_t logical_to_physical_sections[8] = {7, 1, 6, 0, 5, 2, 4, 3};
 
-void init_led() {
-	// Debug lines
-//	uint8_t* dirty_byte = (uint8_t*) getI2CMemory(58);
-//	uint8_t* first_led = (uint8_t*) getI2CMemory(10);
-//	*first_led = 0xFF; // 1st led R
-//	*(first_led+4) = 0xFF; // 2nd led G
-//	*(first_led+8) = 0xFF; // 3rd led B
-//	*dirty_byte = 1;
+void init_led(SPI_HandleTypeDef* spi_handle, TIM_HandleTypeDef* tim_handle) {
+	spi = spi_handle;
+
+	HAL_TIM_Base_Start_IT(tim_handle);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0); // ~OE -> enable output
 }
 
-void led_task() {
-	uint8_t* dirty_byte = (uint8_t*) getI2CMemory(58);
-	if(*dirty_byte) {
-		// 4 rows, divided in 2 parts each (8 total)
-		for(uint8_t section = 0; section < 8; section++) {
-			// Sections are not wired from top left to bottom right
-			uint8_t physical_section = logical_to_physical_sections[section];
-
-			uint8_t* first_led = (uint8_t*) getI2CMemory(10) + section * 6;
-			uint8_t* second_led = first_led + 3;
-
-			// Right-shift all values by one, to transform them to 7 bitplanes instead of 8
-			uint8_t first_R = (*first_led) >> 1;
-			uint8_t first_G = (*(first_led+1)) >> 1;
-			uint8_t first_B = (*(first_led+2)) >> 1;
-
-			uint8_t second_R = (*second_led) >> 1;
-			uint8_t second_G = (*(second_led+1)) >> 1;
-			uint8_t second_B = (*(second_led+2)) >> 1;
-
-			for(uint8_t bitplane = 0; bitplane < 7; bitplane++) {
-				outputmap[physical_section][bitplane] =
-						((first_R & (1 << bitplane)) >> bitplane) +
-						(((first_G & (1 << bitplane)) >> bitplane) << 1) +
-						(((first_B & (1 << bitplane)) >> bitplane) << 2) +
-						(((second_B & (1 << bitplane)) >> bitplane) << 3) +
-						(((second_G & (1 << bitplane)) >> bitplane) << 4) +
-						(((second_R & (1 << bitplane)) >> bitplane) << 5);
-			}
+void update_outputmap() {
+	uint8_t* first_led = (uint8_t*) getI2CMemory(10);
+	for(int bitplane = 1; bitplane < 8; bitplane++) {
+		uint32_t *alias_region = (uint32_t *) (((uint32_t) outputmap[bitplane-1]-0x20000000)*32+0x22000000);
+		for(int led_index = 0; led_index < 48; led_index++) {
+			alias_region[led_order[led_index]] = first_led[led_index] >> bitplane;
 		}
-
-		*dirty_byte = 0;
 	}
 }
 
-uint8_t getOutput_led(uint16_t lineselect) {
-	static uint8_t pos;
-	uint8_t id = 31-__builtin_clz(lineselect >> 8);
-	uint8_t return_val = outputmap[id][bitplane[pos]];
-	if(lineselect == 0x8000) pos++; // If the current row is the last (at gpio PB15), get next bitplane
-	if(pos == 128) pos = 0;
-	return return_val;
+void led_task() {
+	uint8_t bitplane = bitplanes[bitplane_index];
+
+	// Write bitplane to shift registers
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 0); // LE -> Stop latch
+	volatile HAL_StatusTypeDef result = HAL_SPI_Transmit(spi, (uint8_t*)outputmap[bitplane], 6, HAL_MAX_DELAY);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, 1); // LE -> Latch
+
+
+	bitplane_index++;
+	if(bitplane_index >= 128) { bitplane_index = 0; }
 }
