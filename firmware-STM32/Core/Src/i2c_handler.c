@@ -63,6 +63,7 @@ void i2c_watchdog(I2C_HandleTypeDef *hi2c) {
 	}
 
 	if(hi2c->State != HAL_I2C_STATE_LISTEN && (HAL_GetTick() - startTick) > I2C_Timeout) {
+		startTick = HAL_GetTick();
 		HAL_I2C_Init(hi2c);
 		HAL_I2C_EnableListen_IT(hi2c);
 	}
@@ -95,7 +96,7 @@ void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c) {
 	if(first) {
 		first = 0;
 		address = i2cbuf[0];
-	} else {
+	} else if(address < 128) {
 		i2cregisters[address] = i2cbuf[0];
 		address++;
 	}
