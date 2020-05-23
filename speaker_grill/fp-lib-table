@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name speaker_grill)(type KiCad)(uri /media/data/git/cz20-badge/speaker_grill)(options "")(descr ""))
+)
