@@ -49,7 +49,7 @@ void uart_init(void) {
 	}
 
 	UART_WEBUSB.Instance = USART2;
-	UART_WEBUSB.Init.BaudRate = 256000;
+	UART_WEBUSB.Init.BaudRate = 115200;
 	UART_WEBUSB.Init.WordLength = UART_WORDLENGTH_8B;
 	UART_WEBUSB.Init.StopBits = UART_STOPBITS_1;
 	UART_WEBUSB.Init.Parity = UART_PARITY_NONE;
