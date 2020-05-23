@@ -1,4 +1,6 @@
-
+body {
+  background-color: #FCFCFC;
+}
 
 div.filebrowser {
   width: 20%;
@@ -27,7 +29,7 @@ div.filebrowser {
 
  /* Style buttons */
  .btn {
-  background-color: #272822; /* Blue background */
+  background-color: #808080; /* Blue background */
   border: none; /* Remove borders */
   color: white; /* White text */
   padding: 12px 16px; /* Some padding */

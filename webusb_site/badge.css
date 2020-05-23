@@ -1,0 +1,64 @@
+.main {
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: 560px;
+ }
+
+body {
+    background-color: #15171B;
+    color: #fff;
+  }
+
+  .butt {
+    border: 0px;
+    background-color: rgb(19, 122, 156);
+    height:125px;
+    width:125px;
+    cursor:pointer;
+    border-radius: 10px;
+    transition: .5s ease;
+    backface-visibility: hidden;
+ }
+ 
+ .butt:hover {
+    opacity: 0.3;
+    color:white;
+ }
+
+ .button_grid {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   grid-row-gap: 20px;
+   grid-column-gap: 20px;
+}
+.header {
+   margin: 10px;
+}
+
+
+ /* Style buttons */
+ .btn {
+   background-color: #15171B; /* Blue background */
+   border: none; /* Remove borders */
+   color: white; /* White text */
+   padding: 12px 16px; /* Some padding */
+   font-size: 14px; /* Set a font size */
+   cursor: pointer; /* Mouse pointer on hover */
+ }
+ 
+ /* Darker background on mouse-over */
+ .btn:hover {
+   background-color: RoyalBlue;
+ } 
+
+ .nav-left {
+    text-align: left;
+    float:left; /* add this */
+ }
+ .nav-right {
+    text-align: right;
+ }
