@@ -51,9 +51,21 @@ uint8_t i2cregisters[128] = {0};
 uint8_t first = 1;
 uint8_t address;
 
+//uint32_t startTick;
+
+//void i2c_watchdog(I2C_HandleTypeDef *hi2c) {
+//	uint8_t* dirty_byte = (uint8_t*) getI2CMemory(58);
+
+//	if(hi2c->State != HAL_I2C_STATE_LISTEN && (HAL_GetTick() - startTick) > I2C_Timeout) {
+//		HAL_I2C_Init(hi2c);
+//		HAL_I2C_EnableListen_IT(hi2c);
+//	}
+//}
+
 void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, uint16_t AddrMatchCode) {
   UNUSED(AddrMatchCode);
   first = 1;
+  //startTick = HAL_GetTick();
   if(hi2c->Instance == I2C1) {
 	  if(TransferDirection == 1) {	//Write
 		  HAL_I2C_Slave_Seq_Receive_IT(hi2c, i2cbuf, 1, I2C_FIRST_FRAME);

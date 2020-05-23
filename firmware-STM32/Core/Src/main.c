@@ -161,6 +161,8 @@ int main(void)
 		led_task();
 		button_task();
 
+		//i2c_watchdog(&hi2c1);
+
 		if(last_tick != HAL_GetTick()) {
 			last_tick = HAL_GetTick();
 			if (huart2.Instance->SR & UART_FLAG_IDLE && hdma_usart2_rx.State == HAL_DMA_STATE_BUSY) /* if Idle flag is set */
