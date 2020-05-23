@@ -1,7 +1,11 @@
 //Init ace editor
 var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/python");
+    editor.session.setOptions({
+        mode: "ace/mode/python",
+        tabSize: 4,
+        useSoftTabs: true
+    });
 var editor_filename = "";
 
 var device;
