@@ -290,6 +290,7 @@ F 0 "J2" H 4950 2167 50  0000 C CNN
 F 1 "Micro_SD_Card" H 4950 2076 50  0000 C CNN
 F 2 "Connector_Card:microSD_HC_Wuerth_693072010801" H 6150 1750 50  0001 C CNN
 F 3 "http://katalog.we-online.de/em/datasheet/693072010801.pdf" H 5000 1450 50  0001 C CNN
+F 4 "C341096" H 5000 1450 50  0001 C CNN "LCSC"
 	1    5000 1450
 	1    0    0    -1  
 $EndComp
@@ -473,6 +474,7 @@ F 0 "J1" H 10320 2197 50  0000 R CNN
 F 1 "USB_C_Receptacle" H 10320 2288 50  0000 R CNN
 F 2 "Connector_USB:USB_C_Receptacle_China_SMT" H 10900 2500 50  0001 C CNN
 F 3 "https://www.usb.org/sites/default/files/documents/usb_type-c.zip" H 10900 2500 50  0001 C CNN
+F 4 "C167321 " H 10750 2500 50  0001 C CNN "LCSC"
 	1    10750 2500
 	-1   0    0    1   
 $EndComp
@@ -1069,6 +1071,7 @@ F 0 "J7" H 3618 3375 50  0000 C CNN
 F 1 "Conn_01x08" H 3618 3466 50  0000 C CNN
 F 2 "lcsc:FFC-SMD_8P-P1.00_FFC10028-08SBD224K6M" H 3700 4000 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/FFC-FPC-Connectors_TXGA-FFC10028-08SBD224K6M_C456471.html" H 3700 4000 50  0001 C CNN
+F 4 "C456471" H 3700 4000 50  0001 C CNN "LCSC"
 	1    3700 4000
 	-1   0    0    1   
 $EndComp
