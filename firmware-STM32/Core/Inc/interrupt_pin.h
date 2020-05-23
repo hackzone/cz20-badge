@@ -15,6 +15,7 @@
 #define INTERRUPT_REASON_MIDI 4
 #define INTERRUPT_REASON_HID_WRITTEN 8
 #define INTERRUPT_REASON_MIDI_WRITTEN 16
+#define INTTERUPT_REASON_MIDI_RECEIVED 32
 
 void setInterruptPin();
 void resetInterruptPin();

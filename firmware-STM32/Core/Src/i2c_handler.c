@@ -42,8 +42,8 @@
  * 90-92:	USB MIDI data slot 4 (commonly 0x90 Note On or 0x80 Note Off, then a frequency, then a volume)
  * 93:		USB MIDI dirty byte 4 (0 = data is unchanged, 1 = midi data slot 4 should be sent by STM32 over USB)
  *
- * 94-96:	USB MIDI incoming data
- * 97-128:	Reserved
+ * 94:	USB MIDI incoming data valid bytes
+ * 95-127:	USB MIDI incoming data
  *
  ***************************************************************/
 
