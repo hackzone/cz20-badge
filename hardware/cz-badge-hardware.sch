@@ -38,7 +38,7 @@ Wire Wire Line
 Text GLabel 3100 4750 2    50   Input ~ 0
 ESP_FLASH
 Wire Wire Line
-	2000 4200 2000 4450
+	2000 4200 2000 4300
 Text GLabel 1050 4750 0    50   Input ~ 0
 ESP_EN
 Text GLabel 3100 4850 2    50   Output ~ 0
@@ -350,7 +350,7 @@ Wire Wire Line
 Text GLabel 5500 3150 2    50   UnSpc ~ 0
 VCC
 Wire Wire Line
-	5500 3150 5350 3150
+	5500 3150 5450 3150
 Text GLabel 5500 3000 2    50   UnSpc ~ 0
 GND
 Wire Wire Line
@@ -570,7 +570,7 @@ ESP_RX
 Text GLabel 7750 750  0    50   Input ~ 0
 ESP_TX
 Wire Wire Line
-	1050 4750 1400 4750
+	1050 4750 1200 4750
 Text GLabel 3100 6350 2    50   Output ~ 0
 SD_MOSI
 Text GLabel 3100 5350 2    50   Output ~ 0
@@ -1275,4 +1275,46 @@ $EndComp
 Connection ~ 3750 3900
 Wire Wire Line
 	3750 3900 3650 3900
+$Comp
+L Connector:TestPoint_Small TP12
+U 1 1 5ECED560
+P 1200 4750
+F 0 "TP12" H 1248 4796 50  0000 L CNN
+F 1 "TestPoint_Small" H 1248 4705 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 1400 4750 50  0001 C CNN
+F 3 "~" H 1400 4750 50  0001 C CNN
+	1    1200 4750
+	1    0    0    -1  
+$EndComp
+Connection ~ 1200 4750
+Wire Wire Line
+	1200 4750 1400 4750
+$Comp
+L Connector:TestPoint_Small TP13
+U 1 1 5ECEF4F7
+P 2000 4300
+F 0 "TP13" H 2048 4346 50  0000 L CNN
+F 1 "TestPoint_Small" H 2048 4255 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 2200 4300 50  0001 C CNN
+F 3 "~" H 2200 4300 50  0001 C CNN
+	1    2000 4300
+	1    0    0    -1  
+$EndComp
+Connection ~ 2000 4300
+Wire Wire Line
+	2000 4300 2000 4450
+$Comp
+L Connector:TestPoint_Small TP14
+U 1 1 5ECF6727
+P 5450 3150
+F 0 "TP14" H 5498 3196 50  0000 L CNN
+F 1 "TestPoint_Small" H 5498 3105 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 5650 3150 50  0001 C CNN
+F 3 "~" H 5650 3150 50  0001 C CNN
+	1    5450 3150
+	1    0    0    -1  
+$EndComp
+Connection ~ 5450 3150
+Wire Wire Line
+	5450 3150 5350 3150
 $EndSCHEMATC
