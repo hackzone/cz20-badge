@@ -369,9 +369,9 @@ F 3 "~" H 6700 5000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5800 4800 6500 4800
+	5800 4800 6000 4800
 Wire Wire Line
-	6500 4900 5800 4900
+	6500 4900 6000 4900
 Text GLabel 6400 5000 0    50   UnSpc ~ 0
 GND
 Wire Wire Line
@@ -432,4 +432,32 @@ Text GLabel 6450 5300 0    50   UnSpc ~ 0
 VCC
 Wire Wire Line
 	6450 5300 6500 5300
+$Comp
+L Connector:TestPoint_Small TP15
+U 1 1 5ED4800E
+P 6000 4800
+F 0 "TP15" H 6048 4846 50  0000 L CNN
+F 1 "TestPoint_Small" H 6048 4755 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 6200 4800 50  0001 C CNN
+F 3 "~" H 6200 4800 50  0001 C CNN
+	1    6000 4800
+	1    0    0    -1  
+$EndComp
+Connection ~ 6000 4800
+Wire Wire Line
+	6000 4800 6500 4800
+$Comp
+L Connector:TestPoint_Small TP16
+U 1 1 5ED49503
+P 6000 4900
+F 0 "TP16" H 6048 4946 50  0000 L CNN
+F 1 "TestPoint_Small" H 6048 4855 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 6200 4900 50  0001 C CNN
+F 3 "~" H 6200 4900 50  0001 C CNN
+	1    6000 4900
+	1    0    0    -1  
+$EndComp
+Connection ~ 6000 4900
+Wire Wire Line
+	6000 4900 5800 4900
 $EndSCHEMATC
