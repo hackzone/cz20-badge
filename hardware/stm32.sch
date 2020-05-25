@@ -358,26 +358,24 @@ Connection ~ 4200 2850
 Wire Wire Line
 	4200 2850 4250 2850
 $Comp
-L Connector_Generic:Conn_01x03 J6
+L Connector_Generic:Conn_01x06 J6
 U 1 1 5E568FFD
-P 6700 4900
-F 0 "J6" H 6780 4942 50  0000 L CNN
-F 1 "PROG" H 6780 4851 50  0000 L CNN
-F 2 "Connector:Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical" H 6700 4900 50  0001 C CNN
-F 3 "~" H 6700 4900 50  0001 C CNN
-	1    6700 4900
+P 6700 5000
+F 0 "J6" H 6780 5042 50  0000 L CNN
+F 1 "PROG" H 6780 4951 50  0000 L CNN
+F 2 "Connector:Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical" H 6700 5000 50  0001 C CNN
+F 3 "~" H 6700 5000 50  0001 C CNN
+	1    6700 5000
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	5800 4800 6500 4800
 Wire Wire Line
 	6500 4900 5800 4900
-Text GLabel 6400 5100 3    50   UnSpc ~ 0
+Text GLabel 6400 5000 0    50   UnSpc ~ 0
 GND
 Wire Wire Line
 	6500 5000 6400 5000
-Wire Wire Line
-	6400 5000 6400 5100
 Wire Wire Line
 	3250 2750 3250 2600
 Wire Wire Line
@@ -430,4 +428,8 @@ Text HLabel 5900 3500 2    50   Input ~ 0
 CTS2
 Wire Wire Line
 	5900 3500 5800 3500
+Text GLabel 6450 5300 0    50   UnSpc ~ 0
+VCC
+Wire Wire Line
+	6450 5300 6500 5300
 $EndSCHEMATC
