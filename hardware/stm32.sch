@@ -363,7 +363,7 @@ U 1 1 5E568FFD
 P 6700 4900
 F 0 "J6" H 6780 4942 50  0000 L CNN
 F 1 "PROG" H 6780 4851 50  0000 L CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical_SMD_Pin1Left" H 6700 4900 50  0001 C CNN
+F 2 "Connector:Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical" H 6700 4900 50  0001 C CNN
 F 3 "~" H 6700 4900 50  0001 C CNN
 	1    6700 4900
 	1    0    0    -1  
