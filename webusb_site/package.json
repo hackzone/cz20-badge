@@ -9,9 +9,12 @@
     "start": "vue-cli-service serve --open"
   },
   "dependencies": {
+    "brace": "^0.8.0",
     "core-js": "^3.4.4",
+    "jquery": "^3.5.1",
     "mdbvue": "6.5.0",
     "vue": "^2.6.11",
+    "vue2-ace-editor": "0.0.15",
     "vue2-google-maps": "^0.10.7"
   },
   "devDependencies": {
@@ -33,7 +36,10 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-console": "off",
+      "no-unused-vars": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }

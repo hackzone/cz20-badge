@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Dashboard from '@/components/Dashboard'
-import Profile from '@/components/Profile'
+import Apps from '@/components/Apps'
+import Programming from '@/components/Programming'
 import Tables from '@/components/Tables'
 import Maps from '@/components/Maps'
 import BadGateway from '@/components/BadGateway'
@@ -13,17 +13,17 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: Dashboard,
+      path: '/apps',
+      name: 'Apps',
+      component: Apps,
       props: { page: 1 },
       alias: '/'
     },
     {
-      path: '/profile',
-      name: 'Profile',
+      path: '/programming',
+      name: 'Programming & Files',
       props: { page: 2 },
-      component: Profile
+      component: Programming
     },
     {
       path: '/tables',

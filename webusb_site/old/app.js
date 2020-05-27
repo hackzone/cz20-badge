@@ -29,7 +29,7 @@ function buildpacket(size, command) {
 }
 
 function buildpacketWithFilename(size, command, filename) {
-    buffer = buildpacket(filename.length+1+size, command);
+    var buffer = buildpacket(filename.length+1+size, command);
     for(var i = 0; i<filename.length; i++) {
         buffer[8+i] = filename.charCodeAt(i);
     }
@@ -75,7 +75,7 @@ function fetch_dir(obj, cb) {
         }
         console.log(dir_name);
     }
-    buffer = buildpacket(dir_name.length+1, 4096);
+    var buffer = buildpacket(dir_name.length+1, 4096);
     for(var i = 0; i<dir_name.length; i++) {
         buffer[8+i] = dir_name.charCodeAt(i);
     }
@@ -87,32 +87,32 @@ function fetch_dir(obj, cb) {
 }
 
 function readfile(dir_name) {
-    buffer = buildpacketWithFilename(0, 4097, dir_name);
+    var buffer = buildpacketWithFilename(0, 4097, dir_name);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
 
 function createfile(dir_name) {
-    buffer = buildpacketWithFilename(0, 4098, dir_name);
+    var buffer = buildpacketWithFilename(0, 4098, dir_name);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
 
 function delfile(dir_name) {
-    buffer = buildpacketWithFilename(0, 4099, dir_name);
+    var buffer = buildpacketWithFilename(0, 4099, dir_name);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
 
 function runfile(dir_name) {
-    buffer = buildpacketWithFilename(0, 0, dir_name);
+    var buffer = buildpacketWithFilename(0, 0, dir_name);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
 
 
 function duplicatefile(source, destination) {
-    buffer = buildpacket(source.length+1+destination.length+1, 4100);
+    var buffer = buildpacket(source.length+1+destination.length+1, 4100);
     for(var i = 0; i<source.length; i++) {
         buffer[8+i] = source.charCodeAt(i);
     }
@@ -128,7 +128,7 @@ function duplicatefile(source, destination) {
 }
 
 function movefile(source, destination) {
-    buffer = buildpacket(source.length+1+destination.length+1, 4101);
+    var buffer = buildpacket(source.length+1+destination.length+1, 4101);
     for(var i = 0; i<source.length; i++) {
         buffer[8+i] = source.charCodeAt(i);
     }
@@ -144,7 +144,7 @@ function movefile(source, destination) {
 }
 
 function copyfile(source, destination) {
-    buffer = buildpacket(source.length+1+destination.length+1, 4100);
+    var buffer = buildpacket(source.length+1+destination.length+1, 4100);
     for(var i = 0; i<source.length; i++) {
         buffer[8+i] = source.charCodeAt(i);
     }
@@ -161,7 +161,7 @@ function copyfile(source, destination) {
 
 function savetextfile(filename, contents) {
     console.log(filename)
-    buffer = buildpacketWithFilename(contents.length, 4098, filename);    
+    var buffer = buildpacketWithFilename(contents.length, 4098, filename);
     for(var i = 0; i<contents.length; i++) {
         buffer[8+filename.length+1+i] = contents.charCodeAt(i);
     }
@@ -171,7 +171,7 @@ function savetextfile(filename, contents) {
 }
 
 function savefile(filename, contents) {
-    buffer = buildpacketWithFilename(contents.byteLength, 4098, filename);
+    var buffer = buildpacketWithFilename(contents.byteLength, 4098, filename);
     new Uint8Array(buffer, 8+filename.length+1, contents.byteLength).set(new Uint8Array(contents.buffer));    
 
     console.log("Sending command...");
@@ -179,7 +179,7 @@ function savefile(filename, contents) {
 }
 
 function createfolder(folder) {
-    buffer = buildpacketWithFilename(0, 4102, folder);
+    var buffer = buildpacketWithFilename(0, 4102, folder);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
@@ -210,7 +210,7 @@ function handlePacket(id, data) {
     switch(id) {
         case 4096:
             var textdecoder = new TextDecoder("ascii");
-            dir_structure = textdecoder.decode(data).split('\n');
+            var dir_structure = textdecoder.decode(data).split('\n');
             console.log(dir_structure);
             var data_structure = [];
             for(var i = 1; i < dir_structure.length; i++) {
@@ -245,13 +245,13 @@ function handlePacket(id, data) {
         break;
         case 4097:
             var textdecoder = new TextDecoder("ascii");
-            file_contents = textdecoder.decode(data);
+            var file_contents = textdecoder.decode(data);
             console.log(file_contents);
             editor.session.setValue(file_contents);
         break;
         default :
             var textdecoder = new TextDecoder("ascii");
-            file_contents = textdecoder.decode(data);
+            var file_contents = textdecoder.decode(data);
             console.log(file_contents);
         break;
     }
@@ -312,7 +312,7 @@ function connect() {
 function trash_ui() {
     var node = $("#filebrowser").jstree("get_selected",true)[0];
     console.log(node);
-    file = getnodepath(node);
+    var file = getnodepath(node);
     console.log(file);
     if(!isfile(node)) return;
     if(confirm("Delete: " + file + "?")) {
@@ -337,20 +337,20 @@ function rename_ui() {
         } else {
             return;
         }
-        file = getnodepath(node) + "/" + filename;
+        var file = getnodepath(node) + "/" + filename;
         movefile(source, file);
     }
 }
 
 function save_ui() {
-    contents = editor.getValue();
+    var contents = editor.getValue();
     savetextfile(editor_filename, contents);
 }
 
 function startapp_ui() {
     var node = $("#filebrowser").jstree("get_selected",true)[0];
     console.log(node);
-    file = getnodepath(node);
+    var file = getnodepath(node);
     console.log(file);
     if(!isfile(node)) return;
     runfile(file);
@@ -364,7 +364,7 @@ function mkdir_ui() {
         if(isfile(node)) {
             node = $('#filebrowser').jstree(true).get_node(node["parent"]);
         }
-        folder = getnodepath(node) + "/" + folder_name;
+        var folder = getnodepath(node) + "/" + folder_name;
         console.log(folder);
         createfolder(folder);
     }   
@@ -378,7 +378,7 @@ function mkfile_ui() {
         if(isfile(node)) {
             node = $('#filebrowser').jstree(true).get_node(node["parent"]);
         }
-        file = getnodepath(node) + "/" + filename;
+        var file = getnodepath(node) + "/" + filename;
         console.log(file);
         createfile(file);
     }   
@@ -393,11 +393,11 @@ var filetocopy = "";
 var filetocut = "";
 
 function copy_ui() {
-    filetocut = "";
+    var filetocut = "";
     var node = $("#filebrowser").jstree("get_selected",true)[0];
     if(!isfile(node)) return;
-    
-    file = getnodepath(node);
+
+    var file = getnodepath(node);
     filetocopy = file;
     document.getElementById("paste_btn").disabled = false;    
 }
@@ -406,8 +406,8 @@ function cut_ui() {
     filetocopy = "";
     var node = $("#filebrowser").jstree("get_selected",true)[0];
     if(!isfile(node)) return;
-    
-    file = getnodepath(node);
+
+    var file = getnodepath(node);
     filetocut = file;
     document.getElementById("paste_btn").disabled = false;    
 }
@@ -418,11 +418,11 @@ function paste_ui() {
     if(isfile(node)) {
         node = $('#filebrowser').jstree(true).get_node(node["parent"]);
     }
-    folder = getnodepath(node) + "/";
+    var folder = getnodepath(node) + "/";
     console.log(folder);
-    if(filetocut != "") {
+    if(filetocut !== "") {
         movefile(filetocut, folder);
-    } else if(filetocopy != "") {
+    } else if(filetocopy !== "") {
         copyfile(filetocopy, folder);
     }
 }
@@ -440,7 +440,7 @@ function readSingleFile(e) {
         if(isfile(node)) {
             node = $('#filebrowser').jstree(true).get_node(node["parent"]);
         }
-        filedir = getnodepath(node) + "/" + file["name"];
+        var filedir = getnodepath(node) + "/" + file["name"];
         console.log(filedir);
         var arrayBuffer = reader.result;
         console.log(arrayBuffer);
