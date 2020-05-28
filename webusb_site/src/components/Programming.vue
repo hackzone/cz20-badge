@@ -1,6 +1,6 @@
 <template>
   <section id='programming'>
-    <mdb-card class='mb-4'>
+    <mdb-card class='mb-4' ondrop='itemDrop'>
       <mdb-card-body>
         <section>
         <mdb-row>
@@ -11,13 +11,9 @@
                 <mdb-btn color='gray' size='sm' title='Save file' v-on:click='save_ui()' icon='save'></mdb-btn>
                 <mdb-btn color='gray' size='sm' title='Make folder' v-on:click='mkdir_ui()' icon='folder-plus'></mdb-btn>
                 <mdb-btn color='gray' size='sm' title='Make file' v-on:click='mkfile_ui()' icon='file'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Sync' v-on:click='sync_ui()' icon='sync'></mdb-btn>
                 <mdb-btn color='gray' size='sm' title='Rename file' v-on:click='rename_ui()' icon='file-alt'></mdb-btn>
                 <mdb-btn color='gray' size='sm' title='Upload file' v-on:click='upload_ui()' icon='upload'></mdb-btn>
                 <mdb-btn color='gray' size='sm' title='Run file' v-on:click='startapp_ui()' icon='play'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Copy file' v-on:click='copy_ui()' icon='copy'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Cut file' v-on:click='cut_ui()' icon='cut'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Paste file' icon='paste' id='paste_btn' v-on:click='paste_ui()'></mdb-btn>
               </mdb-col>
             </mdb-row>
             <mdb-row class='mt-3'>
@@ -37,10 +33,13 @@
 </template>
 
 <script>
+window.itemDrop = function() {
+  console.log('nope')
+}
   import {mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow} from 'mdbvue';
 import VJstree from 'vue-jstree';
 import {trash_ui} from '../editor';
-import {readfile, fetch_dir} from '../webusb';
+  import {readfile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
@@ -49,6 +48,7 @@ import * as ace_editor from 'vue2-ace-editor';
 import {connect} from '../webusb';
 
 let component = undefined;
+let selected_item = {model:{}};
 
 export default {
   name: 'Programming',
@@ -65,9 +65,11 @@ export default {
     component = this;
   },
   methods: {
-    initEditor:function (editor) {
-    },
     itemClick:(node) => {
+      selected_item.model.selected = false;
+      node.model.selected = true;
+      selected_item = node;
+
       if(node.model.is_dir) {
         fetch_dir(node.model.full_path, (children) => {
           node.model.children = children;
@@ -77,16 +79,55 @@ export default {
         readfile(node.model.full_path, (contents) => component.content = contents );
       }
     },
-    trash_ui: trash_ui,
+    itemDrop: (node, item, draggedItem, e) => {
+      console.log(node);
+    },
+    trash_ui: () => {
+      let file = selected_item.model.full_path;
+      if(confirm("Delete: " + file + "?")) {
+        delfile(file);
+        component.itemClick(selected_item.$parent); // Refresh parent directory
+      }
+    },
+    save_ui: () => savetextfile(selected_item.model.full_path, component.content),
+    rename_ui: () => {
+      if(selected_item.model.is_dir){ return; }
+
+      let path = selected_item.model.full_path;
+      let parent_path = selected_item.$parent.model.full_path;
+
+      let filename = prompt("Please enter new filename", "");
+      if (filename != null) {
+        movefile(path, parent_path + '/' + filename);
+        component.itemClick(selected_item.$parent); // Refresh parent directory
+      }
+    },
+    mkdir_ui: () => {
+      let dirname = prompt("Please enter new directory name", "");
+      let entry = selected_item.model.is_dir ? selected_item : selected_item.$parent;
+      let path = entry.model.full_path;
+      if(dirname) {
+        createfolder(path + '/' + dirname);
+        component.itemClick(entry); // Refresh parent directory
+      }
+    },
+    mkfile_ui: () => {
+      let filename = prompt("Please enter new filename", "");
+      let entry = selected_item.model.is_dir ? selected_item : selected_item.$parent;
+      let path = entry.model.full_path;
+      if(filename) {
+        createfile(path + '/' + filename);
+        component.itemClick(entry); // Refresh parent directory
+      }
+    },
     connect:connect,
   },
   data () {
     return {
-      content:'test',
+      content:'',
       files: [
         {
           text: 'flash',
-          selected: true,
           full_path: '/flash',
           icon: 'fas fa-microchip',
           is_dir: true,
@@ -94,7 +135,6 @@ export default {
         },
         {
           text: 'sdcard',
-          selected: true,
           full_path: '/sdcard',
           icon: 'fas fa-sd-card',
           is_dir: true,
@@ -116,5 +156,11 @@ export default {
   }
   .btn.btn-sm {
     padding: .5rem .5rem !important;
+  }
+</style>
+
+<style>
+  .tree-selected {
+    background: #eee !important;
   }
 </style>
