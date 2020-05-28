@@ -1,13 +1,13 @@
 /**
  * Created by Tom on 5/27/2020.
  */
-let device;
+export let device;
 let waiting_command = 1;
 let command;
 let size;
 let received;
 let payload;
-let cb_reply;
+let cb_reply = (obj, datastructure) => {};
 
 import * as $ from 'jquery';
 
@@ -269,9 +269,10 @@ export function connect() {
     size = 0;
     received = 0;
     payload = 0;
-    navigator.usb.requestDevice({ filters: [{ vendorId: 0xcafe }] })
+    return navigator.usb.requestDevice({ filters: [{ vendorId: 0xcafe }] })
         .then(selectedDevice => {
             device = selectedDevice;
+            window.dev = selectedDevice;
             return device.open(); // Begin a session.
         })
         .then(() => device.selectConfiguration(1)) // Select configuration #1 for the device.
@@ -282,5 +283,8 @@ export function connect() {
             request: 0x22,
             value: 0x02,
             index: 0x02})) // Ready to receive data
-        .then(() => {readLoop(); $('#filebrowser').jstree(true).refresh()}); // Waiting for 64 bytes of data from endpoint #5.
+        .then(() => {
+            readLoop();
+            // $('#filebrowser').jstree(true).refresh();
+        }); // Waiting for 64 bytes of data from endpoint #5.
 }

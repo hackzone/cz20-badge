@@ -2,7 +2,6 @@
   <section id="programming">
     <mdb-card class="mb-4">
       <mdb-card-body>
-        <button onclick="connect()">Connect</button>
         <section>
         <mdb-row>
           <mdb-col>
@@ -48,8 +47,9 @@ window.ace = ace;
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 import * as ace_editor from 'vue2-ace-editor';
+import {connect} from '../webusb';
 
-export default {
+  export default {
   name: 'Programming',
   components: {
     mdbBtn,
@@ -62,25 +62,12 @@ export default {
   },
   methods: {
     initEditor:function (editor) {
-
-      document.getElementById('file-input')
-          .addEventListener('change', readSingleFile, false);
-
-      //Init jstree
-      // $('#filebrowser')
-      //     .on('changed.jstree', treechanged)
-      //     .jstree({
-      //         "core" : {
-      //             "multiple" : false,
-      //             "data" : fetch_dir,
-      //             "check_callback" : true
-      //         }
-      //     });
     },
     itemClick (node) {
       console.log(node.model.text + ' clicked !')
     },
-    trash_ui: trash_ui
+    trash_ui: trash_ui,
+    connect:connect,
   },
   data () {
     return {

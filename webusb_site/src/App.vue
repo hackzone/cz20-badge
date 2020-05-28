@@ -1,5 +1,11 @@
 <template>
   <div class="flexible-content">
+    <mdb-modal size="lg" style="cursor: pointer; z-index: 9999;" v-show="!is_connected" @click.native="connect()">
+      <mdb-modal-header>
+        <mdb-modal-title>Let's get started</mdb-modal-title>
+      </mdb-modal-header>
+      <mdb-modal-body>Click anywhere to connect to your CampZone2020 Event Badge</mdb-modal-body>
+    </mdb-modal>
     <!-- Sidebar -->
     <div class="sidebar-fixed position-fixed">
       <a class="logo-wrapper"
@@ -48,12 +54,10 @@
 
 <script>
 import {
-  // mdbNavbar,
-  // mdbNavbarBrand,
-  // mdbNavItem,
-  // mdbNavbarNav,
-  // mdbNavbarToggler,
-  mdbBtn,
+  mdbModal,
+  mdbModalHeader,
+  mdbModalTitle,
+  mdbModalBody,
   mdbIcon,
   mdbListGroup,
   mdbListGroupItem,
@@ -61,20 +65,37 @@ import {
   waves
 } from "mdbvue";
 
+import {device, connect} from './webusb';
+
+let component = undefined;
+setInterval(() => {
+  component.is_connected = device !== undefined && device.opened;
+}, 1000);
+
 export default {
   name: "AdminTemplate",
   components: {
+    mdbModal,
+    mdbModalHeader,
+    mdbModalTitle,
+    mdbModalBody,
     mdbListGroup,
     mdbListGroupItem,
     mdbIcon,
     ftr: mdbFooter
   },
+  methods: {
+    on_click: () => {console.log('clicked')},
+    connect:connect,
+  },
   data() {
     return {
-      activeItem: 1
+      activeItem: 1,
+      is_connected: device !== undefined && device.opened
     };
   },
   beforeMount() {
+    component = this;
     this.activeItem = this.$route.matched[0].props.default.page;
   },
   mixins: [waves]
