@@ -39,22 +39,16 @@
 <script>
   import {mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow} from 'mdbvue';
 import VJstree from 'vue-jstree';
-import {editor, trash_ui, readSingleFile} from '../editor';
-import {treechanged, fetch_dir} from '../webusb';
+import {trash_ui} from '../editor';
+import {readfile, fetch_dir} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 import * as ace_editor from 'vue2-ace-editor';
 import {connect} from '../webusb';
-window.fetch_dir=fetch_dir;
 
-function updateNode(node) {
-  fetch_dir(node.model.full_path, (children) => {
-    node.model.children = children;
-    node.model.opened = true;
-  });
-}
+let component = undefined;
 
 export default {
   name: 'Programming',
@@ -67,16 +61,22 @@ export default {
     VJstree,
     editor:ace_editor
   },
+  beforeMount() {
+    component = this;
+  },
   methods: {
     initEditor:function (editor) {
     },
-    itemClick:updateNode,
-    // itemToggle (node) {
-    //   if (node.model.children !== undefined && node.model.children.length === 1 &&
-    //           node.model.children[0]['icon'] === 'none') {
-    //     updateNode(node);
-    //   }
-    // },
+    itemClick:(node) => {
+      if(node.model.is_dir) {
+        fetch_dir(node.model.full_path, (children) => {
+          node.model.children = children;
+          node.model.opened = true;
+        });
+      } else {
+        readfile(node.model.full_path, (contents) => component.content = contents );
+      }
+    },
     trash_ui: trash_ui,
     connect:connect,
   },

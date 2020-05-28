@@ -68,9 +68,10 @@ export function fetch_dir(dir_name, cb) {
     device.transferOut(3, buffer);
 }
 
-export function readfile(dir_name) {
+export function readfile(dir_name, callback) {
     let buffer = buildpacketWithFilename(0, 4097, dir_name);
     console.log("Sending command...");
+    cb_reply = callback;
     device.transferOut(3, buffer);
 }
 
@@ -210,7 +211,7 @@ export function handlePacket(id, data) {
             textdecoder = new TextDecoder("ascii");
             file_contents = textdecoder.decode(data);
             console.log(file_contents);
-            // editor.session.setValue(file_contents);
+            cb_reply.call(this, file_contents);
             break;
         default :
             textdecoder = new TextDecoder("ascii");
