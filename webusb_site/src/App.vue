@@ -4,7 +4,7 @@
       <mdb-modal-header>
         <mdb-modal-title>Let's get started</mdb-modal-title>
       </mdb-modal-header>
-      <mdb-modal-body>Click anywhere to connect to your CampZone2020 Event Badge</mdb-modal-body>
+      <mdb-modal-body>Click anywhere to connect to your CampZone2020 Event Badge via USB</mdb-modal-body>
     </mdb-modal>
     <!-- Sidebar -->
     <div class="sidebar-fixed position-fixed">

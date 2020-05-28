@@ -52,22 +52,11 @@ export function isfile(obj) {
     return obj['icon'] === "far fa-file";
 }
 
-export function fetch_dir(obj, cb) {
+export function fetch_dir(dir_name, cb) {
     cb_reply = cb;
-    console.log(obj);
-    let dir_name = "/";
-    if(obj["parent"]) { //We have parent, time to construct dir structure
-        dir_name = "/" + obj["text"];
-        for(const par_id of obj["parents"]) {
-            console.log(par_id);
-            if(par_id !== "#") {
-                let node = $('#filebrowser').jstree(true).get_node(par_id);
-                console.log(node);
-                let folder_name = node["text"];
-                dir_name = "/" + folder_name + dir_name;
-            }
-        }
-        console.log(dir_name);
+    console.log('Fetching', dir_name);
+    if(dir_name === undefined || dir_name === '') {
+        dir_name = '/';
     }
     let buffer = buildpacket(dir_name.length+1, 4096);
     for(let i = 0; i<dir_name.length; i++) {
@@ -77,7 +66,6 @@ export function fetch_dir(obj, cb) {
     //queue.enqueue(buffer);
     console.log("Sending command...");
     device.transferOut(3, buffer);
-
 }
 
 export function readfile(dir_name) {
@@ -182,6 +170,7 @@ export function handlePacket(id, data) {
     let file_contents = undefined;
     let dir_structure = undefined;
     let data_structure = undefined;
+    let parent_path = undefined;
 
     switch(id) {
         case 4096:
@@ -189,35 +178,33 @@ export function handlePacket(id, data) {
             dir_structure = textdecoder.decode(data).split('\n');
             console.log(dir_structure);
             data_structure = [];
+            parent_path = dir_structure[0] === '/' ? '': dir_structure[0];
             for(let i = 1; i < dir_structure.length; i++) {
-                let type = dir_structure[i].charAt(0) == "d";
+                let is_dir = dir_structure[i].charAt(0) === "d";
                 let child = {};
                 child["text"] = dir_structure[i].substr(1);
-                if(type) {
-                    if(dir_structure[i] == "dflash") {
+                child["full_path"] = parent_path + '/' + child["text"];
+                if(is_dir) {
+                    if(dir_structure[i] === "dflash") {
                         child["icon"] = "fas fa-microchip";
-                    } else if(dir_structure[i] == "dsdcard") {
+                    } else if(dir_structure[i] === "dsdcard") {
                         child["icon"] = "fas fa-sd-card";
                     } else {
                         child["icon"] = "far fa-folder";
                     }
+                    child["is_dir"] = true;
                 } else {
                     child["icon"] = "far fa-file";
                 }
-                child["state"] = {"opened":false, "disable":false, "selected":false};
-                if(type) {
-                    child["children"] = true;
+                child["opened"] = false;
+                child["disabled"] = false;
+                child["selected"] = false;
+                if(is_dir) {
+                    child["children"] = [{text:'Click parent to refresh', icon: 'none'}];
                 }
                 data_structure.push(child);
             }
             cb_reply.call(this, data_structure);
-            // try {
-            //     json_data = JSON.parse(json_data);
-            //     $('#filebrowser').jstree(true).settings.core.data = json_data;
-            //     $('#filebrowser').jstree(true).refresh();
-            // } catch (e) {
-            //     console.log("Error in file directory json.");
-            // }
             break;
         case 4097:
             textdecoder = new TextDecoder("ascii");
