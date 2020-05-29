@@ -1,0 +1,43 @@
+body {
+  background-color: #FCFCFC;
+}
+
+div.filebrowser {
+  width: 20%;
+  height: 800px;
+  border: 1px solid #808080;
+  float: left;
+}
+
+#wrapper {
+  width: 90%;
+  overflow: auto;
+  border: 1px solid black;
+}
+
+#editor {
+  width: 70%;
+  height:800px;
+  border: 1px solid green;
+}
+
+#icons {
+  width:90%;
+  height:50px;
+  border: 1px solid red;
+}
+
+ /* Style buttons */
+ .btn {
+  background-color: #808080; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  padding: 12px 16px; /* Some padding */
+  font-size: 14px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlue;
+} 
