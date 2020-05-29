@@ -48,10 +48,6 @@ export function getnodepath(obj) {
     return dir_name;
 }
 
-export function isfile(obj) {
-    return obj['icon'] === "far fa-file";
-}
-
 export function fetch_dir(dir_name, cb) {
     cb_reply = cb;
     console.log('Fetching', dir_name);
