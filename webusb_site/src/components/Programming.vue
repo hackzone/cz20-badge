@@ -17,7 +17,7 @@
           </mdb-row>
           <mdb-row class='mt-3'>
             <mdb-col sm='6' md='4' lg='3'>
-              <v-jstree :data='files' multiple allow-batch whole-row @item-click='itemClick'></v-jstree>
+              <v-jstree :data='files' draggable multiple allow-batch whole-row @item-click='itemClick' @item-drop-before='itemDrop' @item-drop='otherDrop' @item-drag-start='itemDragStart'></v-jstree>
             </mdb-col>
             <mdb-col sm='6' md='8' lg='9'>
               <editor v-model='content' lang='python' theme='monokai' height='500'></editor>
@@ -36,7 +36,7 @@ window.itemDrop = function() {
 
 import {mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow} from 'mdbvue';
 import VJstree from 'vue-jstree';
-  import {connect, on_connect, readfile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
+  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
@@ -45,6 +45,7 @@ import * as ace_editor from 'vue2-ace-editor';
 
 let component = undefined;
 let selected_item = {model:{}};
+let beforemoveloc = undefined;
 
 export default {
   name: 'Programming',
@@ -63,22 +64,74 @@ export default {
     on_connect().then(() => this.itemClick({model: this.files[0]}))
   },
   methods: {
-    itemClick:(node) => {
-      selected_item.model.selected = false;
-      node.model.selected = true;
-      selected_item = node;
-
+    updateNode:(node) => {
+      let model = node.model
       if(node.model.is_dir) {
-        fetch_dir(node.model.full_path, (children) => {
-          node.model.children = children;
-          node.model.opened = true;
+        console.log("Updating: "+node.model.full_path);
+        fetch_dir(model.full_path, (children) => {
+          //Check for deleted items
+          for(let i = 0; i < children.length; i++) {
+            for (let origitem of model.children) {
+              if(origitem.full_path === children[i].full_path) {            
+                children[i] = origitem;
+              }
+            }
+          }
+          console.log(children);
+          model.children = children;
+          model.opened = true;
         });
       } else {
         readfile(node.model.full_path, (contents) => component.content = contents );
       }
     },
+    itemClick:(node) => {
+      selected_item.model.selected = false;
+      node.model.selected = true;
+      selected_item = node;
+      component.updateNode(node);      
+    },
+    otherDrop: (node, item, d, e) => {
+
+    },
     itemDrop: (node, item, draggedItem, e) => {
-      console.log(node);
+      if(draggedItem == undefined) {
+        console.log("file upload");
+        console.log(e);
+        let entry = node.model.is_dir ? node : node.$parent;
+        let path = entry.model.full_path;
+        for(let index = 0; index < e.dataTransfer.files.length; index++) {
+          let item = e.dataTransfer.files[index];
+          let reader = new FileReader();
+          reader.onload = function (event) {
+            console.log(reader.result);
+            savefile(path+"/"+item.name,reader.result);
+            if(index == e.dataTransfer.files.length) {
+              component.updateNode(entry);
+            }
+          };
+          console.log(item);         
+          reader.readAsArrayBuffer(item);
+        }        
+      } else {
+        console.log("drop");
+        console.log(node);
+        if(draggedItem.is_dir) return;
+        let entry = node.model.is_dir ? node : node.$parent;
+        let path = entry.model.full_path;
+        let source = draggedItem.full_path;
+        let destination = path + "/" + draggedItem.text;
+        movefile(source, destination);            
+        component.updateNode(beforemoveloc);
+        component.updateNode(entry);
+      }
+                  
+    },
+    itemDragStart: (node, item, e) => {
+      let entry = node.model.is_dir ? node : node.$parent;
+      console.log("Start:");
+      console.log(entry);
+      beforemoveloc = entry;
     },
     trash_ui: () => {
       let file = selected_item.model.full_path;

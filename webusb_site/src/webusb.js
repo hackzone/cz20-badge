@@ -7,12 +7,14 @@ let command;
 let size;
 let received;
 let payload;
-let cb_reply = (obj, datastructure) => {};
+let cb_reply_read = [];
+let cb_reply_dir = [];
 
 import * as $ from 'jquery';
 
 //Function to create valid packet. Size is the payload size, command is the command id
 export function buildpacket(size, command) {
+    console.log(8+size);
     let arraybuffer = new ArrayBuffer(8+size);
     let buffer = new Uint8Array(arraybuffer);
     new DataView(arraybuffer).setUint16(0, command, true);
@@ -49,7 +51,7 @@ export function getnodepath(obj) {
 }
 
 export function fetch_dir(dir_name, cb) {
-    cb_reply = cb;
+    cb_reply_dir.push(cb);
     console.log('Fetching', dir_name);
     if(dir_name === undefined || dir_name === '') {
         dir_name = '/';
@@ -67,7 +69,7 @@ export function fetch_dir(dir_name, cb) {
 export function readfile(dir_name, callback) {
     let buffer = buildpacketWithFilename(0, 4097, dir_name);
     console.log("Sending command...");
-    cb_reply = callback;
+    cb_reply_read.push(callback);
     device.transferOut(3, buffer);
 }
 
@@ -80,6 +82,7 @@ export function createfile(dir_name) {
 export function delfile(dir_name) {
     let buffer = buildpacketWithFilename(0, 4099, dir_name);
     console.log("Sending command...");
+    console.log(buffer)
     device.transferOut(3, buffer);
 }
 
@@ -150,8 +153,11 @@ export function savetextfile(filename, contents) {
 
 export function savefile(filename, contents) {
     let buffer = buildpacketWithFilename(contents.byteLength, 4098, filename);
-    new Uint8Array(buffer, 8+filename.length+1, contents.byteLength).set(new Uint8Array(contents.buffer));
-
+    let uint8 = new Uint8Array(buffer);
+    uint8.set(new Uint8Array(contents), 8+filename.length+1);
+    buffer = uint8.buffer;
+    console.log(buffer);
+    console.log(uint8);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
@@ -190,6 +196,7 @@ export function handlePacket(id, data) {
                         child["icon"] = "far fa-folder";
                     }
                     child["is_dir"] = true;
+                    child["dragDisabled"] = true;
                 } else {
                     child["icon"] = "far fa-file";
                 }
@@ -197,17 +204,32 @@ export function handlePacket(id, data) {
                 child["disabled"] = false;
                 child["selected"] = false;
                 if(is_dir) {
-                    child["children"] = [{text:'Click parent to refresh', icon: 'none'}];
+                    child["children"] = [{text:'Click parent to refresh', icon: 'none', isDummy: true}];
                 }
                 data_structure.push(child);
             }
-            cb_reply.call(this, data_structure);
+            if(cb_reply_dir[0]) {
+                cb_reply_dir[0].call(this, data_structure);
+            }
+            cb_reply_dir.shift();
             break;
         case 4097:
             textdecoder = new TextDecoder("ascii");
             file_contents = textdecoder.decode(data);
-            console.log(file_contents);
-            cb_reply.call(this, file_contents);
+            console.log(data);
+            if(cb_reply_read[0]) {
+                cb_reply_read[0].call(this, file_contents);
+            }
+            cb_reply_read.shift();
+            break;
+        case 1:
+            textdecoder = new TextDecoder("ascii");
+            file_contents = textdecoder.decode(data);
+            file_contents = file_contents.substring(0,2);
+            if(file_contents === "to") {
+                cb_reply_read = []
+                cb_reply_dir = []
+            }
             break;
         default :
             textdecoder = new TextDecoder("ascii");
