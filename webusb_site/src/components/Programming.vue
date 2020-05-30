@@ -3,29 +3,26 @@
     <mdb-card class='mb-4' ondrop='itemDrop'>
       <mdb-card-body>
         <section>
-        <mdb-row>
-          <mdb-col>
-            <mdb-row>
-              <mdb-col>
-                <mdb-btn color='gray' size='lg' title='Delete file' v-on:click='trash_ui()' icon='trash'></mdb-btn>
-                <mdb-btn color='gray' size='lg' title='Save file' v-on:click='save_ui()' icon='save'></mdb-btn>
-                <mdb-btn color='gray' size='lg' title='Make folder' v-on:click='mkdir_ui()' icon='folder-plus'></mdb-btn>
-                <mdb-btn color='gray' size='lg' title='Make file' v-on:click='mkfile_ui()' icon='file'></mdb-btn>
-                <mdb-btn color='gray' size='lg' title='Rename file' v-on:click='rename_ui()' icon='file-alt'></mdb-btn>
-                <mdb-btn color='gray' size='lg' title='Upload file' v-on:click='upload_ui()' icon='upload'></mdb-btn>
-                <mdb-btn color='gray' size='lg' title='Run file' v-on:click='startapp_ui()' icon='play'></mdb-btn>
-              </mdb-col>
-            </mdb-row>
-            <mdb-row class='mt-3'>
-              <mdb-col sm='6' md='4' lg='3'>
-                <v-jstree :data='files' multiple allow-batch whole-row @item-click='itemClick'></v-jstree>
-              </mdb-col>
-              <mdb-col sm='6' md='8' lg='9'>
-                <editor v-model='content' lang='python' theme='monokai' height='500'></editor>
-              </mdb-col>
-            </mdb-row>
-          </mdb-col>
-        </mdb-row>
+          <mdb-row>
+            <mdb-col sm='6' md='4' lg='3'>
+              <mdb-btn color='gray' size='lg' title='Make folder' v-on:click='mkdir_ui()' icon='folder-plus'></mdb-btn>
+              <mdb-btn color='gray' size='lg' title='Make file' v-on:click='mkfile_ui()' icon='file'></mdb-btn>
+              <mdb-btn color='gray' size='lg' title='Rename file' v-on:click='rename_ui()' icon='file-alt'></mdb-btn>
+              <mdb-btn color='gray' size='lg' title='Delete file' v-on:click='trash_ui()' icon='trash'></mdb-btn>
+            </mdb-col>
+            <mdb-col sm='6' md='8' lg='9'>
+              <mdb-btn color='gray' size='lg' title='Run file' v-on:click='startapp_ui()' icon='play'></mdb-btn>
+              <mdb-btn color='gray' size='lg' title='Save file' v-on:click='save_ui()' icon='save'></mdb-btn>
+            </mdb-col>
+          </mdb-row>
+          <mdb-row class='mt-3'>
+            <mdb-col sm='6' md='4' lg='3'>
+              <v-jstree :data='files' multiple allow-batch whole-row @item-click='itemClick'></v-jstree>
+            </mdb-col>
+            <mdb-col sm='6' md='8' lg='9'>
+              <editor v-model='content' lang='python' theme='monokai' height='500'></editor>
+            </mdb-col>
+          </mdb-row>
         </section>
       </mdb-card-body>
     </mdb-card>
