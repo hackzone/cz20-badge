@@ -1,20 +1,48 @@
 <template>
     <section id="apps">
-        <mdb-card class="mb-4">
-            <mdb-card-body class="badge_container">
-                <div class="header">
-                    <div class=nav-left>
-                        <mdb-btn color="primary" title="Previous Page" size="sm"><i class="fas fa-arrow-left fa-3x"></i></mdb-btn>
-                    </div>
-                    <div class=nav-right>
-                        <mdb-btn color="tertiary" title="Next Page" size="sm"><i class="fas fa-arrow-right fa-3x"></i></mdb-btn>
-                    </div>
-                </div>
-                <div class="button_grid mt-4">
-                    <input v-for="i in 16" v-bind:key="i" class="butt" type="button" value="test"/>
-                </div>
-            </mdb-card-body>
-        </mdb-card>
+        <mdb-row>
+            <mdb-col md="6">
+                <mdb-card class="mb-4">
+                    <mdb-card-body class="badge_container">
+                        <div class="header">
+                            <div class=nav-left>
+                                <mdb-btn color="primary" title="Previous Page" size="sm"><i class="fas fa-arrow-left fa-3x"></i></mdb-btn>
+                            </div>
+                            <div class=nav-right>
+                                <mdb-btn color="tertiary" title="Next Page" size="sm"><i class="fas fa-arrow-right fa-3x"></i></mdb-btn>
+                            </div>
+                        </div>
+                        <div class="button_grid mt-4">
+                            <input v-for="i in 16" v-bind:key="i" class="butt" type="button" value="test"/>
+                        </div>
+                    </mdb-card-body>
+                </mdb-card>
+            </mdb-col>
+            <mdb-col md="6">
+                <mdb-card class="mb-4">
+                    <mdb-card-header>Selected app</mdb-card-header>
+                    <mdb-card-body>
+                        <p v-if="currentApp !== undefined">
+
+                        </p>
+                        <p v-else>Click on a keypad button on the left to select</p>
+                    </mdb-card-body>
+                </mdb-card>
+            </mdb-col>
+        </mdb-row>
+        <mdb-row>
+            <mdb-col md="12">
+                <mdb-card class="mb-4">
+                    <mdb-card-header>Install apps from app store</mdb-card-header>
+                    <mdb-card-body>
+                        noot noot
+                        <hr>
+                        noot too
+                        {{launcher_items}}
+                    </mdb-card-body>
+                </mdb-card>
+            </mdb-col>
+        </mdb-row>
         <section>
             <mdb-row>
                 <mdb-col lg="12" class="mb-4">
@@ -306,7 +334,11 @@
         mdbModalTitle,
         mdbModalBody,
         mdbModalFooter
-    } from 'mdbvue'
+    } from 'mdbvue';
+
+    import {on_connect, readfile} from '../webusb';
+
+    let component = undefined;
 
     export default {
         name: 'Dashboard',
@@ -321,7 +353,15 @@
             mdbModalHeader,
             mdbModalTitle,
             mdbModalBody,
-            mdbModalFooter
+            mdbModalFooter,
+        },
+        beforeMount() {
+            component = this;
+            on_connect().then(() => {
+                readfile('/flash/config/launcher_items.json', (contents) => {
+                    component.launcher_items = JSON.parse(contents);
+                });
+            });
         },
         data() {
             return {
@@ -339,139 +379,14 @@
                 showFluidModalLeft: false,
                 showFluidModalTop: false,
                 showFluidModalBottom: false,
-                barChartData: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [
-                        {
-                            label: '#1',
-                            data: [12, 39, 3, 50, 2, 32, 84],
-                            backgroundColor: 'rgba(245, 74, 85, 0.5)',
-                            borderWidth: 1
-                        }, {
-                            label: '#2',
-                            data: [56, 24, 5, 16, 45, 24, 8],
-                            backgroundColor: 'rgba(90, 173, 246, 0.5)',
-                            borderWidth: 1
-                        }, {
-                            label: '#3',
-                            data: [12, 25, 54, 3, 15, 44, 3],
-                            backgroundColor: 'rgba(245, 192, 50, 0.5)',
-                            borderWidth: 1
-                        }
-                    ]
+                currentApp:{
+                    name: '',
+                    description: '',
+                    category: '',
+                    author: '',
+                    revision: '',
                 },
-                barChartOptions: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        xAxes: [{
-                            barPercentage: 1,
-                            gridLines: {
-                                display: true,
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            }
-                        }],
-                        yAxes: [{
-                            gridLines: {
-                                display: true,
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
-                },
-                pieChartData: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [
-                        {
-                            data: [300, 50, 100, 40, 120, 24, 52],
-                            backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#ac64ad'],
-                            hoverBackgroundColor: ['#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#616774', '#da92db']
-                        }
-                    ]
-                },
-                pieChartOptions: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                },
-                lineChartData: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [
-                        {
-                            label: '#1',
-                            backgroundColor: 'rgba(245, 74, 85, 0.5)',
-                            data: [65, 59, 80, 81, 56, 55, 40]
-                        },
-                        {
-                            label: '#2',
-                            backgroundColor: 'rgba(90, 173, 246, 0.5)',
-                            data: [12, 42, 121, 56, 24, 12, 2]
-                        },
-                        {
-                            label: '#3',
-                            backgroundColor: 'rgba(245, 192, 50, 0.5)',
-                            data: [2, 123, 154, 76, 54, 23, 5]
-                        }
-                    ]
-                },
-                lineChartOptions: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        xAxes: [{
-                            gridLines: {
-                                display: true,
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            }
-                        }],
-                        yAxes: [{
-                            gridLines: {
-                                display: true,
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            }
-                        }]
-                    }
-                },
-                radarChartData: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [
-                        {
-                            label: '#1',
-                            backgroundColor: 'rgba(245, 74, 85, 0.5)',
-                            data: [65, 59, 80, 81, 56, 55, 40]
-                        },
-                        {
-                            label: '#2',
-                            backgroundColor: 'rgba(90, 173, 246, 0.5)',
-                            data: [12, 42, 121, 56, 24, 12, 2]
-                        },
-                        {
-                            label: '#3',
-                            backgroundColor: 'rgba(245, 192, 50, 0.5)',
-                            data: [2, 123, 154, 76, 54, 23, 5]
-                        }
-                    ]
-                },
-                radarChartOptions: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                },
-                doughnutChartData: {
-                    labels: ['Red', 'Green', 'Yellow', 'Grey', 'Dark Grey'],
-                    datasets: [
-                        {
-                            data: [300, 50, 100, 40, 120],
-                            backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
-                            hoverBackgroundColor: ['#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#616774']
-                        }
-                    ]
-                },
-                doughnutChartOptions: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
+                launcher_items: {}
             }
         }
     }

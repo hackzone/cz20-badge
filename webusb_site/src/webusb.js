@@ -138,7 +138,7 @@ export function copyfile(source, destination) {
 }
 
 export function savetextfile(filename, contents) {
-    console.log(filename)
+    console.log(filename);
     let buffer = buildpacketWithFilename(contents.length, 4098, filename);
     for(let i = 0; i<contents.length; i++) {
         buffer[8+filename.length+1+i] = contents.charCodeAt(i);
@@ -246,6 +246,21 @@ let readLoop = () => {
         this.onReceiveError(error);
     });
 };
+
+let connect_resolves = [];
+function connect_check() {
+    if(device !== undefined && device.opened) {
+        for(let resolve of connect_resolves) {
+            resolve();
+        }
+        connect_resolves = [];
+    }
+}
+setInterval(connect_check, 500);
+
+export function on_connect() {
+    return new Promise((resolve) => connect_resolves.push(resolve));
+}
 
 export function connect() {
     waiting_command = 1;

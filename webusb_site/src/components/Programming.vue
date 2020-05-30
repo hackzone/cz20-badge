@@ -21,7 +21,7 @@
                 <v-jstree :data='files' multiple allow-batch whole-row @item-click='itemClick'></v-jstree>
               </mdb-col>
               <mdb-col sm='6' md='8' lg='9'>
-                <editor v-model='content' lang='python' theme='monokai' height='500' @init='initEditor'></editor>
+                <editor v-model='content' lang='python' theme='monokai' height='500'></editor>
               </mdb-col>
             </mdb-row>
           </mdb-col>
@@ -35,17 +35,16 @@
 <script>
 window.itemDrop = function() {
   console.log('nope')
-}
-  import {mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow} from 'mdbvue';
+};
+
+import {mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow} from 'mdbvue';
 import VJstree from 'vue-jstree';
-import {trash_ui} from '../editor';
-  import {readfile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
+  import {connect, on_connect, readfile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 import * as ace_editor from 'vue2-ace-editor';
-import {connect} from '../webusb';
 
 let component = undefined;
 let selected_item = {model:{}};
@@ -63,6 +62,8 @@ export default {
   },
   beforeMount() {
     component = this;
+    // Auto-fetch /flash
+    on_connect().then(() => this.itemClick({model: this.files[0]}))
   },
   methods: {
     itemClick:(node) => {
