@@ -115,7 +115,7 @@ int main(void)
   MX_USB_PCD_Init();
   /* USER CODE BEGIN 2 */
   tusb_init();
-  uint8_t *app_version = (uint8_t *) 0x08003C00;
+  uint8_t *app_version = (uint8_t *) VersionAddress;
   memcpy(&identifier[6], app_version, 2);
   /* USER CODE END 2 */
 
