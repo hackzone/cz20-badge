@@ -17,7 +17,7 @@
           </mdb-row>
           <mdb-row class='mt-3'>
             <mdb-col sm='6' md='4' lg='3'>
-              <v-jstree :data='files' draggable multiple allow-batch whole-row @item-click='itemClick' @item-drop-before='itemDrop' @item-drag-start='itemDragStart'></v-jstree>
+              <v-jstree :data='files' draggable multiple allow-batch whole-row @item-click='itemClick' @item-drop-before='itemDrop' @item-drop='otherDrop' @item-drag-start='itemDragStart'></v-jstree>
             </mdb-col>
             <mdb-col sm='6' md='8' lg='9'>
               <editor v-model='content' lang='python' theme='monokai' height='500'></editor>
@@ -36,7 +36,7 @@ window.itemDrop = function() {
 
 import {mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow} from 'mdbvue';
 import VJstree from 'vue-jstree';
-  import {connect, on_connect, readfile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
+  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
@@ -70,17 +70,10 @@ export default {
         console.log("Updating: "+node.model.full_path);
         fetch_dir(model.full_path, (children) => {
           //Check for deleted items
-          console.log("new")
-          console.log(children);
-          console.log("old");
-          console.log(model.children);
-          console.log(model.full_path);
           for(let i = 0; i < children.length; i++) {
             for (let origitem of model.children) {
-              if(origitem.full_path === children[i].full_path) {
-                console.log("updating with");                
+              if(origitem.full_path === children[i].full_path) {            
                 children[i] = origitem;
-                console.log(children[i].opened);
               }
             }
           }
@@ -98,17 +91,40 @@ export default {
       selected_item = node;
       component.updateNode(node);      
     },
+    otherDrop: (node, item, d, e) => {
+
+    },
     itemDrop: (node, item, draggedItem, e) => {
-      console.log("drop");
-      console.log(node);
-      if(draggedItem.is_dir) return;
-      let entry = node.model.is_dir ? node : node.$parent;
-      let path = entry.model.full_path;
-      let source = draggedItem.full_path;
-      let destination = path + "/" + draggedItem.text;
-      movefile(source, destination);            
-      component.updateNode(beforemoveloc);
-      component.updateNode(entry);
+      if(draggedItem == undefined) {
+        console.log("file upload");
+        console.log(e);
+        let entry = node.model.is_dir ? node : node.$parent;
+        let path = entry.model.full_path;
+        for(let index = 0; index < e.dataTransfer.files.length; index++) {
+          let item = e.dataTransfer.files[index];
+          let reader = new FileReader();
+          reader.onload = function (event) {
+            console.log(reader.result);
+            savefile(path+"/"+item.name,reader.result);
+            if(index == e.dataTransfer.files.length) {
+              component.updateNode(entry);
+            }
+          };
+          console.log(item);         
+          reader.readAsArrayBuffer(item);
+        }        
+      } else {
+        console.log("drop");
+        console.log(node);
+        if(draggedItem.is_dir) return;
+        let entry = node.model.is_dir ? node : node.$parent;
+        let path = entry.model.full_path;
+        let source = draggedItem.full_path;
+        let destination = path + "/" + draggedItem.text;
+        movefile(source, destination);            
+        component.updateNode(beforemoveloc);
+        component.updateNode(entry);
+      }
                   
     },
     itemDragStart: (node, item, e) => {

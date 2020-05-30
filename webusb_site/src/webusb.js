@@ -14,6 +14,7 @@ import * as $ from 'jquery';
 
 //Function to create valid packet. Size is the payload size, command is the command id
 export function buildpacket(size, command) {
+    console.log(8+size);
     let arraybuffer = new ArrayBuffer(8+size);
     let buffer = new Uint8Array(arraybuffer);
     new DataView(arraybuffer).setUint16(0, command, true);
@@ -152,8 +153,11 @@ export function savetextfile(filename, contents) {
 
 export function savefile(filename, contents) {
     let buffer = buildpacketWithFilename(contents.byteLength, 4098, filename);
-    new Uint8Array(buffer, 8+filename.length+1, contents.byteLength).set(new Uint8Array(contents.buffer));
-
+    let uint8 = new Uint8Array(buffer);
+    uint8.set(new Uint8Array(contents), 8+filename.length+1);
+    buffer = uint8.buffer;
+    console.log(buffer);
+    console.log(uint8);
     console.log("Sending command...");
     device.transferOut(3, buffer);
 }
@@ -212,7 +216,7 @@ export function handlePacket(id, data) {
         case 4097:
             textdecoder = new TextDecoder("ascii");
             file_contents = textdecoder.decode(data);
-            console.log(file_contents);
+            console.log(data);
             if(cb_reply_read[0]) {
                 cb_reply_read[0].call(this, file_contents);
             }
