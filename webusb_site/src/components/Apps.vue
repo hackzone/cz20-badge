@@ -12,8 +12,10 @@
                                 <mdb-btn color="tertiary" title="Next Page" size="sm"><i class="fas fa-arrow-right fa-3x"></i></mdb-btn>
                             </div>
                         </div>
-                        <div class="button_grid mt-4">
-                            <input v-for="i in 16" v-bind:key="i" class="butt" type="button" value="test"/>
+                        <div class="button_grid mt-4" v-bind:key="launcher_items">
+                            <input v-for="i in 16" v-bind:key="i" v-bind:style="{
+                                backgroundColor: (launcher_items[i-1] !== undefined ? launcher_items[i-1].colour: 'gray'),
+                                }" class="butt" type="button"/>
                         </div>
                     </mdb-card-body>
                 </mdb-card>
@@ -35,10 +37,13 @@
                 <mdb-card class="mb-4">
                     <mdb-card-header>Install apps from app store</mdb-card-header>
                     <mdb-card-body>
-                        noot noot
-                        <hr>
-                        noot too
-                        {{launcher_items}}
+                        <div v-for="app in store_apps" v-bind:key="app.slug">
+                            <mdb-row>
+                                <mdb-col md="3">{{ app.name }}</mdb-col>
+                                <mdb-col md="9">{{ app.description }}</mdb-col>
+                            </mdb-row>
+                            <hr>
+                        </div>
                     </mdb-card-body>
                 </mdb-card>
             </mdb-col>
@@ -362,6 +367,9 @@
                     component.launcher_items = JSON.parse(contents);
                 });
             });
+
+            fetch('https://hatchery.badge.team/basket/campzone2019/list/json',{mode:'cors'})
+                .then(response => {response.json().then((apps) => component.store_apps = apps)});
         },
         data() {
             return {
@@ -386,7 +394,8 @@
                     author: '',
                     revision: '',
                 },
-                launcher_items: {}
+                launcher_items: {},
+                store_apps: []
             }
         }
     }

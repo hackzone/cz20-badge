@@ -7,13 +7,13 @@
           <mdb-col>
             <mdb-row>
               <mdb-col>
-                <mdb-btn color='gray' size='sm' title='Delete file' v-on:click='trash_ui()' icon='trash'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Save file' v-on:click='save_ui()' icon='save'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Make folder' v-on:click='mkdir_ui()' icon='folder-plus'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Make file' v-on:click='mkfile_ui()' icon='file'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Rename file' v-on:click='rename_ui()' icon='file-alt'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Upload file' v-on:click='upload_ui()' icon='upload'></mdb-btn>
-                <mdb-btn color='gray' size='sm' title='Run file' v-on:click='startapp_ui()' icon='play'></mdb-btn>
+                <mdb-btn color='gray' size='lg' title='Delete file' v-on:click='trash_ui()' icon='trash'></mdb-btn>
+                <mdb-btn color='gray' size='lg' title='Save file' v-on:click='save_ui()' icon='save'></mdb-btn>
+                <mdb-btn color='gray' size='lg' title='Make folder' v-on:click='mkdir_ui()' icon='folder-plus'></mdb-btn>
+                <mdb-btn color='gray' size='lg' title='Make file' v-on:click='mkfile_ui()' icon='file'></mdb-btn>
+                <mdb-btn color='gray' size='lg' title='Rename file' v-on:click='rename_ui()' icon='file-alt'></mdb-btn>
+                <mdb-btn color='gray' size='lg' title='Upload file' v-on:click='upload_ui()' icon='upload'></mdb-btn>
+                <mdb-btn color='gray' size='lg' title='Run file' v-on:click='startapp_ui()' icon='play'></mdb-btn>
               </mdb-col>
             </mdb-row>
             <mdb-row class='mt-3'>
@@ -155,7 +155,7 @@ export default {
   .card.card-cascade .view {
     box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15), 0 3px 12px 0 rgba(0, 0, 0, 0.15);
   }
-  .btn.btn-sm {
+  .btn.btn-lg {
     padding: .5rem .5rem !important;
   }
 </style>
