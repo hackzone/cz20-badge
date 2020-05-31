@@ -47,6 +47,8 @@ let component = undefined;
 let selected_item = {model:{}};
 let beforemoveloc = undefined;
 
+const extension_whitelist = ["txt", "csv", "json", "py", "ini", "info", "md", "log", "conf", "cfg"];
+
 export default {
   name: 'Programming',
   components: {
@@ -82,7 +84,10 @@ export default {
           model.opened = true;
         });
       } else {
-        readfile(node.model.full_path, (contents) => component.content = contents );
+        let parts = node.model.full_path.split(".");
+        if(parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1]) >= 0) {
+          readfile(node.model.full_path, (contents) => component.content = contents );
+        }
       }
     },
     itemClick:(node) => {
