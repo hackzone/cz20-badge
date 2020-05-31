@@ -2,9 +2,9 @@ name: Node.js build and lint
 
 on:
   push:
-    branches: [ master, acceptance ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, acceptance ]
+    branches: [ master ]
 
 jobs:
   build:
