@@ -37,13 +37,38 @@
                 <mdb-card class="mb-4">
                     <mdb-card-header>Install apps from app store</mdb-card-header>
                     <mdb-card-body>
-                        <div v-for="app in store_apps" v-bind:key="app.slug">
-                            <mdb-row>
-                                <mdb-col md="3">{{ app.name }}</mdb-col>
-                                <mdb-col md="9">{{ app.description }}</mdb-col>
-                            </mdb-row>
-                            <hr>
-                        </div>
+                        <mdb-row>
+                            <mdb-col sm="2">
+                                <span>Filter category</span>
+                                <select class="browser-default custom-select" v-model="selected_store_category">
+                                    <option v-for="category in categories" v-bind:key="category" v-bind:value="category">{{category}}</option>
+                                </select>
+                            </mdb-col>
+                        </mdb-row>
+                        <mdb-row class="mt-2 mb-2">
+                            <mdb-col sm="2">
+                                <span>Filter development state</span>
+                                <select class="browser-default custom-select" v-model="selected_store_state">
+                                    <option v-for="state in states" v-bind:key="state" v-bind:value="state">{{state}}</option>
+                                </select>
+                            </mdb-col>
+                        </mdb-row>
+
+                        <mdb-tbl class="table-striped">
+                            <thead>
+                            <tr><th>App name</th><th>Description</th><th>Category</th><th>State</th><th>Author</th><th>Install</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="app in filtered_store_apps" v-bind:key="app.slug">
+                                    <th scope="row">{{ app.name }}</th>
+                                    <td>{{ app.description }}</td>
+                                    <td>{{ app.category }}</td>
+                                    <td>{{ app.status }}</td>
+                                    <td>{{ app.author || 'Unknown' }}</td>
+                                    <td><mdb-btn color="primary" size="sm">Install</mdb-btn></td>
+                                </tr>
+                            </tbody>
+                        </mdb-tbl>
                     </mdb-card-body>
                 </mdb-card>
             </mdb-col>
@@ -331,6 +356,7 @@
         mdbRow,
         mdbCol,
         mdbBtn,
+        mdbTbl,
         mdbCard,
         mdbCardBody,
         mdbCardHeader,
@@ -346,11 +372,12 @@
     let component = undefined;
 
     export default {
-        name: 'Dashboard',
+        name: 'Apps',
         components: {
             mdbRow,
             mdbCol,
             mdbBtn,
+            mdbTbl,
             mdbCard,
             mdbCardBody,
             mdbCardHeader,
@@ -369,7 +396,17 @@
             });
 
             fetch('https://hatchery.badge.team/basket/campzone2019/list/json',{mode:'cors'})
-                .then(response => {response.json().then((apps) => component.store_apps = apps)});
+                .then(response => {response.json().then((apps) => {
+                    component.store_apps = apps;
+                    for(let app of apps) {
+                        if(component.categories.indexOf(app.category) === -1) {
+                            component.categories.push(app.category);
+                        }
+                        if(component.states.indexOf(app.status) === -1) {
+                            component.states.push(app.status);
+                        }
+                    }
+                })});
         },
         data() {
             return {
@@ -395,7 +432,21 @@
                     revision: '',
                 },
                 launcher_items: {},
-                store_apps: []
+                store_apps: [],
+                selected_store_category: 'all',
+                selected_store_state: 'working',
+                categories: ['all'],
+                states: ['working', 'all']
+            }
+        },
+        computed: {
+            filtered_store_apps: () => {
+                if(component.selected_store_category === 'all' && component.selected_store_state === 'all') {
+                    return component.store_apps;
+                }
+                return component.store_apps.filter((app) =>
+                    (component.selected_store_category === 'all' || app.category === component.selected_store_category) &&
+                    (component.selected_store_state === 'all' || app.status === component.selected_store_state));
             }
         }
     }
