@@ -37,7 +37,7 @@ window.itemDrop = function() {
   console.log('nope')
 };
 
-import {mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
+import {mdbToastNotification, mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
 import VJstree from 'vue-jstree';
   import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
 import * as $ from 'jquery';
@@ -126,7 +126,12 @@ export default {
         let parts = node.model.full_path.split(".");
         if(parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1].toLowerCase()) >= 0) {
           if(component.content_editor === component.content_original || window.confirm("Unsaved changes will be lost. Are you sure?")) {
-            readfile(node.model.full_path).then((contents) => {component.content_editor = contents; component.content_original = contents; component.editorfilename = node.model.full_path});
+            readfile(node.model.full_path).then((contents) => {
+              component.content_editor = contents;
+              component.content_original = contents;
+              component.editorfilename = node.model.full_path;
+              component.$emit('genNotification', 'Load success', 'Load success', 'check', 'green', 30);
+              });
           }
         }        
       }
@@ -184,8 +189,9 @@ export default {
       if(confirm("Delete: " + file + "?")) {
         delfile(file);
         if(file === component.editorfilename) {
-          component.editorfilename = "";
-          component.content_editor = "";
+          component.editorfilename = '/flash/cache/scratch.py';
+          component.content_editor = '';
+          component.content_original = '';
         }
         component.itemClick(selected_item.$parent); // Refresh parent directory
       }
@@ -193,8 +199,11 @@ export default {
     save_ui: () => {
       let parts = component.editorfilename.split(".");
       if((parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1].toLowerCase()) >= 0) || window.confirm("File: "+component.editorfilename+" has not a textfile extension")) {
-        savetextfile(component.editorfilename, component.content_editor).then(component.content_original = component.content_editor);
-        component.itemClick(selected_item.$parent);
+        savetextfile(component.editorfilename, component.content_editor).then(() => {
+          component.content_original = component.content_editor;
+          component.itemClick(selected_item.$parent);
+          component.$emit('genNotification','Save succes', 'Save succes', 'check', 'green', 30);
+        });
       }
     },
     rename_ui: () => {
@@ -230,6 +239,9 @@ export default {
         component.itemClick(entry); // Refresh parent directory
       }
     },
+    info() {
+
+    },
     connect:connect,
   },
   data () {
@@ -237,6 +249,7 @@ export default {
       content_editor:'',
       content_original:'',
       editorfilename:'/flash/cache/scratch.py',
+      show: true,
       files: [
         {
           text: 'flash',

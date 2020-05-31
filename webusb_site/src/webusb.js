@@ -317,6 +317,10 @@ export function connect() {
     size = 0;
     received = 0;
     payload = 0;
+    messageid_recv = 0;
+    current_message_id = 1;
+    requests = {};
+
     return navigator.usb.requestDevice({ filters: [{ vendorId: 0xcafe }] })
         .then(selectedDevice => {
             device = selectedDevice;
