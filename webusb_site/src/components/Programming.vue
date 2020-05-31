@@ -124,7 +124,7 @@ export default {
         });
       } else {
         let parts = node.model.full_path.split(".");
-        if(parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1]) >= 0) {
+        if(parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1].toLowerCase()) >= 0) {
           if(component.content_editor === component.content_original || window.confirm("Unsaved changes will be lost. Are you sure?")) {
             readfile(node.model.full_path).then((contents) => {component.content_editor = contents; component.content_original = contents; component.editorfilename = node.model.full_path});
           }
@@ -192,7 +192,7 @@ export default {
     },
     save_ui: () => {
       let parts = component.editorfilename.split(".");
-      if((parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1]) >= 0) || window.confirm("File: "+component.editorfilename+" has not a textfile extension")) {
+      if((parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1].toLowerCase()) >= 0) || window.confirm("File: "+component.editorfilename+" has not a textfile extension")) {
         savetextfile(component.editorfilename, component.content_editor).then(component.content_original = component.content_editor);
         component.itemClick(selected_item.$parent);
       }
