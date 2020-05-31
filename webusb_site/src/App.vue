@@ -31,10 +31,17 @@
         </router-link>
       </mdb-list-group>
     </div>
+    <!-- notifications -->
+    <div class="container">
+        <div class="placement">
+          <mdb-toast-notification v-for="message in messages" :key="message.id" :title="message.title" :message="message.message" :icon="message.icon" :iconColor="message.color" :show="show"/>
+        </div>
+      </div>
     <!-- /Sidebar  -->
     <main>
       <div class="p-5">
-        <router-view></router-view>
+        <router-view v-on:genNotification="onNotification">
+        </router-view>
       </div>
       <ftr color="primary-color-dark" class="text-center font-small darken-2">
         <div class="pb-4 pt-4">
@@ -62,6 +69,7 @@ import {
   mdbListGroup,
   mdbListGroupItem,
   mdbFooter,
+  mdbToastNotification,
   waves
 } from "mdbvue";
 
@@ -71,6 +79,19 @@ let component = undefined;
 setInterval(() => {
   component.is_connected = device !== undefined && device.opened;
 }, 1000);
+
+setInterval(() => {
+  let delete_list = [];
+  for(let i=0; i < component.messages.length; i++) {
+    component.messages[i].lifetime--;
+    if(component.messages[i].lifetime <= 0) {
+      delete_list.unshift(i);
+    }
+  }
+  for(let i=0; i < delete_list.length; i++) {
+    component.messages.splice(delete_list[i], 1);
+  }
+}, 100);
 
 export default {
   name: "AdminTemplate",
@@ -82,14 +103,48 @@ export default {
     mdbListGroup,
     mdbListGroupItem,
     mdbIcon,
+    mdbToastNotification,
     ftr: mdbFooter
   },
   methods: {
     on_click: () => {console.log('clicked')},
     connect:connect,
+    onNotification: (icon, color, message, lifetime, title) => {
+      let newmessage = {id: component.message_id, title:title, message:message, icon:icon, color:color, lifetime:lifetime};
+      component.message_id++;
+      component.messages.push(newmessage);
+    },
   },
   data() {
     return {
+      show: true,
+      message_id: 4,
+      messages: [
+        {
+          id: 1,
+          title: "alert",
+          message: "important meeting in 15 minutes!",
+          icon: 'exclamation',
+          color: 'danger',
+          lifetime: 10
+        },
+        {
+          id: 2,
+          title: "Save succesfull",
+          message: "Can you buy carrots on your way home?",
+          icon: "check",
+          color: 'green',
+          lifetime: 20
+        },
+        {
+          id: 3,
+          title: "alarm",
+          message: "it's 7 o'clock!",
+          icon: 'bell',
+          color: 'elegant',
+          lifetime: 30
+        },
+      ],
       activeItem: 1,
       is_connected: device !== undefined && device.opened
     };
@@ -109,6 +164,12 @@ export default {
   margin-left: 15px;
   color: #2196f3 !important;
   font-weight: bolder;
+}
+.placement {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index:8000;
 }
 </style>
 
