@@ -7,29 +7,32 @@ let command;
 let size;
 let received;
 let payload;
+let messageid_recv;
 let cb_reply_read = [];
 let cb_reply_dir = [];
+const packetheadersize = 12;
 
 import * as $ from 'jquery';
 
 //Function to create valid packet. Size is the payload size, command is the command id
-export function buildpacket(size, command) {
-    console.log(8+size);
-    let arraybuffer = new ArrayBuffer(8+size);
+export function buildpacket(size, command, message_id=0) {
+    console.log(packetheadersize+size);
+    let arraybuffer = new ArrayBuffer(12+size);
     let buffer = new Uint8Array(arraybuffer);
     new DataView(arraybuffer).setUint16(0, command, true);
     new DataView(arraybuffer).setUint32(2, size, true);
+    new DataView(arraybuffer).setUint32(8, message_id, true);
     buffer[6] = 0xDE;
     buffer[7] = 0xAD;
     return buffer;
 }
 
-export function buildpacketWithFilename(size, command, filename) {
-    let buffer = buildpacket(filename.length+1+size, command);
+export function buildpacketWithFilename(size, command, filename, message_id=0) {
+    let buffer = buildpacket(filename.length+1+size, command, message_id);
     for(let i = 0; i<filename.length; i++) {
-        buffer[8+i] = filename.charCodeAt(i);
+        buffer[packetheadersize+i] = filename.charCodeAt(i);
     }
-    buffer[8+filename.length] = 0;
+    buffer[packetheadersize+filename.length] = 0;
     return buffer;
 }
 
@@ -58,9 +61,9 @@ export function fetch_dir(dir_name, cb) {
     }
     let buffer = buildpacket(dir_name.length+1, 4096);
     for(let i = 0; i<dir_name.length; i++) {
-        buffer[8+i] = dir_name.charCodeAt(i);
+        buffer[packetheadersize+i] = dir_name.charCodeAt(i);
     }
-    buffer[8+dir_name.length] = 0;
+    buffer[packetheadersize+dir_name.length] = 0;
     //queue.enqueue(buffer);
     console.log("Sending command...");
     device.transferOut(3, buffer);
@@ -95,14 +98,14 @@ export function runfile(dir_name) {
 export function duplicatefile(source, destination) {
     let buffer = buildpacket(source.length+1+destination.length+1, 4100);
     for(let i = 0; i<source.length; i++) {
-        buffer[8+i] = source.charCodeAt(i);
+        buffer[packetheadersize+i] = source.charCodeAt(i);
     }
-    buffer[8+source.length] = 0;
+    buffer[packetheadersize+source.length] = 0;
 
     for(let i = 0; i<destination.length; i++) {
-        buffer[8+source.length+1+i] = destination.charCodeAt(i);
+        buffer[packetheadersize+source.length+1+i] = destination.charCodeAt(i);
     }
-    buffer[8+source.length+1+destination.length] = 0;
+    buffer[packetheadersize+source.length+1+destination.length] = 0;
     //queue.enqueue(buffer);
     console.log("Sending command...");
     device.transferOut(3, buffer);
@@ -111,14 +114,14 @@ export function duplicatefile(source, destination) {
 export function movefile(source, destination) {
     let buffer = buildpacket(source.length+1+destination.length+1, 4101);
     for(let i = 0; i<source.length; i++) {
-        buffer[8+i] = source.charCodeAt(i);
+        buffer[packetheadersize+i] = source.charCodeAt(i);
     }
-    buffer[8+source.length] = 0;
+    buffer[packetheadersize+source.length] = 0;
 
     for(let i = 0; i<destination.length; i++) {
-        buffer[8+source.length+1+i] = destination.charCodeAt(i);
+        buffer[packetheadersize+source.length+1+i] = destination.charCodeAt(i);
     }
-    buffer[8+source.length+1+destination.length] = 0;
+    buffer[packetheadersize+source.length+1+destination.length] = 0;
 
     console.log("Sending command...");
     device.transferOut(3, buffer);
@@ -127,14 +130,14 @@ export function movefile(source, destination) {
 export function copyfile(source, destination) {
     let buffer = buildpacket(source.length+1+destination.length+1, 4100);
     for(let i = 0; i<source.length; i++) {
-        buffer[8+i] = source.charCodeAt(i);
+        buffer[packetheadersize+i] = source.charCodeAt(i);
     }
-    buffer[8+source.length] = 0;
+    buffer[packetheadersize+source.length] = 0;
 
     for(let i = 0; i<destination.length; i++) {
-        buffer[8+source.length+1+i] = destination.charCodeAt(i);
+        buffer[packetheadersize+source.length+1+i] = destination.charCodeAt(i);
     }
-    buffer[8+source.length+1+destination.length] = 0;
+    buffer[packetheadersize+source.length+1+destination.length] = 0;
 
     console.log("Sending command...");
     device.transferOut(3, buffer);
@@ -144,7 +147,7 @@ export function savetextfile(filename, contents) {
     console.log(filename);
     let buffer = buildpacketWithFilename(contents.length, 4098, filename);
     for(let i = 0; i<contents.length; i++) {
-        buffer[8+filename.length+1+i] = contents.charCodeAt(i);
+        buffer[packetheadersize+filename.length+1+i] = contents.charCodeAt(i);
     }
 
     console.log("Sending command...");
@@ -154,7 +157,7 @@ export function savetextfile(filename, contents) {
 export function savefile(filename, contents) {
     let buffer = buildpacketWithFilename(contents.byteLength, 4098, filename);
     let uint8 = new Uint8Array(buffer);
-    uint8.set(new Uint8Array(contents), 8+filename.length+1);
+    uint8.set(new Uint8Array(contents), packetheadersize+filename.length+1);
     buffer = uint8.buffer;
     console.log(buffer);
     console.log(uint8);
@@ -246,16 +249,18 @@ let readLoop = () => {
             waiting_command = 0;
             command = result.data.getUint16(0, true);
             size = result.data.getUint32(2, true);
+            messageid_recv = result.data.getUint32(8, true);
             console.log("Trans: "+size);
-            let verif = result.data.getUint16(6);
-            received = result.data.byteLength-8;
+            console.log("Packetsize: "+result.data.byteLength);
+            let verif = result.data.getUint16(6);            
+            received = result.data.byteLength-packetheadersize;
             console.log("Verif: "+verif);
             payload = new ArrayBuffer(size);
-            new Uint8Array(payload, 0, size).set(new Uint8Array(result.data.buffer, 8, Math.min(size, received)));
+            new Uint8Array(payload, 0, size).set(new Uint8Array(result.data.buffer, packetheadersize, Math.min(size, received)));
         } else {
             console.log(received + " " + size + " " + result.data.byteLength);
-            new Uint8Array(payload, received, size-received).set(new Uint8Array(result.data.buffer));
-            received = received + result.data.byteLength;
+            new Uint8Array(payload, received, size-received).set(new Uint8Array(result.data.buffer, 0, Math.min(size-received, result.data.byteLength)));
+            received = received + Math.min(size-received, result.data.byteLength);
             console.log("rec: "+received+"/"+size);
         }
         if(received == size) {
