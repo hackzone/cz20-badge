@@ -37,8 +37,6 @@ Wire Wire Line
 	2000 7500 2000 7350
 Text GLabel 3100 4750 2    50   Input ~ 0
 ESP_FLASH
-Wire Wire Line
-	2000 4200 2000 4300
 Text GLabel 1050 4750 0    50   Input ~ 0
 ESP_EN
 Text GLabel 3100 4850 2    50   Output ~ 0
@@ -349,8 +347,6 @@ Wire Wire Line
 	4150 3200 4300 3200
 Text GLabel 5500 3150 2    50   UnSpc ~ 0
 VCC
-Wire Wire Line
-	5500 3150 5450 3150
 Text GLabel 5500 3000 2    50   UnSpc ~ 0
 GND
 Wire Wire Line
@@ -569,8 +565,6 @@ Text GLabel 7750 850  0    50   Output ~ 0
 ESP_RX
 Text GLabel 7750 750  0    50   Input ~ 0
 ESP_TX
-Wire Wire Line
-	1050 4750 1200 4750
 Text GLabel 3100 6350 2    50   Output ~ 0
 SD_MOSI
 Text GLabel 3100 5350 2    50   Output ~ 0
@@ -596,17 +590,11 @@ Wire Wire Line
 Wire Wire Line
 	4100 3800 4100 3900
 Wire Wire Line
-	4100 3900 3750 3900
-Wire Wire Line
 	4050 3700 4050 3800
-Wire Wire Line
-	4300 3600 3750 3600
 Wire Wire Line
 	4300 3500 4000 3500
 Wire Wire Line
 	4000 3500 4000 3700
-Wire Wire Line
-	4000 3700 3750 3700
 $Comp
 L Device:R R?
 U 1 1 5E48C29E
@@ -1061,18 +1049,16 @@ Text GLabel 3100 5550 2    50   Input ~ 0
 TOUCH4
 Text GLabel 3100 5450 2    50   Input ~ 0
 TOUCH5
-Wire Wire Line
-	4050 3800 3750 3800
 $Comp
-L Connector_Generic:Conn_01x08 J7
+L Connector_Generic:Conn_01x09 J7
 U 1 1 5E7705B5
-P 3450 4000
-F 0 "J7" H 3368 3375 50  0000 C CNN
-F 1 "Conn_01x08" H 3368 3466 50  0000 C CNN
-F 2 "lcsc:FFC-SMD_8P-P1.00_FFC10028-08SBD224K6M" H 3450 4000 50  0001 C CNN
-F 3 "https://lcsc.com/product-detail/FFC-FPC-Connectors_TXGA-FFC10028-08SBD224K6M_C456471.html" H 3450 4000 50  0001 C CNN
-F 4 "C456471" H 3450 4000 50  0001 C CNN "LCSC"
-	1    3450 4000
+P 3450 3900
+F 0 "J7" H 3368 3275 50  0000 C CNN
+F 1 "Conn_01x08" H 3368 3366 50  0000 C CNN
+F 2 "lcsc:FFC-SMD_8P-P1.00_FFC10028-08SBD224K6M" H 3450 3900 50  0001 C CNN
+F 3 "https://lcsc.com/product-detail/FFC-FPC-Connectors_TXGA-FFC10028-08SBD224K6M_C456471.html" H 3450 3900 50  0001 C CNN
+F 4 "C456471" H 3450 3900 50  0001 C CNN "LCSC"
+	1    3450 3900
 	-1   0    0    1   
 $EndComp
 Text GLabel 4050 4000 2    50   UnSpc ~ 0
@@ -1230,9 +1216,6 @@ F 3 "~" H 3950 3600 50  0001 C CNN
 	1    3750 3600
 	1    0    0    -1  
 $EndComp
-Connection ~ 3750 3600
-Wire Wire Line
-	3750 3600 3650 3600
 $Comp
 L Connector:TestPoint_Small TP9
 U 1 1 5ECC7C66
@@ -1244,9 +1227,6 @@ F 3 "~" H 3950 3700 50  0001 C CNN
 	1    3750 3700
 	1    0    0    -1  
 $EndComp
-Connection ~ 3750 3700
-Wire Wire Line
-	3750 3700 3650 3700
 $Comp
 L Connector:TestPoint_Small TP10
 U 1 1 5ECC8083
@@ -1258,9 +1238,6 @@ F 3 "~" H 3950 3800 50  0001 C CNN
 	1    3750 3800
 	1    0    0    -1  
 $EndComp
-Connection ~ 3750 3800
-Wire Wire Line
-	3750 3800 3650 3800
 $Comp
 L Connector:TestPoint_Small TP11
 U 1 1 5ECC85C0
@@ -1272,9 +1249,6 @@ F 3 "~" H 3950 3900 50  0001 C CNN
 	1    3750 3900
 	1    0    0    -1  
 $EndComp
-Connection ~ 3750 3900
-Wire Wire Line
-	3750 3900 3650 3900
 $Comp
 L Connector:TestPoint_Small TP12
 U 1 1 5ECED560
@@ -1286,9 +1260,6 @@ F 3 "~" H 1400 4750 50  0001 C CNN
 	1    1200 4750
 	1    0    0    -1  
 $EndComp
-Connection ~ 1200 4750
-Wire Wire Line
-	1200 4750 1400 4750
 $Comp
 L Connector:TestPoint_Small TP13
 U 1 1 5ECEF4F7
@@ -1300,9 +1271,6 @@ F 3 "~" H 2200 4300 50  0001 C CNN
 	1    2000 4300
 	1    0    0    -1  
 $EndComp
-Connection ~ 2000 4300
-Wire Wire Line
-	2000 4300 2000 4450
 $Comp
 L Connector:TestPoint_Small TP14
 U 1 1 5ECF6727
@@ -1314,7 +1282,21 @@ F 3 "~" H 5650 3150 50  0001 C CNN
 	1    5450 3150
 	1    0    0    -1  
 $EndComp
-Connection ~ 5450 3150
+Text GLabel 3650 3500 2    50   UnSpc ~ 0
+GND
 Wire Wire Line
-	5450 3150 5350 3150
+	2000 4200 2000 4450
+Wire Wire Line
+	5350 3150 5500 3150
+Wire Wire Line
+	1050 4750 1400 4750
+Wire Wire Line
+	3650 3900 4100 3900
+Wire Wire Line
+	3650 3600 4300 3600
+Wire Wire Line
+	3650 3700 4000 3700
+Wire Wire Line
+	3650 3800 4050 3800
+NoConn ~ 2600 6950
 $EndSCHEMATC
