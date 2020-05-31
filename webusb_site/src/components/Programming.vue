@@ -10,9 +10,12 @@
               <mdb-btn color='gray' size='lg' title='Rename file' v-on:click='rename_ui()' icon='file-alt'></mdb-btn>
               <mdb-btn color='gray' size='lg' title='Delete file' v-on:click='trash_ui()' icon='trash'></mdb-btn>
             </mdb-col>
-            <mdb-col sm='6' md='8' lg='9'>
+            <mdb-col sm='2' md='2' lg='2'>
               <mdb-btn color='gray' size='lg' title='Run file' v-on:click='startapp_ui()' icon='play'></mdb-btn>
               <mdb-btn color='gray' size='lg' title='Save file' v-on:click='save_ui()' icon='save'></mdb-btn>
+            </mdb-col>
+            <mdb-col sm='4' md='6' lg='7'>
+              <mdb-input label="Filename" v-model="editorfilename" size="md"/>
             </mdb-col>
           </mdb-row>
           <mdb-row class='mt-3'>
@@ -34,7 +37,7 @@ window.itemDrop = function() {
   console.log('nope')
 };
 
-import {mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow} from 'mdbvue';
+import {mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
 import VJstree from 'vue-jstree';
   import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
 import * as $ from 'jquery';
@@ -57,6 +60,7 @@ export default {
     mdbCol,
     mdbCard,
     mdbCardBody,
+    mdbInput,
     VJstree,
     editor:ace_editor
   },
@@ -66,15 +70,50 @@ export default {
     on_connect().then(() => this.itemClick({model: this.files[0]}))
   },
   methods: {
+    parseDir: (data) => {
+          let textdecoder = new TextDecoder("ascii");
+          let dir_structure = textdecoder.decode(data).split('\n');
+          console.log(dir_structure);
+          let data_structure = [];
+          let parent_path = dir_structure[0] === '/' ? '': dir_structure[0];
+          for(let i = 1; i < dir_structure.length; i++) {
+              let is_dir = dir_structure[i].charAt(0) === "d";
+              let child = {};
+              child["text"] = dir_structure[i].substr(1);
+              child["full_path"] = parent_path + '/' + child["text"];
+              if(is_dir) {
+                  if(dir_structure[i] === "dflash") {
+                      child["icon"] = "fas fa-microchip";
+                  } else if(dir_structure[i] === "dsdcard") {
+                      child["icon"] = "fas fa-sd-card";
+                  } else {
+                      child["icon"] = "far fa-folder";
+                  }
+                  child["is_dir"] = true;
+                  child["dragDisabled"] = true;
+              } else {
+                  child["icon"] = "far fa-file";
+              }
+              child["opened"] = false;
+              child["disabled"] = false;
+              child["selected"] = false;
+              if(is_dir) {
+                  child["children"] = [{text:'Click parent to refresh', icon: 'none', isDummy: true}];
+              }
+              data_structure.push(child);
+          }
+          return data_structure;
+    },
     updateNode:(node) => {
-      let model = node.model
+      let model = node.model;
       if(node.model.is_dir) {
         console.log("Updating: "+node.model.full_path);
-        fetch_dir(model.full_path, (children) => {
+        fetch_dir(model.full_path).then(data => {
+          let children = component.parseDir(data);
           //Check for deleted items
           for(let i = 0; i < children.length; i++) {
             for (let origitem of model.children) {
-              if(origitem.full_path === children[i].full_path) {            
+              if(origitem.full_path === children[i].full_path) {
                 children[i] = origitem;
               }
             }
@@ -86,8 +125,8 @@ export default {
       } else {
         let parts = node.model.full_path.split(".");
         if(parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1]) >= 0) {
-          readfile(node.model.full_path, (contents) => component.content = contents );
-        }
+          readfile(node.model.full_path).then((contents) => {component.content = contents; component.editorfilename = node.model.full_path});
+        }        
       }
     },
     itemClick:(node) => {
@@ -142,10 +181,20 @@ export default {
       let file = selected_item.model.full_path;
       if(confirm("Delete: " + file + "?")) {
         delfile(file);
+        if(file === component.editorfilename) {
+          component.editorfilename = "";
+          component.content = "";
+        }
         component.itemClick(selected_item.$parent); // Refresh parent directory
       }
     },
-    save_ui: () => savetextfile(selected_item.model.full_path, component.content),
+    save_ui: () => {
+      let parts = component.editorfilename.split(".");
+      if((parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1]) >= 0) || window.confirm("File: "+component.editorfilename+" has not a textfile extension")) {
+        savetextfile(component.editorfilename, component.content);
+        component.itemClick(selected_item.$parent);
+      }
+    },
     rename_ui: () => {
       if(selected_item.model.is_dir){ return; }
 
@@ -155,6 +204,9 @@ export default {
       let filename = prompt("Please enter new filename", "");
       if (filename != null) {
         movefile(path, parent_path + '/' + filename);
+        if(path === component.editorfilename) {
+          component.editorfilename = parent_path + '/' + filename ;
+        }
         component.itemClick(selected_item.$parent); // Refresh parent directory
       }
     },
@@ -181,6 +233,7 @@ export default {
   data () {
     return {
       content:'',
+      editorfilename:"",
       files: [
         {
           text: 'flash',
@@ -212,6 +265,13 @@ export default {
   }
   .btn.btn-lg {
     padding: .5rem .5rem !important;
+  }
+  .md-form {
+   margin: 0 0 0 0;
+  }
+  .input.input-lg {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 </style>
 

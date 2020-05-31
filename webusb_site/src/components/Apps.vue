@@ -363,7 +363,7 @@
         beforeMount() {
             component = this;
             on_connect().then(() => {
-                readfile('/flash/config/launcher_items.json', (contents) => {
+                readfile('/flash/config/launcher_items.json', ).then((contents) => {
                     component.launcher_items = JSON.parse(contents);
                 });
             });
@@ -454,7 +454,6 @@
 
     .butt {
         border: 0px;
-        background-color: rgb(19, 122, 156);
         height:125px;
         width:125px;
         cursor:pointer;
@@ -478,22 +477,6 @@
 
     .header {
         margin: 10px;
-    }
-
-
-    /* Style buttons */
-    .btn {
-        background-color: #15171B; /* Blue background */
-        border: none; /* Remove borders */
-        color: white; /* White text */
-        padding: 12px 16px; /* Some padding */
-        font-size: 14px; /* Set a font size */
-        cursor: pointer; /* Mouse pointer on hover */
-    }
-
-    /* Darker background on mouse-over */
-    .btn:hover {
-        background-color: RoyalBlue;
     }
 
     .nav-left {
