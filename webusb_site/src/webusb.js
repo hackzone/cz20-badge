@@ -2,10 +2,9 @@
  * Created by Tom on 5/27/2020.
  */
 export let device;
-let waiting_command = 1;
 let command;
-let size;
-let received;
+let size = 0;
+let received = 0;
 let payload;
 let messageid_recv;
 let cb_reply_read = [];
@@ -264,37 +263,50 @@ export function handlePacket(message_type, message_id, data) {
     }
 }
 
-
-let readLoop = () => {
+let readdata = () => {
     device.transferIn(3, 64).then(result => {
-        if(waiting_command) {
-            waiting_command = 0;
-            command = result.data.getUint16(0, true);
-            size = result.data.getUint32(2, true);
-            messageid_recv = result.data.getUint32(8, true);
-            console.log("Trans: "+size);
-            console.log("Packetsize: "+result.data.byteLength);
-            let verif = result.data.getUint16(6);            
-            received = result.data.byteLength-packetheadersize;
-            console.log("Verif: "+verif);
-            payload = new ArrayBuffer(size);
-            new Uint8Array(payload, 0, size).set(new Uint8Array(result.data.buffer, packetheadersize, Math.min(size, received)));
-        } else {
-            console.log(received + " " + size + " " + result.data.byteLength);
-            new Uint8Array(payload, received, size-received).set(new Uint8Array(result.data.buffer, 0, Math.min(size-received, result.data.byteLength)));
-            received = received + Math.min(size-received, result.data.byteLength);
-            console.log("rec: "+received+"/"+size);
+        let parsedbytes = 0;
+        let totalbytes = result.data.byteLength;
+        while(parsedbytes != totalbytes) {
+            if(received == size) { //Should read a new packet header
+                if((totalbytes - parsedbytes) < 12) break; //Can never be a full packet header. Discard data and hope for the best              
+                if(parsepacketheader(result.data.buffer.slice(parsedbytes, parsedbytes+12))) {
+                    payload = new ArrayBuffer(size);
+                    console.log("Command: "+command+" Size: "+size+" id: "+messageid_recv);
+                    if(size == 0) handlePacket(command, messageid_recv, payload);
+                } else {
+                    console.log("Error in packet header");
+                    received = 0;
+                    size = 0;
+                }
+                parsedbytes += 12;
+            } else {
+                let sizetocopy = Math.min(size, totalbytes-parsedbytes);
+                new Uint8Array(payload, received, size-received).set(new Uint8Array(result.data.buffer, parsedbytes, sizetocopy));
+                parsedbytes += sizetocopy;
+                received += sizetocopy;
+                console.log("Transfer status: "+received+"/"+size);
+                if(received == size) {
+                    handlePacket(command, messageid_recv, payload);
+                }
+            }
         }
-        if(received === size) {
-            console.log("transfer complete");
-            waiting_command = 1;
-            handlePacket(command, messageid_recv, payload);
-        }
-        readLoop();
+        readdata();    
     }, error => {
         this.onReceiveError(error);
     });
 };
+
+let parsepacketheader = (data) => {
+    console.log(data);
+    let view = new DataView(data)
+    command = view.getUint16(0, true);
+    size = view.getUint32(2, true);
+    let verif = view.getUint16(6);
+    messageid_recv = view.getUint32(8, true);
+    received = 0;
+    return verif == 57005;
+}
 
 let connect_resolves = [];
 function connect_check() {
@@ -312,7 +324,6 @@ export function on_connect() {
 }
 
 export function connect() {
-    waiting_command = 1;
     command = 0;
     size = 0;
     received = 0;
@@ -336,6 +347,6 @@ export function connect() {
             value: 0x02,
             index: 0x02})) // Ready to receive data
         .then(() => {
-            readLoop();
+            readdata();
         });
 }
