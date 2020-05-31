@@ -15,7 +15,7 @@
                         <div class="button_grid mt-4" v-bind:key="launcher_items.length">
                             <input v-for="i in 16" v-bind:key="i" v-bind:style="{
                                 backgroundColor: (launcher_items[i-1] !== undefined ? launcher_items[i-1].colour: 'gray'),
-                                }" class="butt" type="button"/>
+                                }" class="butt" type="button" style="color:transparent" v-bind:value="i-1" v-on:click="buttonClick"/>
                         </div>
                     </mdb-card-body>
                 </mdb-card>
@@ -24,8 +24,8 @@
                 <mdb-card class="mb-4">
                     <mdb-card-header>Selected app</mdb-card-header>
                     <mdb-card-body>
-                        <p v-if="currentApp !== undefined">
-
+                        <p v-if="current_app !== undefined">
+                            {{ current_app.name }}
                         </p>
                         <p v-else>Click on a keypad button on the left to select</p>
                     </mdb-card-body>
@@ -65,7 +65,10 @@
                                     <td>{{ app.category }}</td>
                                     <td>{{ app.status }}</td>
                                     <td>{{ app.author || 'Unknown' }}</td>
-                                    <td><mdb-btn color="primary" size="sm" v-on:click="install_app(app.slug)">Install</mdb-btn></td>
+                                    <td>
+                                        <mdb-btn color="primary" size="sm" v-bind:class="{disabled: installing}" v-on:click="install_app(app.slug)" v-if="local_apps.indexOf(app.slug) === -1">Install</mdb-btn>
+                                        <mdb-btn color="gray" size="sm" disabled v-else>Installed</mdb-btn>
+                                    </td>
                                 </tr>
                             </tbody>
                         </mdb-tbl>
@@ -87,7 +90,7 @@
         mdbCardHeader,
     } from 'mdbvue';
 
-    import {on_connect, readfile, createfolder, savefile} from '../webusb';
+    import {on_connect, readfile, createfolder, savefile, fetch_dir} from '../webusb';
     import * as pako from 'pako';
     import * as untar from 'js-untar';
     window.pako = pako;
@@ -108,10 +111,10 @@
         },
         beforeMount() {
             component = this;
-            on_connect().then(() => {
-                readfile('/flash/config/launcher_items.json', ).then((contents) => {
-                    component.launcher_items = JSON.parse(contents);
-                });
+            on_connect().then(async () => {
+                let contents = await readfile('/flash/config/launcher_items.json', );
+                component.launcher_items = JSON.parse(contents);
+                await component.update_local_apps();
             });
 
             fetch('https://hatchery.badge.team/basket/campzone2019/list/json',{mode:'cors'})
@@ -128,6 +131,29 @@
                 })});
         },
         methods: {
+            update_local_apps: async () => {
+                let install_paths = ['/flash/apps'];
+                let apps = [];
+
+                for(let path of install_paths) {
+                    let dir = await fetch_dir(path);
+                    let textdecoder = new TextDecoder("ascii");
+                    let dir_contents = textdecoder.decode(dir).split('\n');
+                    for (let item of dir_contents) {
+                        if(item[0] !== 'd') { continue; }
+                        apps.push(item.substr(1));
+                    }
+                }
+                component.local_apps = apps;
+            },
+            get_local_app_metadata: async (app_slug, install_path='/flash/apps/') => {
+                let contents = await readfile(install_path + app_slug + '/metadata.json');
+                debugger;
+                return {
+                    ...JSON.parse(contents),
+                    slug: app_slug
+                };
+            },
             get_app_metadata: async (app_slug) => {
                 let metadata_url = 'https://badge.team/eggs/get/' + app_slug + '/json';
                 let response = await fetch(metadata_url);
@@ -138,6 +164,7 @@
                 return metadata;
             },
             install_app: async (app_slug, install_path='/flash/apps/') => {
+                component.installing = true;
                 let metadata = await component.get_app_metadata(app_slug);
                 let response = await fetch(metadata.latest_release_url);
                 let tar_gz = await response.arrayBuffer();
@@ -164,38 +191,42 @@
                     await savefile(path, file.buffer);
                 }
 
+                component.installing = false;
+                component.local_apps.push(app_slug);
                 component.$emit('genNotification', 'Installed ' + metadata.name + ' successfully');
-            }
+            },
+            buttonClick: async (event) => {
+                debugger;
+                let index = parseInt(event.target.value) ;
+                let absolute_index = index + component.current_page * 16;
+                component.current_index = absolute_index.toString();
+                if(!(absolute_index in component.launcher_items)) {
+                    component.launcher_items[absolute_index] = {
+                        name: '',
+                        description: '',
+                        category: '',
+                        author: '',
+                        revision: '',
+                    };
+                } else {
+                    let app_slug = component.launcher_items[absolute_index].slug;
+                    component.current_app = await component.get_local_app_metadata(app_slug);
+                }
+            },
         },
         data() {
             return {
-                showFrameModalTop: false,
-                showFrameModalBottom: false,
-                showSideModalTopRight: false,
-                showSideModalTopLeft: false,
-                showSideModalBottomRight: false,
-                showSideModalBottomLeft: false,
-                showCentralModalSmall: false,
-                showCentralModalMedium: false,
-                showCentralModalLarge: false,
-                showCentralModalFluid: false,
-                showFluidModalRight: false,
-                showFluidModalLeft: false,
-                showFluidModalTop: false,
-                showFluidModalBottom: false,
-                currentApp:{
-                    name: '',
-                    description: '',
-                    category: '',
-                    author: '',
-                    revision: '',
-                },
+                current_page: 0,
+                current_index: -1,
+                current_app: undefined,
                 launcher_items: {},
+                local_apps: [],
                 store_apps: [],
                 selected_store_category: 'all',
                 selected_store_state: 'working',
                 categories: ['all'],
-                states: ['working', 'all']
+                states: ['working', 'all'],
+                installing: false
             }
         },
         computed: {

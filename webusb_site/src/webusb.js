@@ -74,8 +74,7 @@ export function send_buffer(buffer, message_id, return_string=true) {
     return promise;
 }
 
-export function fetch_dir(dir_name, cb) {
-    cb_reply_dir.push(cb);
+export function fetch_dir(dir_name) {
     console.log('Fetching', dir_name);
     if(dir_name === undefined || dir_name === '') {
         dir_name = '/';
@@ -88,7 +87,7 @@ export function fetch_dir(dir_name, cb) {
     return send_buffer(buffer, message_id, false);
 }
 
-export function readfile(dir_name, callback, return_string=true) {
+export function readfile(dir_name, return_string=true) {
     let {buffer, message_id} = buildpacketWithFilename(0, 4097, dir_name);
     return send_buffer(buffer, message_id, return_string);
 }
