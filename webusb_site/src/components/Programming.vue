@@ -14,7 +14,7 @@
               <mdb-btn color='gray' size='lg' title='Run file' v-on:click='startapp_ui()' icon='play'></mdb-btn>
               <mdb-btn color='gray' size='lg' title='Save file' v-on:click='save_ui()' icon='save'></mdb-btn>
             </mdb-col>
-            <mdb-col sm='4' md='6' lg='7'>
+            <mdb-col sm='4' md='6' lg='7' class="mt-2">
               <mdb-input label="Filename" v-model="editorfilename" size="md"/>
             </mdb-col>
           </mdb-row>
@@ -233,7 +233,7 @@ export default {
   data () {
     return {
       content:'',
-      editorfilename:"",
+      editorfilename:'/flash/cache/scratch.py',
       files: [
         {
           text: 'flash',
@@ -269,13 +269,16 @@ export default {
   .md-form {
    margin: 0 0 0 0;
   }
-  .input.input-lg {
+  input .input-lg {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
 </style>
 
 <style>
+  .md-form .form-control {
+    margin-bottom: 0;
+  }
   .tree-selected {
     background: #eee !important;
   }
