@@ -49,8 +49,12 @@ export function send_buffer(buffer, message_id, return_string=true) {
         buffer, // For retransmit
         resolve: (data) => {
             if(return_string) {
-                let textdecoder = new TextDecoder("ascii");
-                resolve(textdecoder.decode(data));
+                if(data.byteLength == 0) {
+                    resolve("");
+                } else {
+                    let textdecoder = new TextDecoder("ascii");
+                    resolve(textdecoder.decode(data));
+                }
             } else {
                 resolve(data);
             }

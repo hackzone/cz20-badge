@@ -23,7 +23,7 @@
               <v-jstree :data='files' draggable multiple allow-batch whole-row @item-click='itemClick' @item-drop-before='itemDrop' @item-drop='otherDrop' @item-drag-start='itemDragStart'></v-jstree>
             </mdb-col>
             <mdb-col sm='6' md='8' lg='9'>
-              <editor v-model='content' lang='python' theme='monokai' height='500'></editor>
+              <editor v-model='content_editor' lang='python' theme='monokai' height='500'></editor>
             </mdb-col>
           </mdb-row>
         </section>
@@ -125,7 +125,9 @@ export default {
       } else {
         let parts = node.model.full_path.split(".");
         if(parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1]) >= 0) {
-          readfile(node.model.full_path).then((contents) => {component.content = contents; component.editorfilename = node.model.full_path});
+          if(component.content_editor === component.content_original || window.confirm("Unsaved changes will be lost. Are you sure?")) {
+            readfile(node.model.full_path).then((contents) => {component.content_editor = contents; component.content_original = contents; component.editorfilename = node.model.full_path});
+          }
         }        
       }
     },
@@ -183,7 +185,7 @@ export default {
         delfile(file);
         if(file === component.editorfilename) {
           component.editorfilename = "";
-          component.content = "";
+          component.content_editor = "";
         }
         component.itemClick(selected_item.$parent); // Refresh parent directory
       }
@@ -191,7 +193,7 @@ export default {
     save_ui: () => {
       let parts = component.editorfilename.split(".");
       if((parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1]) >= 0) || window.confirm("File: "+component.editorfilename+" has not a textfile extension")) {
-        savetextfile(component.editorfilename, component.content);
+        savetextfile(component.editorfilename, component.content_editor).then(component.content_original = component.content_editor);
         component.itemClick(selected_item.$parent);
       }
     },
@@ -232,7 +234,8 @@ export default {
   },
   data () {
     return {
-      content:'',
+      content_editor:'',
+      content_original:'',
       editorfilename:"",
       files: [
         {
