@@ -64,15 +64,50 @@ export default {
     on_connect().then(() => this.itemClick({model: this.files[0]}))
   },
   methods: {
+    parseDir: (data) => {
+          let textdecoder = new TextDecoder("ascii");
+          let dir_structure = textdecoder.decode(data).split('\n');
+          console.log(dir_structure);
+          let data_structure = [];
+          let parent_path = dir_structure[0] === '/' ? '': dir_structure[0];
+          for(let i = 1; i < dir_structure.length; i++) {
+              let is_dir = dir_structure[i].charAt(0) === "d";
+              let child = {};
+              child["text"] = dir_structure[i].substr(1);
+              child["full_path"] = parent_path + '/' + child["text"];
+              if(is_dir) {
+                  if(dir_structure[i] === "dflash") {
+                      child["icon"] = "fas fa-microchip";
+                  } else if(dir_structure[i] === "dsdcard") {
+                      child["icon"] = "fas fa-sd-card";
+                  } else {
+                      child["icon"] = "far fa-folder";
+                  }
+                  child["is_dir"] = true;
+                  child["dragDisabled"] = true;
+              } else {
+                  child["icon"] = "far fa-file";
+              }
+              child["opened"] = false;
+              child["disabled"] = false;
+              child["selected"] = false;
+              if(is_dir) {
+                  child["children"] = [{text:'Click parent to refresh', icon: 'none', isDummy: true}];
+              }
+              data_structure.push(child);
+          }
+          return data_structure;
+    },
     updateNode:(node) => {
-      let model = node.model
+      let model = node.model;
       if(node.model.is_dir) {
         console.log("Updating: "+node.model.full_path);
-        fetch_dir(model.full_path, (children) => {
+        fetch_dir(model.full_path).then(data => {
+          let children = component.parseDir(data);
           //Check for deleted items
           for(let i = 0; i < children.length; i++) {
             for (let origitem of model.children) {
-              if(origitem.full_path === children[i].full_path) {            
+              if(origitem.full_path === children[i].full_path) {
                 children[i] = origitem;
               }
             }
@@ -82,7 +117,7 @@ export default {
           model.opened = true;
         });
       } else {
-        readfile(node.model.full_path, (contents) => component.content = contents );
+        readfile(node.model.full_path).then((contents) => component.content = contents);
       }
     },
     itemClick:(node) => {
