@@ -25,6 +25,10 @@
                     <mdb-card-header>Selected app</mdb-card-header>
                     <mdb-card-body>
                         <p v-if="current_app !== undefined">
+                            <span>Filter development state</span>
+                            <select class="browser-default custom-select">
+                                <option v-for="app_name in local_apps" v-bind:key="app_name" v-bind:value="app_name">{{app_name}}</option>
+                            </select>
                             {{ current_app.name }}
                         </p>
                         <p v-else>Click on a keypad button on the left to select</p>
@@ -148,7 +152,6 @@
             },
             get_local_app_metadata: async (app_slug, install_path='/flash/apps/') => {
                 let contents = await readfile(install_path + app_slug + '/metadata.json');
-                debugger;
                 return {
                     ...JSON.parse(contents),
                     slug: app_slug
@@ -196,7 +199,6 @@
                 component.$emit('genNotification', 'Installed ' + metadata.name + ' successfully');
             },
             buttonClick: async (event) => {
-                debugger;
                 let index = parseInt(event.target.value) ;
                 let absolute_index = index + component.current_page * 16;
                 component.current_index = absolute_index.toString();
