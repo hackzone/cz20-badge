@@ -41,7 +41,6 @@
                             <mdb-col sm="2">
                                 <span>Filter category</span>
                                 <select class="browser-default custom-select" v-model="selected_store_category">
-                                    <option selected>all</option>
                                     <option v-for="category in categories" v-bind:key="category" v-bind:value="category">{{category}}</option>
                                 </select>
                             </mdb-col>
@@ -50,7 +49,6 @@
                             <mdb-col sm="2">
                                 <span>Filter development state</span>
                                 <select class="browser-default custom-select" v-model="selected_store_state">
-                                    <option selected>working</option>
                                     <option v-for="state in states" v-bind:key="state" v-bind:value="state">{{state}}</option>
                                 </select>
                             </mdb-col>
@@ -67,7 +65,7 @@
                                     <td>{{ app.category }}</td>
                                     <td>{{ app.status }}</td>
                                     <td>{{ app.author || 'Unknown' }}</td>
-                                    <td>Install</td>
+                                    <td><mdb-btn color="primary" size="sm">Install</mdb-btn></td>
                                 </tr>
                             </tbody>
                         </mdb-tbl>
@@ -438,15 +436,17 @@
                 selected_store_category: 'all',
                 selected_store_state: 'working',
                 categories: ['all'],
-                states: ['working']
+                states: ['working', 'all']
             }
         },
         computed: {
             filtered_store_apps: () => {
-                if(component.selected_store_category === 'all') {
+                if(component.selected_store_category === 'all' && component.selected_store_state === 'all') {
                     return component.store_apps;
                 }
-                return component.store_apps.filter((app) => app.category === component.selected_store_category);
+                return component.store_apps.filter((app) =>
+                    (component.selected_store_category === 'all' || app.category === component.selected_store_category) &&
+                    (component.selected_store_state === 'all' || app.status === component.selected_store_state));
             }
         }
     }
