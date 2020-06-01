@@ -13,3 +13,7 @@ Use [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html)
 ## [firmware-ESP32](firmware-ESP32)
 
 See [badgeteam/ESP32-platform-firmware](https://github.com/badgeteam/ESP32-platform-firmware) and [docs.badge.team](https://docs.badge.team/)
+
+## [WebUSB site](webusb_site)
+
+Node.js build static site for using with Hatchery over WebUSB 
