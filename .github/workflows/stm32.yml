@@ -18,6 +18,10 @@ jobs:
     - name: CMake
       run: cmake . 
       working-directory: firmware-STM32 
+      env:
+        CC: /usr/bin/arm-none-eabi-gcc
+        CXX: /usr/bin/arm-none-eabi-gcc
+        ASM: /usr/bin/arm-none-eabi-gcc
     - name: Make
       run: make 
       working-directory: firmware-STM32 
