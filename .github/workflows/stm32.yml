@@ -14,9 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Get prequisites
-      run: sudo apt update && sudo apt install -y --no-install-recommends gcc-avr
+      run: sudo apt update && sudo apt install -y --no-install-recommends gcc-avr gcc-arm-none-eabi
     - name: CMake
-      run: CC=/usr/bin/arm-none-eabi-gcc CXX=/usr/bin/arm-none-eabi-g++ ASM=/usr/bin/arm-none-eabi-gcc cmake .
+      run: cmake .
       working-directory: firmware-STM32 
     - name: Make
       run: make 
