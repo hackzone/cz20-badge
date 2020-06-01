@@ -32,9 +32,10 @@
                             <option value="none"><b>No app</b></option>
                             <option v-for="app_name in local_apps" v-bind:key="app_name" v-bind:value="app_name">{{app_name}}</option>
                         </select>
-                        <p v-if="current_app !== undefined" class="mt-3">
-                            {{ current_app.name }}
-                        </p>
+                        <div v-if="current_app !== undefined" class="mt-3">
+                            <p><strong>{{ current_app.name }}</strong></p>
+                            <p>{{ current_app.description }}</p>
+                        </div>
 
                         <sketch-picker v-model="color_picker" @input="update_current_colour" />
 
@@ -258,7 +259,7 @@
                 current_index: -1,
                 current_app: undefined,
                 current_app_slug: undefined,
-                current_colour: '#007F7F',
+                current_colour: '#4A90E2',
                 launcher_items: {},
                 local_apps: [],
                 store_apps: [],
