@@ -16,12 +16,8 @@ jobs:
     - name: Get prequisites
       run: sudo apt update && sudo apt install -y --no-install-recommends gcc-avr
     - name: CMake
-      run: cmake . 
+      run: CC=/usr/bin/arm-none-eabi-gcc CXX=/usr/bin/arm-none-eabi-g++ ASM=/usr/bin/arm-none-eabi-gcc cmake .
       working-directory: firmware-STM32 
-      env:
-        CC: /usr/bin/arm-none-eabi-gcc
-        CXX: /usr/bin/arm-none-eabi-gcc
-        ASM: /usr/bin/arm-none-eabi-gcc
     - name: Make
       run: make 
       working-directory: firmware-STM32 

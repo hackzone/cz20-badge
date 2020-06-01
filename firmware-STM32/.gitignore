@@ -9,3 +9,5 @@ firmware-STM32.bin
 firmware-STM32.elf
 firmware-STM32.hex
 firmware-STM32.map
+cmake_install.cmake
+.idea
