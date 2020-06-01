@@ -235,8 +235,11 @@
                 }
             },
             update_current_colour: (colour) => {
-                component.current_colour = colour.hex;
-                component.update_current_launcher_item();
+                clearTimeout(component.timeout_colorpicker);
+                component.timeout_colorpicker = setTimeout(() => {
+                    component.current_colour = colour.hex;
+                    component.update_current_launcher_item();
+                }, 800);
             },
             update_current_launcher_item: async () => {
                 let index = component.current_index;
@@ -255,6 +258,7 @@
         },
         data() {
             return {
+                timeout_colorpicker: null,
                 current_page: 0,
                 current_index: -1,
                 current_app: undefined,
