@@ -280,7 +280,7 @@ let readdata = () => {
                 }
                 parsedbytes += 12;
             } else {
-                let sizetocopy = Math.min(size, totalbytes-parsedbytes);
+                let sizetocopy = Math.min(size, totalbytes-parsedbytes, size-received);
                 new Uint8Array(payload, received, size-received).set(new Uint8Array(result.data.buffer, parsedbytes, sizetocopy));
                 parsedbytes += sizetocopy;
                 received += sizetocopy;

@@ -16,6 +16,7 @@
     "mdbvue": "6.5.0",
     "pako": "^1.0.11",
     "vue": "^2.6.11",
+    "vue-color": "^2.7.1",
     "vue-jstree": "^2.1.6",
     "vue2-ace-editor": "0.0.15",
     "vue2-google-maps": "^0.10.7"
