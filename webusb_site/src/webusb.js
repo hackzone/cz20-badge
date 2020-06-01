@@ -1,7 +1,7 @@
 /**
  * Created by Tom on 5/27/2020.
  */
-export let device;
+export let device = {opened: false};
 let command;
 let size = 0;
 let received = 0;
