@@ -39,7 +39,7 @@ window.itemDrop = function() {
 
 import {mdbToastNotification, mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
 import VJstree from 'vue-jstree';
-  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, createfile} from '../webusb';
+  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
@@ -71,8 +71,7 @@ export default {
   },
   methods: {
     parseDir: (data) => {
-          let textdecoder = new TextDecoder("ascii");
-          let dir_structure = textdecoder.decode(data).split('\n');
+          let dir_structure = data.split('\n');
           console.log(dir_structure);
           let data_structure = [];
           let parent_path = dir_structure[0] === '/' ? '': dir_structure[0];
@@ -184,15 +183,22 @@ export default {
       console.log(entry);
       beforemoveloc = entry;
     },
-    trash_ui: () => {
+    trash_ui: async () => {
       let file = selected_item.model.full_path;
       if(confirm("Delete: " + file + "?")) {
-        delfile(file);
-        if(file === component.editorfilename) {
+        if(selected_item.model.is_dir) {
+          await deldir(file);
+          if(file == component.editorfilename.substr(0, file.length)) {
+            component.editorfilename = '/flash/cache/scratch.py';
+            component.content_editor = '';
+            component.content_original = '';
+          } 
+        } else {
+          delfile(file);
           component.editorfilename = '/flash/cache/scratch.py';
           component.content_editor = '';
           component.content_original = '';
-        }
+        }               
         component.itemClick(selected_item.$parent); // Refresh parent directory
       }
     },

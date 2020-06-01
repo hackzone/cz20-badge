@@ -1,11 +1,10 @@
 /**
  * Created by Tom on 5/27/2020.
  */
-export let device;
-let waiting_command = 1;
+export let device = {opened: false};
 let command;
-let size;
-let received;
+let size = 0;
+let received = 0;
 let payload;
 let messageid_recv;
 let cb_reply_read = [];
@@ -18,6 +17,11 @@ let requests = {};
 let MAX_RETRIES = 3;
 
 import * as $ from 'jquery';
+
+function sendHeartbeat() {
+    let {buffer, message_id} = buildpacketWithFilename(0, 1, "beat");
+    send_buffer(buffer, message_id, true).then(data => {console.log("Heartbeat")}, reason => {console.log("Heartbeat no response")});
+}
 
 //Function to create valid packet. Size is the payload size, command is the command id
 export function buildpacket(size, command) {
@@ -42,6 +46,12 @@ export function buildpacketWithFilename(size, command, filename) {
     return {buffer, message_id: message_id};
 }
 
+function rewritemessageid(buffer) {
+    current_message_id++;
+    new DataView(buffer.buffer).setUint32(8, current_message_id, true);
+    return current_message_id;
+}
+
 export function send_buffer(buffer, message_id, return_string=true) {
     let resolve, reject;
     let promise = new Promise((_resolve, _reject) => {resolve = _resolve; reject = _reject;});
@@ -51,20 +61,27 @@ export function send_buffer(buffer, message_id, return_string=true) {
             if(return_string) {
                 if(data.byteLength == 0) {
                     resolve("");
+                    return true;
                 } else {
                     let textdecoder = new TextDecoder("ascii");
                     resolve(textdecoder.decode(data));
+                    return true
                 }
             } else {
                 resolve(data);
+                return true;
             }
         },
         reject: (reason, immediate_reject=false) => {
             if(!immediate_reject && request.retries <= MAX_RETRIES) {
                 request.retries++;
+                console.log(buffer);
+                rewritemessageid(buffer);
                 device.transferOut(3, buffer);
+                return false;
             } else {
                 reject(reason);
+                return true;
             }
         },
         retries: 0 // Number of times this request has been retransmitted already
@@ -74,8 +91,7 @@ export function send_buffer(buffer, message_id, return_string=true) {
     return promise;
 }
 
-export function fetch_dir(dir_name, cb) {
-    cb_reply_dir.push(cb);
+export function fetch_dir(dir_name) {
     console.log('Fetching', dir_name);
     if(dir_name === undefined || dir_name === '') {
         dir_name = '/';
@@ -85,10 +101,10 @@ export function fetch_dir(dir_name, cb) {
         buffer[packetheadersize+i] = dir_name.charCodeAt(i);
     }
     buffer[packetheadersize+dir_name.length] = 0;
-    return send_buffer(buffer, message_id, false);
+    return send_buffer(buffer, message_id, true);
 }
 
-export function readfile(dir_name, callback, return_string=true) {
+export function readfile(dir_name, return_string=true) {
     let {buffer, message_id} = buildpacketWithFilename(0, 4097, dir_name);
     return send_buffer(buffer, message_id, return_string);
 }
@@ -98,7 +114,24 @@ export function createfile(dir_name) {
     return send_buffer(buffer, message_id);
 }
 
+export async function deldir(dir_name) {
+    let dir = await fetch_dir(dir_name)
+    let dirlist = dir.split('\n');
+    dirlist.unshift();
+    console.log(dirlist);
+    for(let i = 1; i < dirlist.length; i++) {
+        let item = dirlist[i];
+        if(item.charAt(0) == 'd') {
+            await deldir(dir_name + "/" + item.substr(1));
+        } else {
+            await delfile(dir_name + "/" + item.substr(1));
+        }
+    }
+    await delfile(dir_name);
+}
+
 export function delfile(dir_name) {
+    console.log("Deleting: "+dir_name);
     let {buffer, message_id} = buildpacketWithFilename(0, 4099, dir_name);
     return send_buffer(buffer, message_id);
 }
@@ -179,56 +212,6 @@ export function createfolder(folder) {
 export function handlePacket(message_type, message_id, data) {
     let textdecoder = undefined;
     let file_contents = undefined;
-    // let dir_structure = undefined;
-    // let data_structure = undefined;
-    // let parent_path = undefined;
-
-    // case 4096:
-    //     textdecoder = new TextDecoder("ascii");
-    //     dir_structure = textdecoder.decode(data).split('\n');
-    //     console.log(dir_structure);
-    //     data_structure = [];
-    //     parent_path = dir_structure[0] === '/' ? '': dir_structure[0];
-    //     for(let i = 1; i < dir_structure.length; i++) {
-    //         let is_dir = dir_structure[i].charAt(0) === "d";
-    //         let child = {};
-    //         child["text"] = dir_structure[i].substr(1);
-    //         child["full_path"] = parent_path + '/' + child["text"];
-    //         if(is_dir) {
-    //             if(dir_structure[i] === "dflash") {
-    //                 child["icon"] = "fas fa-microchip";
-    //             } else if(dir_structure[i] === "dsdcard") {
-    //                 child["icon"] = "fas fa-sd-card";
-    //             } else {
-    //                 child["icon"] = "far fa-folder";
-    //             }
-    //             child["is_dir"] = true;
-    //             child["dragDisabled"] = true;
-    //         } else {
-    //             child["icon"] = "far fa-file";
-    //         }
-    //         child["opened"] = false;
-    //         child["disabled"] = false;
-    //         child["selected"] = false;
-    //         if(is_dir) {
-    //             child["children"] = [{text:'Click parent to refresh', icon: 'none', isDummy: true}];
-    //         }
-    //         data_structure.push(child);
-    //     }
-    //     if(cb_reply_dir[0]) {
-    //         cb_reply_dir[0].call(this, data_structure);
-    //     }
-    //     cb_reply_dir.shift();
-    //     break;
-    // case 4097:
-    //     textdecoder = new TextDecoder("ascii");
-    //     file_contents = textdecoder.decode(data);
-    //     console.log(data);
-    //     if(cb_reply_read[0]) {
-    //         cb_reply_read[0].call(this, file_contents);
-    //     }
-    //     cb_reply_read.shift();
-    //     break;
 
     if (message_type === 1 && message_id === 0) {
         textdecoder = new TextDecoder("ascii");
@@ -237,64 +220,102 @@ export function handlePacket(message_type, message_id, data) {
         if (file_contents === "to") {
             for(let key in requests) {
                 let request = requests[key];
-                request.reject('Timeout');
+                if(!request.reject('Timeout')) {
+                    requests[current_message_id] = request;
+                }
+                delete requests[key];
             }
         } else if (file_contents === "te") {
             for(let key in requests) {
                 let request = requests[key];
-                request.reject('Timeout');
+                if(!request.reject('Timeout')) {
+                    requests[current_message_id] = request;
+                }
+                delete requests[key];
             }
         }
         return;
     }
 
-    if(message_id in requests) {
-        let request = requests[message_id];
-        if(data.byteLength === 3) {
-            let textdecoder = new TextDecoder("ascii");
-            let text_content = textdecoder.decode(data.slice(0, 2));
-            if(text_content === 'er') {
-                request.reject('Unspecified error');
+    for(let key in requests) {
+        let request = requests[key];
+        if(key < message_id) {
+            request.reject('No response');
+            delete requests[key];
+        } else if(key == message_id) {
+            if(data.byteLength === 3) {
+                let textdecoder = new TextDecoder("ascii");
+                let text_content = textdecoder.decode(data.slice(0, 2));
+                if(text_content === 'er') {
+                    request.reject('Unspecified error', true);  //Immediate reject when proper error is received
+                } else {
+                    request.resolve(data, true);
+                }
             } else {
-                request.resolve(data, true);
+                request.resolve(data);
             }
-        } else {
-            request.resolve(data);
+            delete requests[key];
         }
     }
+    // if(message_id in requests) {
+    //     let request = requests[message_id];
+    //     if(data.byteLength === 3) {
+    //         let textdecoder = new TextDecoder("ascii");
+    //         let text_content = textdecoder.decode(data.slice(0, 2));
+    //         if(text_content === 'er') {
+    //             request.reject('Unspecified error', true);  //Immediate reject when proper error is received
+    //         } else {
+    //             request.resolve(data, true);
+    //         }
+    //     } else {
+    //         request.resolve(data);
+    //     }
+    // }
 }
 
-
-let readLoop = () => {
+let readdata = () => {
     device.transferIn(3, 64).then(result => {
-        if(waiting_command) {
-            waiting_command = 0;
-            command = result.data.getUint16(0, true);
-            size = result.data.getUint32(2, true);
-            messageid_recv = result.data.getUint32(8, true);
-            console.log("Trans: "+size);
-            console.log("Packetsize: "+result.data.byteLength);
-            let verif = result.data.getUint16(6);            
-            received = result.data.byteLength-packetheadersize;
-            console.log("Verif: "+verif);
-            payload = new ArrayBuffer(size);
-            new Uint8Array(payload, 0, size).set(new Uint8Array(result.data.buffer, packetheadersize, Math.min(size, received)));
-        } else {
-            console.log(received + " " + size + " " + result.data.byteLength);
-            new Uint8Array(payload, received, size-received).set(new Uint8Array(result.data.buffer, 0, Math.min(size-received, result.data.byteLength)));
-            received = received + Math.min(size-received, result.data.byteLength);
-            console.log("rec: "+received+"/"+size);
+        let parsedbytes = 0;
+        let totalbytes = result.data.byteLength;
+        while(parsedbytes != totalbytes) {
+            if(received == size) { //Should read a new packet header
+                if((totalbytes - parsedbytes) < 12) break; //Can never be a full packet header. Discard data and hope for the best              
+                if(parsepacketheader(result.data.buffer.slice(parsedbytes, parsedbytes+12))) {
+                    payload = new ArrayBuffer(size);
+                    console.log("Command: "+command+" Size: "+size+" id: "+messageid_recv);
+                    if(size == 0) handlePacket(command, messageid_recv, payload);
+                } else {
+                    console.log("Error in packet header");
+                    received = 0;
+                    size = 0;
+                }
+                parsedbytes += 12;
+            } else {
+                let sizetocopy = Math.min(size, totalbytes-parsedbytes, size-received);
+                new Uint8Array(payload, received, size-received).set(new Uint8Array(result.data.buffer, parsedbytes, sizetocopy));
+                parsedbytes += sizetocopy;
+                received += sizetocopy;
+                console.log("Transfer status: "+received+"/"+size);
+                if(received == size) {
+                    handlePacket(command, messageid_recv, payload);
+                }
+            }
         }
-        if(received === size) {
-            console.log("transfer complete");
-            waiting_command = 1;
-            handlePacket(command, messageid_recv, payload);
-        }
-        readLoop();
+        readdata();    
     }, error => {
         this.onReceiveError(error);
     });
 };
+
+let parsepacketheader = (data) => {
+    let view = new DataView(data)
+    command = view.getUint16(0, true);
+    size = view.getUint32(2, true);
+    let verif = view.getUint16(6);
+    messageid_recv = view.getUint32(8, true);
+    received = 0;
+    return verif == 57005;
+}
 
 let connect_resolves = [];
 function connect_check() {
@@ -306,13 +327,17 @@ function connect_check() {
     }
 }
 setInterval(connect_check, 500);
+setInterval(function(){
+    if(device.opened) {
+        sendHeartbeat();
+    }
+}, 1500);
 
 export function on_connect() {
     return new Promise((resolve) => connect_resolves.push(resolve));
 }
 
 export function connect() {
-    waiting_command = 1;
     command = 0;
     size = 0;
     received = 0;
@@ -336,6 +361,6 @@ export function connect() {
             value: 0x02,
             index: 0x02})) // Ready to receive data
         .then(() => {
-            readLoop();
+            readdata();
         });
 }
