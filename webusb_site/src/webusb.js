@@ -18,6 +18,11 @@ let MAX_RETRIES = 3;
 
 import * as $ from 'jquery';
 
+function sendHeartbeat() {
+    let {buffer, message_id} = buildpacketWithFilename(0, 1, "beat");
+    send_buffer(buffer, message_id, true).then(data => {console.log("Heartbeat")}, reason => {console.log("Heartbeat no response")});
+}
+
 //Function to create valid packet. Size is the payload size, command is the command id
 export function buildpacket(size, command) {
     console.log(packetheadersize+size);
@@ -41,6 +46,12 @@ export function buildpacketWithFilename(size, command, filename) {
     return {buffer, message_id: message_id};
 }
 
+function rewritemessageid(buffer) {
+    current_message_id++;
+    new DataView(buffer.buffer).setUint32(8, current_message_id, true);
+    return current_message_id;
+}
+
 export function send_buffer(buffer, message_id, return_string=true) {
     let resolve, reject;
     let promise = new Promise((_resolve, _reject) => {resolve = _resolve; reject = _reject;});
@@ -50,20 +61,27 @@ export function send_buffer(buffer, message_id, return_string=true) {
             if(return_string) {
                 if(data.byteLength == 0) {
                     resolve("");
+                    return true;
                 } else {
                     let textdecoder = new TextDecoder("ascii");
                     resolve(textdecoder.decode(data));
+                    return true
                 }
             } else {
                 resolve(data);
+                return true;
             }
         },
         reject: (reason, immediate_reject=false) => {
             if(!immediate_reject && request.retries <= MAX_RETRIES) {
                 request.retries++;
+                console.log(buffer);
+                rewritemessageid(buffer);
                 device.transferOut(3, buffer);
+                return false;
             } else {
                 reject(reason);
+                return true;
             }
         },
         retries: 0 // Number of times this request has been retransmitted already
@@ -83,7 +101,7 @@ export function fetch_dir(dir_name) {
         buffer[packetheadersize+i] = dir_name.charCodeAt(i);
     }
     buffer[packetheadersize+dir_name.length] = 0;
-    return send_buffer(buffer, message_id, false);
+    return send_buffer(buffer, message_id, true);
 }
 
 export function readfile(dir_name, return_string=true) {
@@ -96,7 +114,24 @@ export function createfile(dir_name) {
     return send_buffer(buffer, message_id);
 }
 
+export async function deldir(dir_name) {
+    let dir = await fetch_dir(dir_name)
+    let dirlist = dir.split('\n');
+    dirlist.unshift();
+    console.log(dirlist);
+    for(let i = 1; i < dirlist.length; i++) {
+        let item = dirlist[i];
+        if(item.charAt(0) == 'd') {
+            await deldir(dir_name + "/" + item.substr(1));
+        } else {
+            await delfile(dir_name + "/" + item.substr(1));
+        }
+    }
+    await delfile(dir_name);
+}
+
 export function delfile(dir_name) {
+    console.log("Deleting: "+dir_name);
     let {buffer, message_id} = buildpacketWithFilename(0, 4099, dir_name);
     return send_buffer(buffer, message_id);
 }
@@ -177,56 +212,6 @@ export function createfolder(folder) {
 export function handlePacket(message_type, message_id, data) {
     let textdecoder = undefined;
     let file_contents = undefined;
-    // let dir_structure = undefined;
-    // let data_structure = undefined;
-    // let parent_path = undefined;
-
-    // case 4096:
-    //     textdecoder = new TextDecoder("ascii");
-    //     dir_structure = textdecoder.decode(data).split('\n');
-    //     console.log(dir_structure);
-    //     data_structure = [];
-    //     parent_path = dir_structure[0] === '/' ? '': dir_structure[0];
-    //     for(let i = 1; i < dir_structure.length; i++) {
-    //         let is_dir = dir_structure[i].charAt(0) === "d";
-    //         let child = {};
-    //         child["text"] = dir_structure[i].substr(1);
-    //         child["full_path"] = parent_path + '/' + child["text"];
-    //         if(is_dir) {
-    //             if(dir_structure[i] === "dflash") {
-    //                 child["icon"] = "fas fa-microchip";
-    //             } else if(dir_structure[i] === "dsdcard") {
-    //                 child["icon"] = "fas fa-sd-card";
-    //             } else {
-    //                 child["icon"] = "far fa-folder";
-    //             }
-    //             child["is_dir"] = true;
-    //             child["dragDisabled"] = true;
-    //         } else {
-    //             child["icon"] = "far fa-file";
-    //         }
-    //         child["opened"] = false;
-    //         child["disabled"] = false;
-    //         child["selected"] = false;
-    //         if(is_dir) {
-    //             child["children"] = [{text:'Click parent to refresh', icon: 'none', isDummy: true}];
-    //         }
-    //         data_structure.push(child);
-    //     }
-    //     if(cb_reply_dir[0]) {
-    //         cb_reply_dir[0].call(this, data_structure);
-    //     }
-    //     cb_reply_dir.shift();
-    //     break;
-    // case 4097:
-    //     textdecoder = new TextDecoder("ascii");
-    //     file_contents = textdecoder.decode(data);
-    //     console.log(data);
-    //     if(cb_reply_read[0]) {
-    //         cb_reply_read[0].call(this, file_contents);
-    //     }
-    //     cb_reply_read.shift();
-    //     break;
 
     if (message_type === 1 && message_id === 0) {
         textdecoder = new TextDecoder("ascii");
@@ -235,31 +220,57 @@ export function handlePacket(message_type, message_id, data) {
         if (file_contents === "to") {
             for(let key in requests) {
                 let request = requests[key];
-                request.reject('Timeout');
+                if(!request.reject('Timeout')) {
+                    requests[current_message_id] = request;
+                }
+                delete requests[key];
             }
         } else if (file_contents === "te") {
             for(let key in requests) {
                 let request = requests[key];
-                request.reject('Timeout');
+                if(!request.reject('Timeout')) {
+                    requests[current_message_id] = request;
+                }
+                delete requests[key];
             }
         }
         return;
     }
 
-    if(message_id in requests) {
-        let request = requests[message_id];
-        if(data.byteLength === 3) {
-            let textdecoder = new TextDecoder("ascii");
-            let text_content = textdecoder.decode(data.slice(0, 2));
-            if(text_content === 'er') {
-                request.reject('Unspecified error');
+    for(let key in requests) {
+        let request = requests[key];
+        if(key < message_id) {
+            request.reject('No response');
+            delete requests[key];
+        } else if(key == message_id) {
+            if(data.byteLength === 3) {
+                let textdecoder = new TextDecoder("ascii");
+                let text_content = textdecoder.decode(data.slice(0, 2));
+                if(text_content === 'er') {
+                    request.reject('Unspecified error', true);  //Immediate reject when proper error is received
+                } else {
+                    request.resolve(data, true);
+                }
             } else {
-                request.resolve(data, true);
+                request.resolve(data);
             }
-        } else {
-            request.resolve(data);
+            delete requests[key];
         }
     }
+    // if(message_id in requests) {
+    //     let request = requests[message_id];
+    //     if(data.byteLength === 3) {
+    //         let textdecoder = new TextDecoder("ascii");
+    //         let text_content = textdecoder.decode(data.slice(0, 2));
+    //         if(text_content === 'er') {
+    //             request.reject('Unspecified error', true);  //Immediate reject when proper error is received
+    //         } else {
+    //             request.resolve(data, true);
+    //         }
+    //     } else {
+    //         request.resolve(data);
+    //     }
+    // }
 }
 
 let readdata = () => {
@@ -297,7 +308,6 @@ let readdata = () => {
 };
 
 let parsepacketheader = (data) => {
-    console.log(data);
     let view = new DataView(data)
     command = view.getUint16(0, true);
     size = view.getUint32(2, true);
@@ -317,6 +327,11 @@ function connect_check() {
     }
 }
 setInterval(connect_check, 500);
+setInterval(function(){
+    if(device.opened) {
+        sendHeartbeat();
+    }
+}, 1500);
 
 export function on_connect() {
     return new Promise((resolve) => connect_resolves.push(resolve));

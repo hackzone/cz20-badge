@@ -71,7 +71,7 @@
                                     <td>{{ app.author || 'Unknown' }}</td>
                                     <td>
                                         <mdb-btn color="primary" size="sm" v-bind:class="{disabled: installing}" v-on:click="install_app(app.slug)" v-if="local_apps.indexOf(app.slug) === -1">Install</mdb-btn>
-                                        <mdb-btn color="gray" size="sm" disabled v-else>Installed</mdb-btn>
+                                        <mdb-btn color="red" size="sm" v-on:click="uninstall_app(app.slug)" v-else>Uninstall</mdb-btn>
                                     </td>
                                 </tr>
                             </tbody>
@@ -94,7 +94,7 @@
         mdbCardHeader,
     } from 'mdbvue';
 
-    import {on_connect, readfile, createfolder, savefile, fetch_dir} from '../webusb';
+    import {on_connect, readfile, createfolder, savefile, deldir, fetch_dir} from '../webusb';
     import * as pako from 'pako';
     import * as untar from 'js-untar';
     window.pako = pako;
@@ -140,9 +140,8 @@
                 let apps = [];
 
                 for(let path of install_paths) {
-                    let dir = await fetch_dir(path);
-                    let textdecoder = new TextDecoder("ascii");
-                    let dir_contents = textdecoder.decode(dir).split('\n');
+                    let dir = await fetch_dir(path);                    
+                    let dir_contents = dir.split('\n');
                     for (let item of dir_contents) {
                         if(item[0] !== 'd') { continue; }
                         apps.push(item.substr(1));
@@ -197,6 +196,15 @@
                 component.installing = false;
                 component.local_apps.push(app_slug);
                 component.$emit('genNotification', 'Installed ' + metadata.name + ' successfully');
+            },
+            uninstall_app: async (app_slug, install_path='/flash/apps/') => {
+                try {
+                    await deldir(install_path+app_slug);
+                    component.$emit('genNotification', 'Uninstalled ' + app_slug + ' successfully');
+                } catch {
+                    component.$emit('genNotification', 'Uninstalled ' + app_slug + ' not successfully', 'exclamation');
+                }
+                component.update_local_apps();
             },
             buttonClick: async (event) => {
                 let index = parseInt(event.target.value) ;
