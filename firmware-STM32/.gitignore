@@ -11,3 +11,4 @@ firmware-STM32.hex
 firmware-STM32.map
 cmake_install.cmake
 .idea
+cmake-build-debug
