@@ -128,6 +128,7 @@
             component = this;
             on_connect().then(async () => {
                 let contents = await readfile('/flash/config/launcher_items.json', );
+                if(contents.length < 2) { contents = '{}'; }
                 component.launcher_items = JSON.parse(contents);
                 await component.update_local_apps();
             });
@@ -162,6 +163,7 @@
             },
             get_local_app_metadata: async (app_slug, install_path='/flash/apps/') => {
                 let contents = await readfile(install_path + app_slug + '/metadata.json');
+                if(contents.length < 2) { contents = '{}'; }
                 return {
                     ...JSON.parse(contents),
                     slug: app_slug
@@ -225,9 +227,10 @@
                     component.current_app = undefined;
                     component.current_app_slug = 'none';
                 } else {
-                    let app_slug = component.launcher_items[absolute_index.toString()].slug;
-                    component.current_app_slug = app_slug;
-                    component.current_app = await component.get_local_app_metadata(app_slug);
+                    let launcher_item = component.launcher_items[absolute_index.toString()];
+                    component.color_picker = component.current_colour = launcher_item.colour;
+                    component.current_app_slug = launcher_item.slug;
+                    component.current_app = await component.get_local_app_metadata(launcher_item.slug);
                 }
             },
             update_current_colour: (colour) => {
