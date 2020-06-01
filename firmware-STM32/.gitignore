@@ -2,3 +2,9 @@
 Debug/*
 Release/*
 /Release/
+CMakeFiles/*
+Makefile
+firmware-STM32.bin
+firmware-STM32.elf
+firmware-STM32.hex
+firmware-STM32.map

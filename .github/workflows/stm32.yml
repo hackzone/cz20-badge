@@ -13,12 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Download STM32CubeIDE
-      run: wget https://www.st.com/content/ccc/resource/technical/software/sw_development_suite/group0/34/94/1c/ac/4d/22/46/d9/stm32cubeide_deb/files/st-stm32cubeide_1.3.0_5720_20200220_1053_amd64.deb_bundle.sh.zip/jcr:content/translations/en.st-stm32cubeide_1.3.0_5720_20200220_1053_amd64.deb_bundle.sh.zip
-    - name: Unpack STM32CubeIDE
-      run: unzip en.st-stm32cubeide_1.3.0_5720_20200220_1053_amd64.deb_bundle.sh.zip && chmod +x st-stm32cubeide_1.3.0_5720_20200220_1053_amd64.deb_bundle.sh
-    - name: Install STM32CubeIDE
-      run: yes | ./st-stm32cubeide_1.3.0_5720_20200220_1053_amd64.deb_bundle.sh
-    - name: Build
-      run: echo TODO 
+    - name: Get prequisites
+      run: sudo apt update && sudo apt install -y --no-install-recommends gcc-avr
+    - name: CMake
+      run: cmake . 
+      working-directory: firmware-STM32 
+    - name: Make
+      run: make 
       working-directory: firmware-STM32 
