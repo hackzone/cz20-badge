@@ -13,25 +13,34 @@
                             </div>
                         </div>
                         <div class="button_grid mt-4" v-bind:key="launcher_items.length">
-                            <input v-for="i in 16" v-bind:key="i" v-bind:style="{
-                                backgroundColor: (launcher_items[i-1] !== undefined ? launcher_items[i-1].colour: 'gray'),
-                                }" class="butt" type="button" style="color:transparent" v-bind:value="i-1" v-on:click="buttonClick"/>
+                            <div v-for="i in 16" v-bind:key="i" v-bind:style="{
+                                backgroundColor: ((launcher_items[(i-1)+(current_page*16)] !== undefined &&
+                                launcher_items[(i-1)+(current_page*16)].colour !== undefined) ?
+                                launcher_items[(i-1)+(current_page*16)].colour : 'gray'),
+                                filter: (i-1 === current_index) ? 'drop-shadow(gray 0px 0px 5px)': ''
+                                }" class="butt" type="button" style="color:transparent" v-bind:id="(i-1)+(current_page*16)" v-on:click="buttonClick"></div>
                         </div>
                     </mdb-card-body>
                 </mdb-card>
             </mdb-col>
             <mdb-col md="6">
                 <mdb-card class="mb-4">
-                    <mdb-card-header>Selected app</mdb-card-header>
-                    <mdb-card-body>
-                        <p v-if="current_app !== undefined">
-                            <span>Filter development state</span>
-                            <select class="browser-default custom-select">
-                                <option v-for="app_name in local_apps" v-bind:key="app_name" v-bind:value="app_name">{{app_name}}</option>
-                            </select>
+                    <mdb-card-header>Configure home screen buttons</mdb-card-header>
+                    <mdb-card-body v-if="current_index >= 0">
+                        <span>Currently configured app</span>
+                        <select class="browser-default custom-select" v-model="current_app_slug" v-on:change="update_current_launcher_item">
+                            <option value="none"><b>No app</b></option>
+                            <option v-for="app_name in local_apps" v-bind:key="app_name" v-bind:value="app_name">{{app_name}}</option>
+                        </select>
+                        <p v-if="current_app !== undefined" class="mt-3">
                             {{ current_app.name }}
                         </p>
-                        <p v-else>Click on a keypad button on the left to select</p>
+
+                        <sketch-picker v-model="color_picker" @input="update_current_colour" />
+
+                    </mdb-card-body>
+                    <mdb-card-body v-else>
+                        <span>Here you can connect apps to buttons on the homescreen you see when your badge starts up. Select a button to configure on the left.</span>
                     </mdb-card-body>
                 </mdb-card>
             </mdb-col>
@@ -94,7 +103,8 @@
         mdbCardHeader,
     } from 'mdbvue';
 
-    import {on_connect, readfile, createfolder, savefile, deldir, fetch_dir} from '../webusb';
+    import {Sketch} from 'vue-color';
+    import {on_connect, readfile, createfolder, savefile, fetch_dir, deldir, savetextfile} from '../webusb';
     import * as pako from 'pako';
     import * as untar from 'js-untar';
     window.pako = pako;
@@ -112,6 +122,7 @@
             mdbCard,
             mdbCardBody,
             mdbCardHeader,
+            'sketch-picker': Sketch,
         },
         beforeMount() {
             component = this;
@@ -207,28 +218,44 @@
                 component.update_local_apps();
             },
             buttonClick: async (event) => {
-                let index = parseInt(event.target.value) ;
+                let index = parseInt(event.target.id) ;
                 let absolute_index = index + component.current_page * 16;
-                component.current_index = absolute_index.toString();
+                component.current_index = absolute_index;
                 if(!(absolute_index in component.launcher_items)) {
-                    component.launcher_items[absolute_index] = {
-                        name: '',
-                        description: '',
-                        category: '',
-                        author: '',
-                        revision: '',
-                    };
+                    component.current_app = undefined;
+                    component.current_app_slug = 'none';
                 } else {
-                    let app_slug = component.launcher_items[absolute_index].slug;
+                    let app_slug = component.launcher_items[absolute_index.toString()].slug;
+                    component.current_app_slug = app_slug;
                     component.current_app = await component.get_local_app_metadata(app_slug);
                 }
             },
+            update_current_colour: (colour) => {
+                component.current_colour = colour.hex;
+                component.update_current_launcher_item();
+            },
+            update_current_launcher_item: async () => {
+                let index = component.current_index;
+                let slug = component.current_app_slug;
+                let app = await component.get_local_app_metadata(slug);
+                component.current_app = app;
+                let launcher_item = {
+                    slug,
+                    name: app.name,
+                    colour: component.current_colour,
+                };
+                component.launcher_items[index.toString()] = launcher_item;
+                await savetextfile('/flash/config/launcher_items.json', JSON.stringify(component.launcher_items));
+                component.$emit('genNotification', 'Updated homescreen');
+            }
         },
         data() {
             return {
                 current_page: 0,
                 current_index: -1,
                 current_app: undefined,
+                current_app_slug: undefined,
+                current_colour: '#007F7F',
                 launcher_items: {},
                 local_apps: [],
                 store_apps: [],
@@ -236,7 +263,8 @@
                 selected_store_state: 'working',
                 categories: ['all'],
                 states: ['working', 'all'],
-                installing: false
+                installing: false,
+                color_picker: '007F7F'
             }
         },
         computed: {
