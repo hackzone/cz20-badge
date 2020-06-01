@@ -436,6 +436,8 @@ $Comp
 L Connector:TestPoint_Small TP15
 U 1 1 5ED4800E
 P 6000 4800
+AR Path="/5ED4800E" Ref="TP15"  Part="1" 
+AR Path="/5E3BA64A/5ED4800E" Ref="TP15"  Part="1" 
 F 0 "TP15" H 6048 4846 50  0000 L CNN
 F 1 "TestPoint_Small" H 6048 4755 50  0000 L CNN
 F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 6200 4800 50  0001 C CNN
@@ -450,6 +452,8 @@ $Comp
 L Connector:TestPoint_Small TP16
 U 1 1 5ED49503
 P 6000 4900
+AR Path="/5ED49503" Ref="TP16"  Part="1" 
+AR Path="/5E3BA64A/5ED49503" Ref="TP16"  Part="1" 
 F 0 "TP16" H 6048 4946 50  0000 L CNN
 F 1 "TestPoint_Small" H 6048 4855 50  0000 L CNN
 F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 6200 4900 50  0001 C CNN

@@ -13,21 +13,35 @@
                             </div>
                         </div>
                         <div class="button_grid mt-4" v-bind:key="launcher_items.length">
-                            <input v-for="i in 16" v-bind:key="i" v-bind:style="{
-                                backgroundColor: (launcher_items[i-1] !== undefined ? launcher_items[i-1].colour: 'gray'),
-                                }" class="butt" type="button"/>
+                            <div v-for="i in 16" v-bind:key="i" v-bind:style="{
+                                backgroundColor: ((launcher_items[(i-1)+(current_page*16)] !== undefined &&
+                                launcher_items[(i-1)+(current_page*16)].colour !== undefined) ?
+                                launcher_items[(i-1)+(current_page*16)].colour : 'gray'),
+                                filter: (i-1 === current_index) ? 'drop-shadow(gray 0px 0px 5px)': ''
+                                }" class="butt" type="button" style="color:transparent" v-bind:id="(i-1)+(current_page*16)" v-on:click="buttonClick"></div>
                         </div>
                     </mdb-card-body>
                 </mdb-card>
             </mdb-col>
             <mdb-col md="6">
                 <mdb-card class="mb-4">
-                    <mdb-card-header>Selected app</mdb-card-header>
-                    <mdb-card-body>
-                        <p v-if="currentApp !== undefined">
+                    <mdb-card-header>Configure home screen buttons</mdb-card-header>
+                    <mdb-card-body v-if="current_index >= 0">
+                        <span>Currently configured app</span>
+                        <select class="browser-default custom-select" v-model="current_app_slug" v-on:change="update_current_launcher_item">
+                            <option value="none"><b>No app</b></option>
+                            <option v-for="app_name in local_apps" v-bind:key="app_name" v-bind:value="app_name">{{app_name}}</option>
+                        </select>
+                        <div v-if="current_app !== undefined" class="mt-3">
+                            <p><strong>{{ current_app.name }}</strong></p>
+                            <p>{{ current_app.description }}</p>
+                        </div>
 
-                        </p>
-                        <p v-else>Click on a keypad button on the left to select</p>
+                        <sketch-picker v-model="color_picker" @input="update_current_colour" />
+
+                    </mdb-card-body>
+                    <mdb-card-body v-else>
+                        <span>Here you can connect apps to buttons on the homescreen you see when your badge starts up. Select a button to configure on the left.</span>
                     </mdb-card-body>
                 </mdb-card>
             </mdb-col>
@@ -65,7 +79,10 @@
                                     <td>{{ app.category }}</td>
                                     <td>{{ app.status }}</td>
                                     <td>{{ app.author || 'Unknown' }}</td>
-                                    <td><mdb-btn color="primary" size="sm" v-on:click="install_app(app.slug)">Install</mdb-btn></td>
+                                    <td>
+                                        <mdb-btn color="primary" size="sm" v-bind:class="{disabled: installing}" v-on:click="install_app(app.slug)" v-if="local_apps.indexOf(app.slug) === -1">Install</mdb-btn>
+                                        <mdb-btn color="red" size="sm" v-on:click="uninstall_app(app.slug)" v-else>Uninstall</mdb-btn>
+                                    </td>
                                 </tr>
                             </tbody>
                         </mdb-tbl>
@@ -87,7 +104,8 @@
         mdbCardHeader,
     } from 'mdbvue';
 
-    import {on_connect, readfile, createfolder, savefile} from '../webusb';
+    import {Sketch} from 'vue-color';
+    import {on_connect, readfile, createfolder, savefile, fetch_dir, deldir, savetextfile} from '../webusb';
     import * as pako from 'pako';
     import * as untar from 'js-untar';
     window.pako = pako;
@@ -105,13 +123,15 @@
             mdbCard,
             mdbCardBody,
             mdbCardHeader,
+            'sketch-picker': Sketch,
         },
         beforeMount() {
             component = this;
-            on_connect().then(() => {
-                readfile('/flash/config/launcher_items.json', ).then((contents) => {
-                    component.launcher_items = JSON.parse(contents);
-                });
+            on_connect().then(async () => {
+                let contents = await readfile('/flash/config/launcher_items.json', );
+                if(contents.length < 2) { contents = '{}'; }
+                component.launcher_items = JSON.parse(contents);
+                await component.update_local_apps();
             });
 
             fetch('https://hatchery.badge.team/basket/campzone2019/list/json',{mode:'cors'})
@@ -128,6 +148,28 @@
                 })});
         },
         methods: {
+            update_local_apps: async () => {
+                let install_paths = ['/flash/apps'];
+                let apps = [];
+
+                for(let path of install_paths) {
+                    let dir = await fetch_dir(path);                    
+                    let dir_contents = dir.split('\n');
+                    for (let item of dir_contents) {
+                        if(item[0] !== 'd') { continue; }
+                        apps.push(item.substr(1));
+                    }
+                }
+                component.local_apps = apps;
+            },
+            get_local_app_metadata: async (app_slug, install_path='/flash/apps/') => {
+                let contents = await readfile(install_path + app_slug + '/metadata.json');
+                if(contents.length < 2) { contents = '{}'; }
+                return {
+                    ...JSON.parse(contents),
+                    slug: app_slug
+                };
+            },
             get_app_metadata: async (app_slug) => {
                 let metadata_url = 'https://badge.team/eggs/get/' + app_slug + '/json';
                 let response = await fetch(metadata_url);
@@ -138,6 +180,7 @@
                 return metadata;
             },
             install_app: async (app_slug, install_path='/flash/apps/') => {
+                component.installing = true;
                 let metadata = await component.get_app_metadata(app_slug);
                 let response = await fetch(metadata.latest_release_url);
                 let tar_gz = await response.arrayBuffer();
@@ -164,38 +207,72 @@
                     await savefile(path, file.buffer);
                 }
 
+                component.installing = false;
+                component.local_apps.push(app_slug);
                 component.$emit('genNotification', 'Installed ' + metadata.name + ' successfully');
+            },
+            uninstall_app: async (app_slug, install_path='/flash/apps/') => {
+                try {
+                    await deldir(install_path+app_slug);
+                    component.$emit('genNotification', 'Uninstalled ' + app_slug + ' successfully');
+                } catch {
+                    component.$emit('genNotification', 'Uninstalled ' + app_slug + ' not successfully', 'exclamation');
+                }
+                component.update_local_apps();
+            },
+            buttonClick: async (event) => {
+                let index = parseInt(event.target.id) ;
+                let absolute_index = index + component.current_page * 16;
+                component.current_index = absolute_index;
+                if(!(absolute_index in component.launcher_items)) {
+                    component.current_app = undefined;
+                    component.current_app_slug = 'none';
+                } else {
+                    let launcher_item = component.launcher_items[absolute_index.toString()];
+                    component.color_picker = component.current_colour = launcher_item.colour;
+                    component.current_app_slug = launcher_item.slug;
+                    component.current_app = await component.get_local_app_metadata(launcher_item.slug);
+                }
+            },
+            update_current_colour: (colour) => {
+                clearTimeout(component.timeout_colorpicker);
+                component.timeout_colorpicker = setTimeout(() => {
+                    component.current_colour = colour.hex;
+                    component.update_current_launcher_item();
+                }, 800);
+            },
+            update_current_launcher_item: async () => {
+                let index = component.current_index;
+                let slug = component.current_app_slug;
+                let app = await component.get_local_app_metadata(slug);
+                component.current_app = app;
+                let launcher_item = {
+                    slug,
+                    name: app.name,
+                    colour: component.current_colour,
+                };
+                component.launcher_items[index.toString()] = launcher_item;
+                await savetextfile('/flash/config/launcher_items.json', JSON.stringify(component.launcher_items));
+                component.$emit('genNotification', 'Updated homescreen');
             }
         },
         data() {
             return {
-                showFrameModalTop: false,
-                showFrameModalBottom: false,
-                showSideModalTopRight: false,
-                showSideModalTopLeft: false,
-                showSideModalBottomRight: false,
-                showSideModalBottomLeft: false,
-                showCentralModalSmall: false,
-                showCentralModalMedium: false,
-                showCentralModalLarge: false,
-                showCentralModalFluid: false,
-                showFluidModalRight: false,
-                showFluidModalLeft: false,
-                showFluidModalTop: false,
-                showFluidModalBottom: false,
-                currentApp:{
-                    name: '',
-                    description: '',
-                    category: '',
-                    author: '',
-                    revision: '',
-                },
+                timeout_colorpicker: null,
+                current_page: 0,
+                current_index: -1,
+                current_app: undefined,
+                current_app_slug: undefined,
+                current_colour: '#4A90E2',
                 launcher_items: {},
+                local_apps: [],
                 store_apps: [],
                 selected_store_category: 'all',
                 selected_store_state: 'working',
                 categories: ['all'],
-                states: ['working', 'all']
+                states: ['working', 'all'],
+                installing: false,
+                color_picker: '007F7F'
             }
         },
         computed: {
