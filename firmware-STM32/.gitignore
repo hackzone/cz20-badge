@@ -2,6 +2,7 @@
 Debug/*
 Release/*
 /Release/
+CMakeCache.txt
 CMakeFiles/*
 Makefile
 firmware-STM32.bin
