@@ -26,6 +26,17 @@
               <editor v-model='content_editor' lang='python' theme='monokai' height='500'></editor>
             </mdb-col>
           </mdb-row>
+          </section>
+      </mdb-card-body>
+    </mdb-card>
+      <mdb-card class='mb-4'>
+      <mdb-card-body>
+        <section>
+              Python terminal
+              <div class="md-form">
+                  <textarea readonly wrap="hard" id="commandlog" style="resize: none; overflow:auto" v-model="commandlog"></textarea>
+                  <input type="text" id="example1" class="form-control" v-on:keyup="commandpython" v-model="command">
+              </div>
         </section>
       </mdb-card-body>
     </mdb-card>
@@ -39,18 +50,25 @@ window.itemDrop = function() {
 
 import {mdbToastNotification, mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
 import VJstree from 'vue-jstree';
-  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile} from '../webusb';
+  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 import * as ace_editor from 'vue2-ace-editor';
+import VueTerminal from 'vue-terminal-ui';
 
 let component = undefined;
 let selected_item = {model:{}};
 let beforemoveloc = undefined;
 
+
 const extension_whitelist = ["txt", "csv", "json", "py", "ini", "info", "md", "log", "conf", "cfg"];
+
+function commandlog(str) {
+  component.commandlog += str;
+}
+registerstdout(commandlog)
 
 export default {
   name: 'Programming',
@@ -248,6 +266,13 @@ export default {
     info() {
 
     },
+    commandpython(e) {
+      console.log(e);
+      if(e.code === "Enter") {
+        component.commandlog += component.command + "\n";
+        component.command = "";
+      }
+    },
     connect:connect,
   },
   data () {
@@ -255,6 +280,8 @@ export default {
       content_editor:'',
       content_original:'',
       editorfilename:'/flash/cache/scratch.py',
+      commandlog:"",
+      command:"",
       show: true,
       files: [
         {
@@ -275,6 +302,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style scoped>
@@ -294,6 +322,10 @@ export default {
   input .input-lg {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+  }
+  textarea {
+    width:100%;
+    height:400px;
   }
 </style>
 

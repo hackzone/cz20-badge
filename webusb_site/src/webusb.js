@@ -13,6 +13,7 @@ const packetheadersize = 12;
 
 let current_message_id = 0;
 let requests = {};
+let stdout_callback;
 
 let MAX_RETRIES = 3;
 
@@ -25,7 +26,7 @@ function sendHeartbeat() {
 
 //Function to create valid packet. Size is the payload size, command is the command id
 export function buildpacket(size, command) {
-    console.log(packetheadersize+size);
+    //console.log(packetheadersize+size);
     current_message_id++;
     let arraybuffer = new ArrayBuffer(12+size);
     let buffer = new Uint8Array(arraybuffer);
@@ -213,6 +214,13 @@ export function handlePacket(message_type, message_id, data) {
     let textdecoder = undefined;
     let file_contents = undefined;
 
+    if(message_type === 3 && message_id === 0) {
+        textdecoder = new TextDecoder("ascii");
+        let consolelog = textdecoder.decode(data);
+        console.log(consolelog);
+        stdout_callback(consolelog);
+    }
+
     if (message_type === 1 && message_id === 0) {
         textdecoder = new TextDecoder("ascii");
         file_contents = textdecoder.decode(data);
@@ -273,6 +281,10 @@ export function handlePacket(message_type, message_id, data) {
     // }
 }
 
+export function registerstdout(func) {
+    stdout_callback = func;
+}
+
 let readdata = () => {
     device.transferIn(3, 64).then(result => {
         let parsedbytes = 0;
@@ -282,7 +294,7 @@ let readdata = () => {
                 if((totalbytes - parsedbytes) < 12) break; //Can never be a full packet header. Discard data and hope for the best              
                 if(parsepacketheader(result.data.buffer.slice(parsedbytes, parsedbytes+12))) {
                     payload = new ArrayBuffer(size);
-                    console.log("Command: "+command+" Size: "+size+" id: "+messageid_recv);
+                    //console.log("Command: "+command+" Size: "+size+" id: "+messageid_recv);
                     if(size == 0) handlePacket(command, messageid_recv, payload);
                 } else {
                     console.log("Error in packet header");
@@ -295,7 +307,7 @@ let readdata = () => {
                 new Uint8Array(payload, received, size-received).set(new Uint8Array(result.data.buffer, parsedbytes, sizetocopy));
                 parsedbytes += sizetocopy;
                 received += sizetocopy;
-                console.log("Transfer status: "+received+"/"+size);
+                //console.log("Transfer status: "+received+"/"+size);
                 if(received == size) {
                     handlePacket(command, messageid_recv, payload);
                 }
@@ -333,8 +345,39 @@ setInterval(function(){
     }
 }, 1500);
 
+setInterval(function(){
+    if(device.opened) {
+        readserial();
+    }
+}, 250);
+
+
 export function on_connect() {
     return new Promise((resolve) => connect_resolves.push(resolve));
+}
+
+async function readserial() {
+    let res = await device.controlTransferIn({
+        requestType: 'class',
+        recipient: 'interface',
+        request: 0x23,
+        value: 0x02,
+        index: 0x02}, 16);
+    
+    let textdecoder = new TextDecoder("ascii");
+    let text_content = textdecoder.decode(res.data.buffer);
+    let raw = new Uint8Array(res.data.buffer);
+    let valid = 0;
+    for(let i = 0; i < 16; i++) {
+        if(raw[i] == 0) {
+            valid = i;
+            break;
+        }
+    }
+    text_content = text_content.substr(0, valid);
+    if(text_content.length) {
+        console.log(text_content);
+    }
 }
 
 export function connect() {
