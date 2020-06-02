@@ -4,6 +4,7 @@ Event badge for CampZone 2020
 ![firmware-ESP32 build](https://github.com/tjclement/cz20-badge/workflows/firmware-ESP32%20build/badge.svg)
 ![Node.js build and lint](https://github.com/tjclement/cz20-badge/workflows/Node.js%20build%20and%20lint/badge.svg)
 ![firmware-STM32 build](https://github.com/tjclement/cz20-badge/workflows/firmware-STM32%20build/badge.svg)
+![bootloader-STM32 build](https://github.com/tjclement/cz20-badge/workflows/bootloader-STM32%20build/badge.svg)
 
 ## [firmware-STM32](firmware-STM32)
 ## [bootloader-STM32](bootloader-STM32)
