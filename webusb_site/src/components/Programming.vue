@@ -56,7 +56,6 @@ import * as ace from 'brace';
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 import * as ace_editor from 'vue2-ace-editor';
-import VueTerminal from 'vue-terminal-ui';
 
 let component = undefined;
 let selected_item = {model:{}};
