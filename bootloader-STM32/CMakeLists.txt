@@ -39,7 +39,7 @@ add_definitions(-DUSE_HAL_DRIVER -DSTM32F103xB -DDEBUG -DCFG_TUSB_MCU=OPT_MCU_ST
 
 file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*")
 
-include_directories("../Drivers/tinyusb/src}" Drivers/CMSIS/Device/ST/STM32F1xx/Include Drivers/CMSIS/Include Core/Inc Drivers/STM32F1xx_HAL_Driver/Inc/Legacy Drivers/STM32F1xx_HAL_Driver/Inc)
+include_directories(Drivers/tinyusb/src Drivers/CMSIS/Device/ST/STM32F1xx/Include Drivers/CMSIS/Include Core/Inc Drivers/STM32F1xx_HAL_Driver/Inc/Legacy Drivers/STM32F1xx_HAL_Driver/Inc)
 
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
 

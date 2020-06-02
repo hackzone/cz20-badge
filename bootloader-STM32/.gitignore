@@ -5,10 +5,11 @@ Release/*
 CMakeCache.txt
 CMakeFiles/*
 Makefile
-firmware-STM32.bin
-firmware-STM32.elf
-firmware-STM32.hex
-firmware-STM32.map
+bootloader-STM32.bin
+bootloader-STM32.elf
+bootloader-STM32.hex
+bootloader-STM32.map
+bootloader-STM32.cbp
 cmake_install.cmake
 .idea
 cmake-build-debug
