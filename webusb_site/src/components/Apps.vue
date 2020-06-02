@@ -70,7 +70,7 @@
 
                         <mdb-tbl class="table-striped">
                             <thead>
-                            <tr><th>App name</th><th>Description</th><th>Category</th><th>State</th><th>Author</th><th>Install</th></tr>
+                            <tr><th>App name</th><th>Description</th><th>Category</th><th>State</th><th>Author</th><th>Revision</th><th>Install</th></tr>
                             </thead>
                             <tbody>
                                 <tr v-for="app in filtered_store_apps" v-bind:key="app.slug">
@@ -79,6 +79,7 @@
                                     <td>{{ app.category }}</td>
                                     <td>{{ app.status }}</td>
                                     <td>{{ app.author || 'Unknown' }}</td>
+                                    <td>{{ app.revision }}</td>
                                     <td>
                                         <mdb-btn color="primary" size="sm" v-bind:class="{disabled: installing}" v-on:click="install_app(app.slug)" v-if="local_apps.indexOf(app.slug) === -1">Install</mdb-btn>
                                         <mdb-btn color="red" size="sm" v-on:click="uninstall_app(app.slug)" v-else>Uninstall</mdb-btn>
