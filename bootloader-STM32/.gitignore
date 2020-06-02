@@ -1,0 +1,15 @@
+/.metadata/
+Debug/*
+Release/*
+/Release/
+CMakeCache.txt
+CMakeFiles/*
+Makefile
+bootloader-STM32.bin
+bootloader-STM32.elf
+bootloader-STM32.hex
+bootloader-STM32.map
+bootloader-STM32.cbp
+cmake_install.cmake
+.idea
+cmake-build-debug
