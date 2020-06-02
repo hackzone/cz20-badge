@@ -45,14 +45,9 @@
       </div>
       <ftr color="primary-color-dark" class="text-center font-small darken-2">
         <div class="pb-4 pt-4">
-          <a href="#"><mdb-icon fab icon="facebook-square" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="twitter" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="youtube" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="google-plus" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="dribbble" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="pinterest" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="github" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="codepen" class="mr-3"/></a>
+          <a href="https://twitter.com/hackzonenl"><mdb-icon fab icon="twitter" class="mr-3"/></a>
+          <a href="https://www.youtube.com/watch?v=G0mEW8f2vac"><mdb-icon fab icon="youtube" class="mr-3"/></a>
+          <a href="https://github.com/hackzone"><mdb-icon fab icon="github" class="mr-3"/></a>
         </div>
       </ftr>
     </main>
