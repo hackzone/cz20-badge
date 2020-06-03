@@ -50,7 +50,7 @@ window.itemDrop = function() {
 
 import {mdbToastNotification, mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
 import VJstree from 'vue-jstree';
-  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout} from '../webusb';
+  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout, writetostdin} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
@@ -266,9 +266,9 @@ export default {
 
     },
     commandpython(e) {
-      console.log(e);
       if(e.code === "Enter") {
-        component.commandlog += component.command + "\n";
+        //component.commandlog += component.command + "\n";
+        writetostdin(component.command + "\r\n");
         component.command = "";
       }
     },
