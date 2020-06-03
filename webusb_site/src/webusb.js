@@ -352,7 +352,7 @@ setInterval(function(){
     if(device.opened) {
         sendHeartbeat();
     }
-}, 1500);
+}, 500);
 
 setInterval(function(){
     if(device.opened) {
