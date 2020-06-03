@@ -285,6 +285,15 @@ export function registerstdout(func) {
     stdout_callback = func;
 }
 
+
+export function writetostdin(stdin) {
+    let {buffer, message_id} = buildpacket(stdin.length, 2);
+    for(let i = 0; i<stdin.length; i++) {
+        buffer[packetheadersize+i] = stdin.charCodeAt(i);
+    }
+    return send_buffer(buffer, message_id);
+}
+
 let readdata = () => {
     device.transferIn(3, 64).then(result => {
         let parsedbytes = 0;
