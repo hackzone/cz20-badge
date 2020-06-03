@@ -350,7 +350,8 @@ function connect_check() {
 setInterval(connect_check, 500);
 setInterval(function(){
     if(device.opened) {
-        sendHeartbeat();
+        if(Object.keys(requests).length < 5)
+            sendHeartbeat();
     }
 }, 500);
 
