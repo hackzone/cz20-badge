@@ -135,7 +135,7 @@
                 await component.update_local_apps();
             });
 
-            fetch('https://hatchery.badge.team/basket/campzone2019/list/json',{mode:'cors'})
+            fetch('https://hatchery.badge.team/basket/campzone2020/list/json',{mode:'cors'})
                 .then(response => {response.json().then((apps) => {
                     component.store_apps = apps;
                     for(let app of apps) {
