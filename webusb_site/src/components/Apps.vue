@@ -1,7 +1,7 @@
 <template>
     <section id="apps">
         <mdb-row>
-            <mdb-col md="6">
+            <mdb-col md="5">
                 <mdb-card class="mb-4">
                     <mdb-card-body class="badge_container">
                         <div class="header">
@@ -12,7 +12,7 @@
                                 <mdb-btn color="tertiary" title="Next Page" size="sm"><i class="fas fa-arrow-right fa-3x"></i></mdb-btn>
                             </div>
                         </div>
-                        <div class="button_grid mt-4" v-bind:key="launcher_items.length">
+                        <div class="button_grid mt-4 mb-4" v-bind:key="launcher_items.length">
                             <div v-for="i in 16" v-bind:key="i" v-bind:style="{
                                 backgroundColor: ((launcher_items[(i-1)+(current_page*16)] !== undefined &&
                                 launcher_items[(i-1)+(current_page*16)].colour !== undefined) ?
@@ -341,9 +341,11 @@
 
 
     .butt {
+        content: "";
         border: 0px;
-        height:125px;
-        width:125px;
+        padding-bottom: 100%;
+        display: block;
+        width:100%;
         cursor:pointer;
         border-radius: 10px;
         transition: .5s ease;
@@ -359,8 +361,8 @@
     .button_grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-row-gap: 20px;
-        grid-column-gap: 20px;
+        grid-row-gap: 3.5%;
+        grid-column-gap: 3.5%;
     }
 
     .header {
@@ -376,7 +378,9 @@
     }
 
     .badge_container {
-        width: 600px;
+        width: 80%;
+        display: block;
+        padding-bottom: 15%;
         margin: 0 auto;
     }
 </style>

@@ -48,8 +48,9 @@ export function buildpacketWithFilename(size, command, filename) {
 }
 
 function rewritemessageid(buffer) {
+    console.log(buffer);
     current_message_id++;
-    new DataView(buffer.buffer).setUint32(8, current_message_id, true);
+    new DataView(new ArrayBuffer(buffer)).setUint32(8, current_message_id, true);
     return current_message_id;
 }
 
@@ -296,6 +297,7 @@ export function writetostdin(stdin) {
 
 let readdata = () => {
     device.transferIn(3, 64).then(result => {
+        console.log("Tick");
         let parsedbytes = 0;
         let totalbytes = result.data.byteLength;
         while(parsedbytes != totalbytes) {
