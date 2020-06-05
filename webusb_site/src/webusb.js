@@ -65,7 +65,7 @@ export function send_buffer(buffer, message_id, return_string=true) {
         buffer, // For retransmit
         resolve: (data) => {
             if(return_string) {
-                if(data.byteLength == 0) {
+                if(data.byteLength === 0) {
                     resolve("");
                     return true;
                 } else {
