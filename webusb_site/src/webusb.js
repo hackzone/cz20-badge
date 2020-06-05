@@ -112,7 +112,12 @@ export function fetch_dir(dir_name) {
 
 export function readfile(dir_name, return_string=true) {
     let {buffer, message_id} = buildpacketWithFilename(0, 4097, dir_name);
-    return send_buffer(buffer, message_id, return_string);
+    return send_buffer(buffer, message_id, return_string).then((contents) => {
+        if(contents === 'Can\'t open file') {
+            contents = undefined;
+        }
+        return contents;
+    });
 }
 
 export function createfile(dir_name) {
