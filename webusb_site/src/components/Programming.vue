@@ -35,7 +35,7 @@
               Python terminal
               <div class="md-form">
                   <textarea readonly wrap="hard" id="commandlog" style="resize: none; overflow:auto" v-model="commandlog"></textarea>
-                  <input type="text" id="example1" class="form-control" v-on:keyup="commandpython" v-model="command">
+                  <input autocomplete="off" type="text" id="example1" class="form-control" v-on:keyup="commandpython" v-model="command">
               </div>
         </section>
       </mdb-card-body>
