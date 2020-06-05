@@ -238,13 +238,12 @@
             },
             buttonClick: async (event) => {
                 let index = parseInt(event.target.id) ;
-                let absolute_index = index + component.current_page * 16;
-                component.current_index = absolute_index;
-                if(!(absolute_index in component.launcher_items)) {
+                component.current_index = index;
+                if(!(index in component.launcher_items)) {
                     component.current_app = undefined;
                     component.current_app_slug = 'none';
                 } else {
-                    let launcher_item = component.launcher_items[absolute_index.toString()];
+                    let launcher_item = component.launcher_items[index.toString()];
                     component.color_picker = component.current_colour = launcher_item.colour;
                     component.current_app_slug = launcher_item.slug;
                     component.current_app = await component.get_local_app_metadata(launcher_item.slug);
@@ -260,14 +259,17 @@
             update_current_launcher_item: async () => {
                 let index = component.current_index;
                 let slug = component.current_app_slug;
-                let app = await component.get_local_app_metadata(slug);
-                component.current_app = app;
-                let launcher_item = {
-                    slug,
-                    name: app.name,
-                    colour: component.current_colour,
-                };
-                component.launcher_items[index.toString()] = launcher_item;
+                if (slug === 'none') {
+                    delete component.launcher_items[index.toString()];
+                } else {
+                    let app = await component.get_local_app_metadata(slug);
+                    component.current_app = app;
+                    component.launcher_items[index.toString()] = {
+                        slug,
+                        name: app.name,
+                        colour: component.current_colour,
+                    };
+                }
                 await savetextfile('/flash/config/system-launcher_items.json', JSON.stringify(component.launcher_items));
                 component.$emit('genNotification', 'Updated homescreen');
             },
