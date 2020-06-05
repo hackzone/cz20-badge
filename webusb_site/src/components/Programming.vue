@@ -262,7 +262,10 @@ export default {
         component.itemClick(entry); // Refresh parent directory
       }
     },
-    runfile_ui: () => {
+    runfile_ui: async () => {
+      if(component.content_editor !== component.content_original) {
+        await savefile(component.editorfilename, component.content_editor);
+      }
       runfile(component.editorfilename.replace('/flash/', '/'));
     },
     info() {
