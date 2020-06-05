@@ -65,7 +65,9 @@ let beforemoveloc = undefined;
 const extension_whitelist = ["txt", "csv", "json", "py", "ini", "info", "md", "log", "conf", "cfg"];
 
 function commandlog(str) {
-  component.commandlog += str;
+  if(component) {
+    component.commandlog += str;
+  }
 }
 registerstdout(commandlog);
 
