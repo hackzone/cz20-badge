@@ -134,9 +134,14 @@
         beforeMount() {
             component = this;
             on_connect().then(async () => {
-                let contents = await readfile('/flash/config/launcher_items.json', );
-                if(contents.length < 2) { contents = '{}'; }
-                component.launcher_items = JSON.parse(contents);
+                let contents = await readfile('/flash/config/system-launcher_items.json', );
+                let launcher_items;
+                try {
+                    launcher_items = JSON.parse(contents);
+                } catch {
+                    launcher_items = {};
+                }
+                component.launcher_items = launcher_items;
                 await component.update_local_apps();
             });
 
@@ -170,9 +175,14 @@
             },
             get_local_app_metadata: async (app_slug, install_path='/flash/apps/') => {
                 let contents = await readfile(install_path + app_slug + '/metadata.json');
-                if(contents.length < 2) { contents = '{}'; }
+                let metadata;
+                try {
+                    metadata = JSON.parse(contents);
+                } catch {
+                    metadata = {};
+                }
                 return {
-                    ...JSON.parse(contents),
+                    ...metadata,
                     slug: app_slug
                 };
             },
@@ -258,7 +268,7 @@
                     colour: component.current_colour,
                 };
                 component.launcher_items[index.toString()] = launcher_item;
-                await savetextfile('/flash/config/launcher_items.json', JSON.stringify(component.launcher_items));
+                await savetextfile('/flash/config/system-launcher_items.json', JSON.stringify(component.launcher_items));
                 component.$emit('genNotification', 'Updated homescreen');
             },
             pageinc: () => {

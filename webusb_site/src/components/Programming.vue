@@ -263,7 +263,7 @@ export default {
       }
     },
     runfile_ui: () => {
-      runfile(component.editorfilename.replace('/__init__.py', '').replace('.py', ''));
+      runfile(component.editorfilename.replace('/flash/', '/'));
     },
     info() {
 
