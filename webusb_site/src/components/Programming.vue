@@ -11,7 +11,7 @@
               <mdb-btn color='gray' size='lg' title='Delete file' v-on:click='trash_ui()' icon='trash'></mdb-btn>
             </mdb-col>
             <mdb-col sm='2' md='2' lg='2'>
-              <mdb-btn color='gray' size='lg' title='Run file' v-on:click='startapp_ui()' icon='play'></mdb-btn>
+              <mdb-btn color='gray' size='lg' title='Run file' v-on:click='runfile_ui()' icon='play'></mdb-btn>
               <mdb-btn color='gray' size='lg' title='Save file' v-on:click='save_ui()' icon='save'></mdb-btn>
             </mdb-col>
             <mdb-col sm='4' md='6' lg='7' class="mt-2">
@@ -50,7 +50,7 @@ window.itemDrop = function() {
 
 import {mdbToastNotification, mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
 import VJstree from 'vue-jstree';
-  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout, writetostdin} from '../webusb';
+  import {connect, on_connect, runfile, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout, writetostdin} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
@@ -67,7 +67,7 @@ const extension_whitelist = ["txt", "csv", "json", "py", "ini", "info", "md", "l
 function commandlog(str) {
   component.commandlog += str;
 }
-registerstdout(commandlog)
+registerstdout(commandlog);
 
 export default {
   name: 'Programming',
@@ -261,6 +261,9 @@ export default {
         createfile(path + '/' + filename);
         component.itemClick(entry); // Refresh parent directory
       }
+    },
+    runfile_ui: () => {
+      runfile(component.editorfilename.replace('/__init__.py', '').replace('.py', ''));
     },
     info() {
 

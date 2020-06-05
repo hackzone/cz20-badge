@@ -48,9 +48,13 @@ export function buildpacketWithFilename(size, command, filename) {
 }
 
 function rewritemessageid(buffer) {
+    if (buffer instanceof Uint8Array || buffer instanceof Uint16Array || buffer instanceof Uint32Array) {
+        // If buffer is not an ArrayBuffer, get its ArrayBuffer property
+        buffer = buffer.buffer;
+    }
     console.log(buffer);
     current_message_id++;
-    new DataView(new ArrayBuffer(buffer)).setUint32(8, current_message_id, true);
+    new DataView(buffer).setUint32(8, current_message_id, true);
     return current_message_id;
 }
 
@@ -330,8 +334,8 @@ let readdata = () => {
     });
 };
 
-let parsepacketheader = (data) => {
-    let view = new DataView(data)
+function parsepacketheader(data) {
+    let view = new DataView(data);
     command = view.getUint16(0, true);
     size = view.getUint32(2, true);
     let verif = view.getUint16(6);
