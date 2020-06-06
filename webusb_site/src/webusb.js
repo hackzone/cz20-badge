@@ -110,8 +110,8 @@ export function fetch_dir(dir_name) {
     return send_buffer(buffer, message_id, true);
 }
 
-export function readfile(dir_name, return_string=true) {
-    let {buffer, message_id} = buildpacketWithFilename(0, 4097, dir_name);
+export function readfile(file_name, return_string=true) {
+    let {buffer, message_id} = buildpacketWithFilename(0, 4097, file_name);
     return send_buffer(buffer, message_id, return_string).then((contents) => {
         if(contents === 'Can\'t open file') {
             contents = undefined;
@@ -147,8 +147,11 @@ export function delfile(dir_name) {
     return send_buffer(buffer, message_id);
 }
 
-export function runfile(dir_name) {
-    let {buffer, message_id} = buildpacketWithFilename(0, 0, dir_name);
+export function runfile(file_path) {
+    if(file_path.startsWith('/flash')) {
+        file_path = file_path.slice('/flash'.length);
+    }
+    let {buffer, message_id} = buildpacketWithFilename(0, 0, file_path);
     return send_buffer(buffer, message_id);
 }
 

@@ -86,7 +86,7 @@ export default {
   beforeMount() {
     component = this;
     // Auto-fetch /flash
-    on_connect().then(() => this.itemClick({model: this.files[0]}))
+    on_connect().then(() => this.itemClick({model: this.files[0]}));
   },
   methods: {
     parseDir: (data) => {

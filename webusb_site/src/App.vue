@@ -8,9 +8,7 @@
     </mdb-modal>
     <!-- Sidebar -->
     <div class="sidebar-fixed position-fixed">
-      <a class="logo-wrapper"
-        ><img alt="" class="img-fluid" src="./assets/hackzone_logo.png"
-      /></a>
+      <a class="logo-wrapper"><img alt="" class="img-fluid" src="./assets/hackzone_logo.png"/></a>
       <mdb-list-group class="list-group-flush">
         <router-link to="/apps" @click.native="activeItem = 1">
           <mdb-list-group-item
@@ -19,15 +17,19 @@
             ><mdb-icon
               icon="table"
               class="mr-3"
-            />Apps</mdb-list-group-item
-          >
+            />Apps</mdb-list-group-item>
         </router-link>
         <router-link to="/programming" @click.native="activeItem = 2">
           <mdb-list-group-item
-            :action="true"
-            :class="activeItem === 2 && 'active'"
-            ><mdb-icon icon="i-cursor" class="mr-3" />Programming & Files</mdb-list-group-item
-          >
+                  :action="true"
+                  :class="activeItem === 2 && 'active'"
+          ><mdb-icon icon="i-cursor" class="mr-3" style="width:16px;text-align:center" />Programming & Files</mdb-list-group-item>
+        </router-link>
+        <router-link to="/settings" @click.native="activeItem = 3">
+          <mdb-list-group-item
+                  :action="true"
+                  :class="activeItem === 3 && 'active'"
+          ><mdb-icon icon="cog" class="mr-3" />Settings</mdb-list-group-item>
         </router-link>
       </mdb-list-group>
     </div>
@@ -102,7 +104,6 @@ export default {
     ftr: mdbFooter
   },
   methods: {
-    on_click: () => {console.log('clicked')},
     connect:connect,
     onNotification: (message, title='', icon='info', color='elegant', lifetime=30) => {
       let newmessage = {id: component.message_id, title:title, message:message, icon:icon, color:color, lifetime:lifetime};
@@ -151,6 +152,7 @@ main {
 .flexible-content {
   transition: padding-left 0.3s;
   padding-left: 270px;
+  height: 100%;
 }
 
 .flexible-navbar {
