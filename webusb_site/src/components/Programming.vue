@@ -9,6 +9,7 @@
               <mdb-btn color='gray' size='lg' title='Make file' v-on:click='mkfile_ui()' icon='file'></mdb-btn>
               <mdb-btn color='gray' size='lg' title='Rename file' v-on:click='rename_ui()' icon='file-alt'></mdb-btn>
               <mdb-btn color='gray' size='lg' title='Delete file' v-on:click='trash_ui()' icon='trash'></mdb-btn>
+              <mdb-btn color='gray' size='lg' title='Download folder' v-on:click='download_ui()' icon='download'></mdb-btn>
             </mdb-col>
             <mdb-col sm='2' md='2' lg='2'>
               <mdb-btn color='gray' size='lg' title='Run file' v-on:click='runfile_ui()' icon='play'></mdb-btn>
@@ -50,12 +51,14 @@ window.itemDrop = function() {
 
 import {mdbToastNotification, mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
 import VJstree from 'vue-jstree';
-  import {connect, on_connect, runfile, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout, writetostdin} from '../webusb';
+  import {connect, on_connect, runfile, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout, writetostdin, downloaddir} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 import * as ace_editor from 'vue2-ace-editor';
+import { saveAs } from 'file-saver';
+import * as JSZip from 'jszip';
 
 let component = undefined;
 let selected_item = {model:{}};
@@ -225,6 +228,19 @@ export default {
           component.content_original = '';
         }               
         component.itemClick(selected_item.$parent); // Refresh parent directory
+      }
+    },
+    download_ui: async () => {
+      if(selected_item.model.is_dir) {
+        let file = selected_item.model.full_path;
+        let zip = await downloaddir(file);
+        zip.generateAsync({type:"blob"})
+        .then(function (blob) {
+            saveAs(blob, "download.zip");
+            component.$emit('genNotification','Download succes', 'Download succes', 'check', 'green', 30);
+        });
+      } else {
+        component.$emit('genNotification', 'Can only download folder','Download failed','times', 'red', 30);
       }
     },
     save_ui: () => {
