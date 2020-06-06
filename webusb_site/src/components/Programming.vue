@@ -34,7 +34,7 @@
         <section>
               Python terminal
               <div class="md-form">
-                  <textarea readonly wrap="hard" id="commandlog" style="resize: none; overflow:auto" v-model="commandlog"></textarea>
+                  <textarea placeholder=">>>" readonly wrap="hard" id="commandlog" style="resize: none; overflow:auto" v-model="commandlog"></textarea>
                   <input autocomplete="off" type="text" id="example1" class="form-control" v-on:keyup="commandpython" v-model="command">
               </div>
         </section>
@@ -67,9 +67,14 @@ const extension_whitelist = ["txt", "csv", "json", "py", "ini", "info", "md", "l
 function commandlog(str) {
   if(component) {
     component.commandlog += str;
+    setTimeout(() => {
+      let textarea = document.getElementById("commandlog");
+      if(textarea.selectionStart == textarea.selectionEnd) {
+        textarea.scrollTop = textarea.scrollHeight;
+      }
+    }, 10);
   }
 }
-registerstdout(commandlog);
 
 export default {
   name: 'Programming',
@@ -86,6 +91,7 @@ export default {
   beforeMount() {
     component = this;
     // Auto-fetch /flash
+    registerstdout(commandlog);
     on_connect().then(() => this.itemClick({model: this.files[0]}))
   },
   methods: {
