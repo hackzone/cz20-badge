@@ -161,7 +161,7 @@ int main(void)
 		led_task();
 		button_task();
 
-		//i2c_watchdog(&hi2c1);
+		i2c_watchdog(&hi2c1);
 
 		if(last_tick != HAL_GetTick()) {
 			last_tick = HAL_GetTick();

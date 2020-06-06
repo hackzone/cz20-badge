@@ -8,7 +8,7 @@
 #ifndef INC_I2C_HANDLER_H_
 #define INC_I2C_HANDLER_H_
 
-//#define I2C_Timeout 50
+#define I2C_Timeout 50
 
 //void i2c_watchdog();
 
