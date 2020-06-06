@@ -6,6 +6,7 @@
  */
 #include "stm32f1xx_hal.h"
 #include "i2c_handler.h"
+#include "led_driver.h"
 #include "interrupt_pin.h"
 
 /************* I2C Register space mapping *********************
@@ -41,8 +42,8 @@
  * 90-92:	USB MIDI data slot 4 (commonly 0x90 Note On or 0x80 Note Off, then a frequency, then a volume)
  * 93:		USB MIDI dirty byte 4 (0 = data is unchanged, 1 = midi data slot 4 should be sent by STM32 over USB)
  *
- * 94-96:	USB MIDI incoming data
- * 97-128:	Reserved
+ * 94:	USB MIDI incoming data valid bytes
+ * 95-127:	USB MIDI incoming data
  *
  ***************************************************************/
 
@@ -54,8 +55,6 @@ uint8_t address;
 uint32_t startTick;
 
 void i2c_watchdog(I2C_HandleTypeDef *hi2c) {
-	uint8_t* dirty_byte = (uint8_t*) getI2CMemory(58);
-
 	if(hi2c->State != HAL_I2C_STATE_LISTEN && (HAL_GetTick() - startTick) > I2C_Timeout) {
 		startTick = HAL_GetTick();
 		HAL_I2C_Init(hi2c);
@@ -66,7 +65,7 @@ void i2c_watchdog(I2C_HandleTypeDef *hi2c) {
 void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, uint16_t AddrMatchCode) {
   UNUSED(AddrMatchCode);
   first = 1;
-  //startTick = HAL_GetTick();
+  startTick = HAL_GetTick();
   if(hi2c->Instance == I2C1) {
 	  if(TransferDirection == 1) {	//Write
 		  HAL_I2C_Slave_Seq_Receive_IT(hi2c, i2cbuf, 1, I2C_FIRST_FRAME);
@@ -90,7 +89,7 @@ void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c) {
 	if(first) {
 		first = 0;
 		address = i2cbuf[0];
-	} else {
+	} else if(address < 128) {
 		i2cregisters[address] = i2cbuf[0];
 		address++;
 	}
@@ -99,6 +98,14 @@ void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c) {
 
 void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c) {
 	HAL_I2C_EnableListen_IT(hi2c);
+}
+
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c) {
+    // ignore NACK errors
+    if (!(hi2c->ErrorCode & (~HAL_I2C_ERROR_AF)))
+        return;
+    // Continue listening
+    HAL_I2C_EnableListen_IT(hi2c);
 }
 
 uint8_t* getI2CMemory(uint32_t pos) {

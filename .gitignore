@@ -1,3 +1,4 @@
 *-bak
 *.o
 firmware-STM32/cdc_msc_hid_midi/_build
+webusb_site/node_modules

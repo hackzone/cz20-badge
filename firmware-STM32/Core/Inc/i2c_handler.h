@@ -10,7 +10,7 @@
 
 #define I2C_Timeout 50
 
-//void i2c_watchdog();
+void i2c_watchdog();
 
 uint8_t* getI2CMemory(uint32_t pos);
 
