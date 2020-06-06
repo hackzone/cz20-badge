@@ -40,6 +40,9 @@
                         <div v-if="current_app !== undefined" class="mt-3">
                             <p><strong>{{ current_app.name }}</strong></p>
                             <p>{{ current_app.description }}</p>
+                            <p v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision">An update is available for this app
+                            <mdb-btn color="primary" size="sm" v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision" v-bind:class="{disabled: installing}" v-on:click="install_app(current_app.slug)">Install</mdb-btn>
+                            </p>
                         </div>
 
                         <sketch-picker v-model="color_picker" @input="update_current_colour" />
