@@ -18,6 +18,8 @@ let stdout_callback;
 let MAX_RETRIES = 3;
 
 import * as $ from 'jquery';
+import * as JSZip from 'jszip';
+
 
 function sendHeartbeat() {
     let {buffer, message_id} = buildpacketWithFilename(0, 1, "beat");
@@ -139,6 +141,27 @@ export async function deldir(dir_name) {
         }
     }
     await delfile(dir_name);
+}
+
+export async function downloaddir(dir_name, zip=undefined) {
+    if(zip === undefined) {
+        zip = new JSZip();
+    }
+
+    let dir = await fetch_dir(dir_name)
+    let dirlist = dir.split('\n');
+    dirlist.unshift();
+    console.log(dirlist);
+    for(let i = 1; i < dirlist.length; i++) {
+        let item = dirlist[i];
+        if(item.charAt(0) == 'd') {
+            await downloaddir(dir_name + "/" + item.substr(1), zip.folder(item.substr(1)));
+        } else {
+            let data = await readfile(dir_name + "/" + item.substr(1));
+            zip.file(item.substr(1), data);
+        }
+    }
+    return zip;
 }
 
 export function delfile(dir_name) {
