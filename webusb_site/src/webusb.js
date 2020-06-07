@@ -13,10 +13,13 @@ const packetheadersize = 12;
 
 let current_message_id = 0;
 let requests = {};
+let stdout_callback;
 
 let MAX_RETRIES = 3;
 
 import * as $ from 'jquery';
+import * as JSZip from 'jszip';
+
 
 function sendHeartbeat() {
     let {buffer, message_id} = buildpacketWithFilename(0, 1, "beat");
@@ -25,7 +28,7 @@ function sendHeartbeat() {
 
 //Function to create valid packet. Size is the payload size, command is the command id
 export function buildpacket(size, command) {
-    console.log(packetheadersize+size);
+    //console.log(packetheadersize+size);
     current_message_id++;
     let arraybuffer = new ArrayBuffer(12+size);
     let buffer = new Uint8Array(arraybuffer);
@@ -47,8 +50,13 @@ export function buildpacketWithFilename(size, command, filename) {
 }
 
 function rewritemessageid(buffer) {
+    if (buffer instanceof Uint8Array || buffer instanceof Uint16Array || buffer instanceof Uint32Array) {
+        // If buffer is not an ArrayBuffer, get its ArrayBuffer property
+        buffer = buffer.buffer;
+    }
+    console.log(buffer);
     current_message_id++;
-    new DataView(buffer.buffer).setUint32(8, current_message_id, true);
+    new DataView(buffer).setUint32(8, current_message_id, true);
     return current_message_id;
 }
 
@@ -59,7 +67,7 @@ export function send_buffer(buffer, message_id, return_string=true) {
         buffer, // For retransmit
         resolve: (data) => {
             if(return_string) {
-                if(data.byteLength == 0) {
+                if(data.byteLength === 0) {
                     resolve("");
                     return true;
                 } else {
@@ -104,9 +112,14 @@ export function fetch_dir(dir_name) {
     return send_buffer(buffer, message_id, true);
 }
 
-export function readfile(dir_name, return_string=true) {
-    let {buffer, message_id} = buildpacketWithFilename(0, 4097, dir_name);
-    return send_buffer(buffer, message_id, return_string);
+export function readfile(file_name, return_string=true) {
+    let {buffer, message_id} = buildpacketWithFilename(0, 4097, file_name);
+    return send_buffer(buffer, message_id, return_string).then((contents) => {
+        if(contents === 'Can\'t open file') {
+            contents = undefined;
+        }
+        return contents;
+    });
 }
 
 export function createfile(dir_name) {
@@ -130,14 +143,38 @@ export async function deldir(dir_name) {
     await delfile(dir_name);
 }
 
+export async function downloaddir(dir_name, zip=undefined) {
+    if(zip === undefined) {
+        zip = new JSZip();
+    }
+
+    let dir = await fetch_dir(dir_name)
+    let dirlist = dir.split('\n');
+    dirlist.unshift();
+    console.log(dirlist);
+    for(let i = 1; i < dirlist.length; i++) {
+        let item = dirlist[i];
+        if(item.charAt(0) == 'd') {
+            await downloaddir(dir_name + "/" + item.substr(1), zip.folder(item.substr(1)));
+        } else {
+            let data = await readfile(dir_name + "/" + item.substr(1));
+            zip.file(item.substr(1), data);
+        }
+    }
+    return zip;
+}
+
 export function delfile(dir_name) {
     console.log("Deleting: "+dir_name);
     let {buffer, message_id} = buildpacketWithFilename(0, 4099, dir_name);
     return send_buffer(buffer, message_id);
 }
 
-export function runfile(dir_name) {
-    let {buffer, message_id} = buildpacketWithFilename(0, 0, dir_name);
+export function runfile(file_path) {
+    if(file_path.startsWith('/flash')) {
+        file_path = file_path.slice('/flash'.length);
+    }
+    let {buffer, message_id} = buildpacketWithFilename(0, 0, file_path);
     return send_buffer(buffer, message_id);
 }
 
@@ -213,6 +250,15 @@ export function handlePacket(message_type, message_id, data) {
     let textdecoder = undefined;
     let file_contents = undefined;
 
+    if(message_type === 3 && message_id === 0) {
+        textdecoder = new TextDecoder("ascii");
+        let consolelog = textdecoder.decode(data);
+        console.log(consolelog);
+        if(stdout_callback) {
+            stdout_callback(consolelog);
+        }
+    }
+
     if (message_type === 1 && message_id === 0) {
         textdecoder = new TextDecoder("ascii");
         file_contents = textdecoder.decode(data);
@@ -273,8 +319,22 @@ export function handlePacket(message_type, message_id, data) {
     // }
 }
 
+export function registerstdout(func) {
+    stdout_callback = func;
+}
+
+
+export function writetostdin(stdin) {
+    let {buffer, message_id} = buildpacket(stdin.length, 2);
+    for(let i = 0; i<stdin.length; i++) {
+        buffer[packetheadersize+i] = stdin.charCodeAt(i);
+    }
+    return send_buffer(buffer, message_id);
+}
+
 let readdata = () => {
     device.transferIn(3, 64).then(result => {
+        console.log("Tick");
         let parsedbytes = 0;
         let totalbytes = result.data.byteLength;
         while(parsedbytes != totalbytes) {
@@ -282,7 +342,7 @@ let readdata = () => {
                 if((totalbytes - parsedbytes) < 12) break; //Can never be a full packet header. Discard data and hope for the best              
                 if(parsepacketheader(result.data.buffer.slice(parsedbytes, parsedbytes+12))) {
                     payload = new ArrayBuffer(size);
-                    console.log("Command: "+command+" Size: "+size+" id: "+messageid_recv);
+                    //console.log("Command: "+command+" Size: "+size+" id: "+messageid_recv);
                     if(size == 0) handlePacket(command, messageid_recv, payload);
                 } else {
                     console.log("Error in packet header");
@@ -295,7 +355,7 @@ let readdata = () => {
                 new Uint8Array(payload, received, size-received).set(new Uint8Array(result.data.buffer, parsedbytes, sizetocopy));
                 parsedbytes += sizetocopy;
                 received += sizetocopy;
-                console.log("Transfer status: "+received+"/"+size);
+                //console.log("Transfer status: "+received+"/"+size);
                 if(received == size) {
                     handlePacket(command, messageid_recv, payload);
                 }
@@ -307,8 +367,8 @@ let readdata = () => {
     });
 };
 
-let parsepacketheader = (data) => {
-    let view = new DataView(data)
+function parsepacketheader(data) {
+    let view = new DataView(data);
     command = view.getUint16(0, true);
     size = view.getUint32(2, true);
     let verif = view.getUint16(6);
@@ -329,12 +389,44 @@ function connect_check() {
 setInterval(connect_check, 500);
 setInterval(function(){
     if(device.opened) {
-        sendHeartbeat();
+        if(Object.keys(requests).length < 5)
+            sendHeartbeat();
     }
-}, 1500);
+}, 500);
+
+setInterval(function(){
+    if(device.opened) {
+        readserial();
+    }
+}, 250);
+
 
 export function on_connect() {
     return new Promise((resolve) => connect_resolves.push(resolve));
+}
+
+async function readserial() {
+    let res = await device.controlTransferIn({
+        requestType: 'class',
+        recipient: 'interface',
+        request: 0x23,
+        value: 0x02,
+        index: 0x02}, 16);
+    
+    let textdecoder = new TextDecoder("ascii");
+    let text_content = textdecoder.decode(res.data.buffer);
+    let raw = new Uint8Array(res.data.buffer);
+    let valid = 0;
+    for(let i = 0; i < 16; i++) {
+        if(raw[i] == 0) {
+            valid = i;
+            break;
+        }
+    }
+    text_content = text_content.substr(0, valid);
+    if(text_content.length) {
+        console.log(text_content);
+    }
 }
 
 export function connect() {

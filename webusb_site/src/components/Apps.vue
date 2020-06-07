@@ -1,25 +1,30 @@
 <template>
     <section id="apps">
         <mdb-row>
-            <mdb-col md="6">
+            <mdb-col md="5">
                 <mdb-card class="mb-4">
                     <mdb-card-body class="badge_container">
-                        <div class="header">
-                            <div class=nav-left>
-                                <mdb-btn color="primary" title="Previous Page" size="sm"><i class="fas fa-arrow-left fa-3x"></i></mdb-btn>
-                            </div>
-                            <div class=nav-right>
-                                <mdb-btn color="tertiary" title="Next Page" size="sm"><i class="fas fa-arrow-right fa-3x"></i></mdb-btn>
-                            </div>
-                        </div>
-                        <div class="button_grid mt-4" v-bind:key="launcher_items.length">
-                            <div v-for="i in 16" v-bind:key="i" v-bind:style="{
-                                backgroundColor: ((launcher_items[(i-1)+(current_page*16)] !== undefined &&
-                                launcher_items[(i-1)+(current_page*16)].colour !== undefined) ?
-                                launcher_items[(i-1)+(current_page*16)].colour : 'gray'),
-                                filter: (i-1 === current_index) ? 'drop-shadow(gray 0px 0px 5px)': ''
-                                }" class="butt" type="button" style="color:transparent" v-bind:id="(i-1)+(current_page*16)" v-on:click="buttonClick"></div>
-                        </div>
+                        <mdb-row>
+                            <mdb-col sm="4" class=nav-left>
+                                <mdb-btn color="primary" title="Previous Page" size="sm" v-on:click="pagedec"><i class="fas fa-arrow-left fa-3x"></i></mdb-btn>
+                            </mdb-col>
+                            <mdb-col sm="4" class=page>
+                            <H1>{{current_page}}</H1>
+                            </mdb-col>
+                            <mdb-col sm="4" class=nav-right>                           
+                                <mdb-btn color="tertiary" title="Next Page" size="sm" v-on:click="pageinc"><i class="fas fa-arrow-right fa-3x"></i></mdb-btn>
+                            </mdb-col>
+                        </mdb-row>
+                        <mdb-row class="button_grid mt-4 mb-4" v-bind:key="launcher_items.length">
+
+                                <div v-for="i in 16" v-bind:key="i" v-bind:style="{
+                                    backgroundColor: ((launcher_items[(i-1)+(current_page*16)] !== undefined &&
+                                    launcher_items[(i-1)+(current_page*16)].colour !== undefined) ?
+                                    launcher_items[(i-1)+(current_page*16)].colour : 'gray'),
+                                    filter: (i-1 === current_index) ? 'drop-shadow(gray 0px 0px 5px)': ''
+                                    }" class="butt" type="button" style="color:transparent" v-bind:id="(i-1)+(current_page*16)" v-on:click="buttonClick"></div>
+
+                        </mdb-row>
                     </mdb-card-body>
                 </mdb-card>
             </mdb-col>
@@ -35,6 +40,9 @@
                         <div v-if="current_app !== undefined" class="mt-3">
                             <p><strong>{{ current_app.name }}</strong></p>
                             <p>{{ current_app.description }}</p>
+                            <p v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision">An update is available for this app
+                            <mdb-btn color="primary" size="sm" v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision" v-bind:class="{disabled: installing}" v-on:click="install_app(current_app.slug)">Install</mdb-btn>
+                            </p>
                         </div>
 
                         <sketch-picker v-model="color_picker" @input="update_current_colour" />
@@ -70,7 +78,7 @@
 
                         <mdb-tbl class="table-striped">
                             <thead>
-                            <tr><th>App name</th><th>Description</th><th>Category</th><th>State</th><th>Author</th><th>Install</th></tr>
+                            <tr><th>App name</th><th>Description</th><th>Category</th><th>State</th><th>Author</th><th>Revision</th><th>Install</th></tr>
                             </thead>
                             <tbody>
                                 <tr v-for="app in filtered_store_apps" v-bind:key="app.slug">
@@ -79,6 +87,7 @@
                                     <td>{{ app.category }}</td>
                                     <td>{{ app.status }}</td>
                                     <td>{{ app.author || 'Unknown' }}</td>
+                                    <td>{{ app.revision }}</td>
                                     <td>
                                         <mdb-btn color="primary" size="sm" v-bind:class="{disabled: installing}" v-on:click="install_app(app.slug)" v-if="local_apps.indexOf(app.slug) === -1">Install</mdb-btn>
                                         <mdb-btn color="red" size="sm" v-on:click="uninstall_app(app.slug)" v-else>Uninstall</mdb-btn>
@@ -128,13 +137,18 @@
         beforeMount() {
             component = this;
             on_connect().then(async () => {
-                let contents = await readfile('/flash/config/launcher_items.json', );
-                if(contents.length < 2) { contents = '{}'; }
-                component.launcher_items = JSON.parse(contents);
+                let contents = await readfile('/flash/config/system-launcher_items.json', );
+                let launcher_items;
+                try {
+                    launcher_items = JSON.parse(contents);
+                } catch {
+                    launcher_items = {};
+                }
+                component.launcher_items = launcher_items;
                 await component.update_local_apps();
             });
 
-            fetch('https://hatchery.badge.team/basket/campzone2019/list/json',{mode:'cors'})
+            fetch('https://hatchery.badge.team/basket/campzone2020/list/json',{mode:'cors'})
                 .then(response => {response.json().then((apps) => {
                     component.store_apps = apps;
                     for(let app of apps) {
@@ -164,9 +178,14 @@
             },
             get_local_app_metadata: async (app_slug, install_path='/flash/apps/') => {
                 let contents = await readfile(install_path + app_slug + '/metadata.json');
-                if(contents.length < 2) { contents = '{}'; }
+                let metadata;
+                try {
+                    metadata = JSON.parse(contents);
+                } catch {
+                    metadata = {};
+                }
                 return {
-                    ...JSON.parse(contents),
+                    ...metadata,
                     slug: app_slug
                 };
             },
@@ -222,13 +241,12 @@
             },
             buttonClick: async (event) => {
                 let index = parseInt(event.target.id) ;
-                let absolute_index = index + component.current_page * 16;
-                component.current_index = absolute_index;
-                if(!(absolute_index in component.launcher_items)) {
+                component.current_index = index;
+                if(!(index in component.launcher_items)) {
                     component.current_app = undefined;
                     component.current_app_slug = 'none';
                 } else {
-                    let launcher_item = component.launcher_items[absolute_index.toString()];
+                    let launcher_item = component.launcher_items[index.toString()];
                     component.color_picker = component.current_colour = launcher_item.colour;
                     component.current_app_slug = launcher_item.slug;
                     component.current_app = await component.get_local_app_metadata(launcher_item.slug);
@@ -244,16 +262,27 @@
             update_current_launcher_item: async () => {
                 let index = component.current_index;
                 let slug = component.current_app_slug;
-                let app = await component.get_local_app_metadata(slug);
-                component.current_app = app;
-                let launcher_item = {
-                    slug,
-                    name: app.name,
-                    colour: component.current_colour,
-                };
-                component.launcher_items[index.toString()] = launcher_item;
-                await savetextfile('/flash/config/launcher_items.json', JSON.stringify(component.launcher_items));
+                if (slug === 'none') {
+                    delete component.launcher_items[index.toString()];
+                } else {
+                    let app = await component.get_local_app_metadata(slug);
+                    component.current_app = app;
+                    component.launcher_items[index.toString()] = {
+                        slug,
+                        name: app.name,
+                        colour: component.current_colour,
+                    };
+                }
+                await savetextfile('/flash/config/system-launcher_items.json', JSON.stringify(component.launcher_items));
                 component.$emit('genNotification', 'Updated homescreen');
+            },
+            pageinc: () => {
+                component.current_page += 1;
+            },
+            pagedec: () => {
+                if(component.current_page > 0) {
+                     component.current_page -= 1;
+                }
             }
         },
         data() {
@@ -340,9 +369,11 @@
 
 
     .butt {
+        content: "";
         border: 0px;
-        height:125px;
-        width:125px;
+        padding-bottom: 100%;
+        display: block;
+        width:100%;
         cursor:pointer;
         border-radius: 10px;
         transition: .5s ease;
@@ -358,8 +389,8 @@
     .button_grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-row-gap: 20px;
-        grid-column-gap: 20px;
+        grid-row-gap: 3.5%;
+        grid-column-gap: 3.5%;
     }
 
     .header {
@@ -375,7 +406,15 @@
     }
 
     .badge_container {
-        width: 600px;
+        width: 80%;
+        display: block;
+        padding-bottom: 15%;
         margin: 0 auto;
+    }
+
+    .page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>

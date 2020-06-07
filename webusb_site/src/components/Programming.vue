@@ -9,9 +9,10 @@
               <mdb-btn color='gray' size='lg' title='Make file' v-on:click='mkfile_ui()' icon='file'></mdb-btn>
               <mdb-btn color='gray' size='lg' title='Rename file' v-on:click='rename_ui()' icon='file-alt'></mdb-btn>
               <mdb-btn color='gray' size='lg' title='Delete file' v-on:click='trash_ui()' icon='trash'></mdb-btn>
+              <mdb-btn color='gray' size='lg' title='Download folder' v-on:click='download_ui()' icon='download'></mdb-btn>
             </mdb-col>
             <mdb-col sm='2' md='2' lg='2'>
-              <mdb-btn color='gray' size='lg' title='Run file' v-on:click='startapp_ui()' icon='play'></mdb-btn>
+              <mdb-btn color='gray' size='lg' title='Run file' v-on:click='runfile_ui()' icon='play'></mdb-btn>
               <mdb-btn color='gray' size='lg' title='Save file' v-on:click='save_ui()' icon='save'></mdb-btn>
             </mdb-col>
             <mdb-col sm='4' md='6' lg='7' class="mt-2">
@@ -26,6 +27,17 @@
               <editor v-model='content_editor' lang='python' theme='monokai' height='500'></editor>
             </mdb-col>
           </mdb-row>
+          </section>
+      </mdb-card-body>
+    </mdb-card>
+      <mdb-card class='mb-4'>
+      <mdb-card-body>
+        <section>
+              Python terminal
+              <div class="md-form">
+                  <textarea placeholder=">>>" readonly wrap="hard" id="commandlog" style="resize: none; overflow:auto" v-model="commandlog"></textarea>
+                  <input autocomplete="off" type="text" id="example1" class="form-control" v-on:keyup="commandpython" v-model="command">
+              </div>
         </section>
       </mdb-card-body>
     </mdb-card>
@@ -39,18 +51,33 @@ window.itemDrop = function() {
 
 import {mdbToastNotification, mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
 import VJstree from 'vue-jstree';
-  import {connect, on_connect, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile} from '../webusb';
+  import {connect, on_connect, runfile, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout, writetostdin, downloaddir} from '../webusb';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 import * as ace_editor from 'vue2-ace-editor';
+import { saveAs } from 'file-saver';
+import * as JSZip from 'jszip';
 
 let component = undefined;
 let selected_item = {model:{}};
 let beforemoveloc = undefined;
 
+
 const extension_whitelist = ["txt", "csv", "json", "py", "ini", "info", "md", "log", "conf", "cfg"];
+
+function commandlog(str) {
+  if(component) {
+    component.commandlog += str;
+    setTimeout(() => {
+      let textarea = document.getElementById("commandlog");
+      if(textarea.selectionStart == textarea.selectionEnd) {
+        textarea.scrollTop = textarea.scrollHeight;
+      }
+    }, 10);
+  }
+}
 
 export default {
   name: 'Programming',
@@ -67,7 +94,8 @@ export default {
   beforeMount() {
     component = this;
     // Auto-fetch /flash
-    on_connect().then(() => this.itemClick({model: this.files[0]}))
+    registerstdout(commandlog);
+    on_connect().then(() => this.itemClick({model: this.files[0]}));
   },
   methods: {
     parseDir: (data) => {
@@ -202,6 +230,19 @@ export default {
         component.itemClick(selected_item.$parent); // Refresh parent directory
       }
     },
+    download_ui: async () => {
+      if(selected_item.model.is_dir) {
+        let file = selected_item.model.full_path;
+        let zip = await downloaddir(file);
+        zip.generateAsync({type:"blob"})
+        .then(function (blob) {
+            saveAs(blob, "download.zip");
+            component.$emit('genNotification','Download succes', 'Download succes', 'check', 'green', 30);
+        });
+      } else {
+        component.$emit('genNotification', 'Can only download folder','Download failed','times', 'red', 30);
+      }
+    },
     save_ui: () => {
       let parts = component.editorfilename.split(".");
       if((parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1].toLowerCase()) >= 0) || window.confirm("File: "+component.editorfilename+" has not a textfile extension")) {
@@ -245,8 +286,21 @@ export default {
         component.itemClick(entry); // Refresh parent directory
       }
     },
+    runfile_ui: async () => {
+      if(component.content_editor !== component.content_original) {
+        await savefile(component.editorfilename, component.content_editor);
+      }
+      runfile(component.editorfilename.replace('/flash/', '/'));
+    },
     info() {
 
+    },
+    commandpython(e) {
+      if(e.code === "Enter") {
+        //component.commandlog += component.command + "\n";
+        writetostdin(component.command + "\r\n");
+        component.command = "";
+      }
     },
     connect:connect,
   },
@@ -255,6 +309,8 @@ export default {
       content_editor:'',
       content_original:'',
       editorfilename:'/flash/cache/scratch.py',
+      commandlog:"",
+      command:"",
       show: true,
       files: [
         {
@@ -275,6 +331,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style scoped>
@@ -294,6 +351,10 @@ export default {
   input .input-lg {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+  }
+  textarea {
+    width:100%;
+    height:400px;
   }
 </style>
 

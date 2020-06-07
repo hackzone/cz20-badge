@@ -8,9 +8,7 @@
     </mdb-modal>
     <!-- Sidebar -->
     <div class="sidebar-fixed position-fixed">
-      <a class="logo-wrapper"
-        ><img alt="" class="img-fluid" src="./assets/hackzone_logo.png"
-      /></a>
+      <a class="logo-wrapper"><img alt="" class="img-fluid" src="./assets/hackzone_logo.png"/></a>
       <mdb-list-group class="list-group-flush">
         <router-link to="/apps" @click.native="activeItem = 1">
           <mdb-list-group-item
@@ -19,15 +17,19 @@
             ><mdb-icon
               icon="table"
               class="mr-3"
-            />Apps</mdb-list-group-item
-          >
+            />Apps</mdb-list-group-item>
         </router-link>
         <router-link to="/programming" @click.native="activeItem = 2">
           <mdb-list-group-item
-            :action="true"
-            :class="activeItem === 2 && 'active'"
-            ><mdb-icon icon="i-cursor" class="mr-3" />Programming & Files</mdb-list-group-item
-          >
+                  :action="true"
+                  :class="activeItem === 2 && 'active'"
+          ><mdb-icon icon="i-cursor" class="mr-3" style="width:16px;text-align:center" />Programming & Files</mdb-list-group-item>
+        </router-link>
+        <router-link to="/settings" @click.native="activeItem = 3">
+          <mdb-list-group-item
+                  :action="true"
+                  :class="activeItem === 3 && 'active'"
+          ><mdb-icon icon="cog" class="mr-3" />Settings</mdb-list-group-item>
         </router-link>
       </mdb-list-group>
     </div>
@@ -45,14 +47,9 @@
       </div>
       <ftr color="primary-color-dark" class="text-center font-small darken-2">
         <div class="pb-4 pt-4">
-          <a href="#"><mdb-icon fab icon="facebook-square" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="twitter" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="youtube" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="google-plus" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="dribbble" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="pinterest" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="github" class="mr-3"/></a>
-          <a href="#"><mdb-icon fab icon="codepen" class="mr-3"/></a>
+          <a href="https://twitter.com/hackzonenl"><mdb-icon fab icon="twitter" class="mr-3"/></a>
+          <a href="https://www.youtube.com/watch?v=G0mEW8f2vac"><mdb-icon fab icon="youtube" class="mr-3"/></a>
+          <a href="https://github.com/hackzone"><mdb-icon fab icon="github" class="mr-3"/></a>
         </div>
       </ftr>
     </main>
@@ -107,7 +104,6 @@ export default {
     ftr: mdbFooter
   },
   methods: {
-    on_click: () => {console.log('clicked')},
     connect:connect,
     onNotification: (message, title='', icon='info', color='elegant', lifetime=30) => {
       let newmessage = {id: component.message_id, title:title, message:message, icon:icon, color:color, lifetime:lifetime};
@@ -156,6 +152,7 @@ main {
 .flexible-content {
   transition: padding-left 0.3s;
   padding-left: 270px;
+  height: 100%;
 }
 
 .flexible-navbar {
