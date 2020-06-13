@@ -254,7 +254,9 @@ export function handlePacket(message_type, message_id, data) {
         textdecoder = new TextDecoder("ascii");
         let consolelog = textdecoder.decode(data);
         console.log(consolelog);
-        stdout_callback(consolelog);
+        if(stdout_callback) {
+            stdout_callback(consolelog);
+        }
     }
 
     if (message_type === 1 && message_id === 0) {
