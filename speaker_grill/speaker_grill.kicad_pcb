@@ -87,7 +87,7 @@
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory "gerbers"))
+      (outputdirectory "centroids"))
   )
 
   (net 0 "")
@@ -123,6 +123,7 @@
 
   (module speaker_grill:speaker (layer F.Cu) (tedit 5ED79758) (tstamp 5ECBFF2D)
     (at 150 79.5)
+    (attr smd)
     (fp_text reference G*** (at 0 0) (layer F.SilkS) hide
       (effects (font (size 1.524 1.524) (thickness 0.3)))
     )
