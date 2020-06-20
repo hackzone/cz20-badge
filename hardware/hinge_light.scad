@@ -1,6 +1,6 @@
 br_len = 11.3;
 wall_thickness = 1.5;
-pcb_thickness = 1.75;
+pcb_thickness = 1.85;
 notch_thickness = 0.4;
 notch_offset_x = 0.4;
 notch_offset_y = 0.1;
@@ -25,11 +25,11 @@ difference() {
 
 //// Base plate
 //hull() {
-//    cube([br_len, 6.6, 3]);
+//    cube([br_len, 6.6, 0.4]);
 //    
 //    translate([br_len, 0, 0])
 //    rotate([0, 0, 45])
-//    cube([br_len, 6.6, 3]);
+//    cube([br_len, 6.6, 0.4]);
 //}
 
 // Notches
