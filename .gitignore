@@ -3,3 +3,4 @@
 firmware-STM32/cdc_msc_hid_midi/_build
 bootloader-STM32/build
 firmware-STM32/build
+yarn.lock
