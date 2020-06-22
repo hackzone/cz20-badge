@@ -630,14 +630,12 @@
   (module lcsc:FFC-SMD_8P-P1.00_FFC10028-08SBD224K6M (layer B.Cu) (tedit 5ED3E980) (tstamp 5ECCDDBC)
     (at 52.32 22.5)
     (path /5E7705B5)
+    (attr smd)
     (fp_text reference J7 (at 0.1 3.9) (layer B.SilkS)
       (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
     )
     (fp_text value Conn_01x08 (at 0 5.8) (layer B.Fab)
       (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
-    )
-    (fp_text user gge6 (at 0 1.8) (layer Cmts.User)
-      (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -5.1 -3.8) (end -5.1 1) (layer B.SilkS) (width 0.254))
     (fp_line (start 5.1 -3.8) (end 5.1 1) (layer B.SilkS) (width 0.254))
@@ -5522,10 +5520,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 142 /led_matrix/R8))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5565,10 +5563,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 130 /led_matrix/R7))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5608,10 +5606,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 118 /led_matrix/R6))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5651,10 +5649,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 106 /led_matrix/R5))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5694,10 +5692,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 139 /led_matrix/R4))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5737,10 +5735,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 127 /led_matrix/R3))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5780,10 +5778,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 115 /led_matrix/R2))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5823,10 +5821,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 103 /led_matrix/R1))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5866,10 +5864,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 145 /led_matrix/R12))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5909,10 +5907,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 133 /led_matrix/R11))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5952,10 +5950,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 121 /led_matrix/R10))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5995,10 +5993,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 109 /led_matrix/R9))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -6038,10 +6036,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 112 /led_matrix/R13))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -6081,10 +6079,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 124 /led_matrix/R14))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -6124,10 +6122,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 136 /led_matrix/R15))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -6171,6 +6169,11 @@
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
+    )
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz -90 0 180))
     )
   )
 

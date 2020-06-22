@@ -12,3 +12,4 @@ firmware-STM32.map
 cmake_install.cmake
 .idea
 cmake-build-debug
+/bootloader_build/

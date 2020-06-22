@@ -28,7 +28,7 @@ SET(COMMON_FLAGS
     -g -fno-common -fmessage-length=0 ")
 
 SET(CMAKE_CXX_FLAGS_INIT "${COMMON_FLAGS} -std=c++11")
-SET(CMAKE_C_FLAGS_INIT "${COMMON_FLAGS} -std=gnu99")
+SET(CMAKE_C_FLAGS_INIT "${COMMON_FLAGS} -std=gnu99 -Os")
 SET(CMAKE_EXE_LINKER_FLAGS_INIT "-Wl,-gc-sections,--print-memory-usage -T ${LINKER_SCRIPT}")
 
 PROJECT(bootloader-STM32 C CXX ASM)
@@ -53,4 +53,4 @@ add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
         COMMAND ${CMAKE_OBJCOPY} -Oihex $<TARGET_FILE:${PROJECT_NAME}.elf> ${HEX_FILE}
         COMMAND ${CMAKE_OBJCOPY} -Obinary $<TARGET_FILE:${PROJECT_NAME}.elf> ${BIN_FILE}
         COMMENT "Building ${HEX_FILE}
-Building ${BIN_FILE}")
+	Building ${BIN_FILE}")

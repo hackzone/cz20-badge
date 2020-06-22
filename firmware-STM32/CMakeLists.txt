@@ -1,7 +1,9 @@
-#THIS FILE IS AUTO GENERATED FROM THE TEMPLATE! DO NOT CHANGE!
 SET(CMAKE_SYSTEM_NAME Generic)
 SET(CMAKE_SYSTEM_VERSION 1)
 cmake_minimum_required(VERSION 3.7)
+
+# Options
+option(WITH_BOOTLOADER_SUPPORT "Add support for a 16k bootloader to preface the firmware (see ../bootloader-STM32)" OFF)
 
 # specify cross compilers and tools
 SET(CMAKE_C_COMPILER_WORKS 1)
@@ -14,7 +16,12 @@ set(CMAKE_OBJCOPY arm-none-eabi-objcopy)
 set(CMAKE_OBJDUMP arm-none-eabi-objdump)
 set(SIZE arm-none-eabi-size)
 
-SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F103C8TX_FLASH.ld)
+if(WITH_BOOTLOADER_SUPPORT)
+	SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F103C8TX_FLASH_BOOTLOADER.ld)
+	add_definitions(-DBOOTLOADER_BUILD)
+else()
+	SET(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F103C8TX_FLASH.ld)
+endif()
 
 #Uncomment for hardware floating point
 #SET(FPU_FLAGS "-mfloat-abi=hard -mfpu=fpv4-sp-d16")
@@ -28,7 +35,7 @@ SET(COMMON_FLAGS
     -g -fno-common -fmessage-length=0 ")
 
 SET(CMAKE_CXX_FLAGS_INIT "${COMMON_FLAGS} -std=c++11")
-SET(CMAKE_C_FLAGS_INIT "${COMMON_FLAGS} -std=gnu99")
+SET(CMAKE_C_FLAGS_INIT "${COMMON_FLAGS} -std=gnu99 -Os")
 SET(CMAKE_EXE_LINKER_FLAGS_INIT "-Wl,-gc-sections,--print-memory-usage -T ${LINKER_SCRIPT}")
 
 PROJECT(firmware-STM32 C CXX ASM)
