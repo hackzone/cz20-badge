@@ -39,7 +39,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define URL  "webusb.wittemanlabs.nl"
+#define URL  "webusb.hackz.one"
 
 const tusb_desc_webusb_url_t desc_url =
 {
