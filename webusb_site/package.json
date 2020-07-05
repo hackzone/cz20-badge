@@ -9,13 +9,13 @@
     "start": "vue-cli-service serve --open"
   },
   "dependencies": {
-    "brace": "^0.8.0",
-    "core-js": "^3.4.4",
+    "brace": "^0.11.1",
+    "core-js": "^3.6.5",
     "file-saver": "^2.0.2",
     "jquery": "^3.5.1",
     "js-untar": "^2.0.0",
-    "jszip": "^3.4.0",
-    "mdbvue": "6.5.0",
+    "jszip": "^3.5.0",
+    "mdbvue": "6.7.1",
     "pako": "^1.0.11",
     "vue": "^2.6.11",
     "vue-color": "^2.7.1",
@@ -28,10 +28,10 @@
     "@vue/cli-plugin-babel": "^4.1.2",
     "@vue/cli-plugin-eslint": "^4.1.2",
     "@vue/cli-service": "^4.1.2",
-    "babel-eslint": "^10.0.3",
-    "eslint": "^5.16.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.1.0",
     "eslint-plugin-vue": "^6.1.2",
-    "vue-cli-plugin-mdb": "^2.0.4",
+    "vue-cli-plugin-mdb": "^2.1.0",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {

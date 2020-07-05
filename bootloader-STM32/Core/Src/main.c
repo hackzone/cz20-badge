@@ -48,7 +48,7 @@ uint32_t write_address;
 PCD_HandleTypeDef hpcd_USB_FS;
 
 /* USER CODE BEGIN PV */
-#define URL  "updater.hackz.one"
+#define URL  "webupdate.hackz.one"
 
 const tusb_desc_webusb_url_t desc_url =
 {
