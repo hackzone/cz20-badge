@@ -248,7 +248,7 @@ export default {
       if((parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1].toLowerCase()) >= 0) || window.confirm("File: "+component.editorfilename+" has not a textfile extension")) {
         savetextfile(component.editorfilename, component.content_editor).then(() => {
           component.content_original = component.content_editor;
-          component.itemClick(selected_item.$parent);
+          component.updateNode(selected_item.$parent);
           component.$emit('genNotification','Save succes', 'Save succes', 'check', 'green', 30);
         });
       }
