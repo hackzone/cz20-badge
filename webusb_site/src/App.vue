@@ -25,10 +25,16 @@
                   :class="activeItem === 2 && 'active'"
           ><mdb-icon icon="i-cursor" class="mr-3" style="width:16px;text-align:center" />Programming & Files</mdb-list-group-item>
         </router-link>
-        <router-link to="/settings" @click.native="activeItem = 3">
+        <router-link to="/update" @click.native="activeItem = 3">
           <mdb-list-group-item
                   :action="true"
                   :class="activeItem === 3 && 'active'"
+          ><mdb-icon icon="bolt" class="mr-3" style="width:16px;text-align:center" />Update</mdb-list-group-item>
+        </router-link>
+        <router-link to="/settings" @click.native="activeItem = 4">
+          <mdb-list-group-item
+                  :action="true"
+                  :class="activeItem === 4 && 'active'"
           ><mdb-icon icon="cog" class="mr-3" />Settings</mdb-list-group-item>
         </router-link>
       </mdb-list-group>

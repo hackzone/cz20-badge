@@ -23,7 +23,7 @@ import * as JSZip from 'jszip';
 
 function sendHeartbeat() {
     let {buffer, message_id} = buildpacketWithFilename(0, 1, "beat");
-    send_buffer(buffer, message_id, true).then(data => {console.log("Heartbeat")}, reason => {console.log("Heartbeat no response")});
+    send_buffer(buffer, message_id, true).then(data => {console.debug("Heartbeat")}, reason => {console.log("Heartbeat no response")});
 }
 
 //Function to create valid packet. Size is the payload size, command is the command id
@@ -334,7 +334,7 @@ export function writetostdin(stdin) {
 
 let readdata = () => {
     device.transferIn(3, 64).then(result => {
-        console.log("Tick");
+        // console.log("Tick");
         let parsedbytes = 0;
         let totalbytes = result.data.byteLength;
         while(parsedbytes != totalbytes) {

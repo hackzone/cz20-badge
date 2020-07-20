@@ -243,14 +243,13 @@ export default {
         component.$emit('genNotification', 'Can only download folder','Download failed','times', 'red', 30);
       }
     },
-    save_ui: () => {
+    save_ui: async () => {
       let parts = component.editorfilename.split(".");
       if((parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1].toLowerCase()) >= 0) || window.confirm("File: "+component.editorfilename+" has not a textfile extension")) {
-        savetextfile(component.editorfilename, component.content_editor).then(() => {
-          component.content_original = component.content_editor;
-          component.updateNode(selected_item.$parent);
-          component.$emit('genNotification','Save succes', 'Save succes', 'check', 'green', 30);
-        });
+        await savetextfile(component.editorfilename, component.content_editor);
+        component.content_original = component.content_editor;
+        component.updateNode(selected_item.$parent);
+        component.$emit('genNotification','Save succes', 'Save succes', 'check', 'green', 30);
       }
     },
     rename_ui: () => {
@@ -288,9 +287,16 @@ export default {
     },
     runfile_ui: async () => {
       if(component.content_editor !== component.content_original) {
-        await savefile(component.editorfilename, component.content_editor);
+        await savetextfile(component.editorfilename, component.content_editor);
+        component.content_original = component.content_editor;
       }
-      runfile(component.editorfilename.replace('/flash/', '/'));
+      let import_name = component.editorfilename.replace('/flash/', '/').replace('/__init__.py', '').replace('.py', '')
+      if (import_name.length > 1 && import_name[0] === '/') {
+        import_name = import_name.substr(1);
+      }
+      import_name = import_name.replace('/', '.')
+
+      runfile(import_name);
     },
     info() {
 

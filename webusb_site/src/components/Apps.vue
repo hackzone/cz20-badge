@@ -60,19 +60,20 @@
                     <mdb-card-header>Install apps from app store</mdb-card-header>
                     <mdb-card-body>
                         <mdb-row>
-                            <mdb-col sm="2">
+                            <mdb-col sm="6" md="3">
                                 <span>Filter category</span>
                                 <select class="browser-default custom-select" v-model="selected_store_category">
                                     <option v-for="category in categories" v-bind:key="category" v-bind:value="category">{{category}}</option>
                                 </select>
                             </mdb-col>
-                        </mdb-row>
-                        <mdb-row class="mt-2 mb-2">
-                            <mdb-col sm="2">
+                            <mdb-col sm="6" md="3">
                                 <span>Filter development state</span>
                                 <select class="browser-default custom-select" v-model="selected_store_state">
                                     <option v-for="state in states" v-bind:key="state" v-bind:value="state">{{state}}</option>
                                 </select>
+                            </mdb-col>
+                            <mdb-col sm="6">
+                                <span>Apps uploaded to hatchery.badge.team will automatically show up here for everyone. Be sure to upload yours! :)</span>
                             </mdb-col>
                         </mdb-row>
 

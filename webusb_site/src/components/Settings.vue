@@ -50,7 +50,7 @@
 </template>
 
 <script>
-    import {savetextfile, runfile, readfile, delfile, fetch_dir, on_connect} from '../webusb';
+    import {savetextfile, runfile, readfile, delfile, fetch_dir, on_connect, writetostdin} from '../webusb';
     import {mdbRow, mdbCol, mdbBtn, mdbInput, mdbCard, mdbCardHeader, mdbCardBody} from 'mdbvue';
     import Vue from 'vue';
     import JsonEditor from 'vue-json-edit';
@@ -103,23 +103,15 @@
                 component.app_slugs = configurable_apps;
             },
             save_wifi: async () => {
-                let tmp_filename = '/flash/cache/setup_wifi.py';
-                await savetextfile(tmp_filename, 'import machine, system\n'+
-                    'machine.nvs_setstr("system", "wifi.ssid", "' + component.wifi_ssid + '")\n' +
-                    'machine.nvs_setstr("system", "wifi.password", "' + component.wifi_password + '")\n' +
-                    'system.reboot()');
-                await runfile(tmp_filename);
+                await writetostdin('import machine, system;'+
+                    'machine.nvs_setstr("system", "wifi.ssid", "' + component.wifi_ssid + '");' +
+                    'machine.nvs_setstr("system", "wifi.password", "' + component.wifi_password + '");\r\n');
                 component.$emit('genNotification', 'WiFi settings updated successfully');
-                setTimeout(() => delfile(tmp_filename), 10000);
             },
             save_audio: async () => {
-                let tmp_filename = '/flash/cache/setup_audio.py';
-                await savetextfile(tmp_filename, 'import machine, system\n'+
-                    'machine.nvs_setint("system", "volume", ' + component.volume + ')\n' +
-                    'system.reboot()');
-                await runfile(tmp_filename);
+                await writetostdin('import machine, system;'+
+                    'machine.nvs_setint("system", "volume", ' + component.volume + ')\r\n');
                 component.$emit('genNotification', 'Audio settings updated successfully');
-                setTimeout(() => delfile(tmp_filename), 10000);
             },
             save_app: async (app_slug) => {
                 await savetextfile('/flash/config/app-'+app_slug+'.json', JSON.stringify(component.configs[app_slug]));
