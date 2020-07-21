@@ -8254,6 +8254,13 @@ vue-json-edit@^1.4.3:
     vue "^2.6.8"
     vuedraggable "^2.23.2"
 
+vue-json-editor@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/vue-json-editor/-/vue-json-editor-1.4.2.tgz#bbd65d2293fce49300a254d5b2a8556983bed2be"
+  integrity sha512-l5t0cojE5cHzUFdIdYqOCvBdMjsUJiQ2qZuhIhJe1dVaDUSTYP0ZsGkMcxZYQMd5TABdw56JPl23i/1fkjDZEQ==
+  dependencies:
+    vue "^2.2.6"
+
 vue-jstree@^2.1.6:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/vue-jstree/-/vue-jstree-2.1.6.tgz#44827ad72953ed77da6590ce4e8f37f7787f8653"
@@ -8332,7 +8339,7 @@ vue2-perfect-scrollbar@^1.2.1:
     perfect-scrollbar "^1.5.0"
     postcss-import "^12.0.0"
 
-vue@^2.6.11, vue@^2.6.8:
+vue@^2.2.6, vue@^2.6.11, vue@^2.6.8:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==

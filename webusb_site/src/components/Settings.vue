@@ -33,14 +33,7 @@
                 <mdb-card class="mt-4">
                     <mdb-card-header>App - {{app_slug}}</mdb-card-header>
                     <mdb-card-body>
-                        <JsonEditor
-                                :options="{
-                                  confirmText: 'confirm',
-                                  cancelText: 'cancel',
-                                }"
-                                :objData="configs[app_slug]"
-                                v-model="configs[app_slug]">
-                        </JsonEditor>
+                        <vue-json-editor v-model="configs[app_slug]" :show-btns="false" :expandedOnStart="true" @json-change="onJsonChange"></vue-json-editor>
                         <mdb-btn color="primary" v-on:click="save_app(app_slug)">Save</mdb-btn>
                     </mdb-card-body>
                 </mdb-card>
@@ -53,9 +46,9 @@
     import {savetextfile, runfile, readfile, delfile, fetch_dir, on_connect, writetostdin} from '../webusb';
     import {mdbRow, mdbCol, mdbBtn, mdbInput, mdbCard, mdbCardHeader, mdbCardBody} from 'mdbvue';
     import Vue from 'vue';
-    import JsonEditor from 'vue-json-edit';
-    // import vueJsonEditor from 'vue-json-editor'
-    Vue.use(JsonEditor);
+    // import JsonEditor from 'vue-json-edit';
+    import vueJsonEditor from 'vue-json-editor'
+    // Vue.use(JsonEditor);
 
     let component;
     export default {
@@ -72,6 +65,7 @@
             mdbCard,
             mdbCardHeader,
             mdbCardBody,
+            vueJsonEditor
         },
         methods: {
             update_local_apps: async () => {
@@ -116,6 +110,9 @@
             save_app: async (app_slug) => {
                 await savetextfile('/flash/config/app-'+app_slug+'.json', JSON.stringify(component.configs[app_slug]));
                 component.$emit('genNotification', 'App settings updated successfully');
+            },
+            onJsonChange: () => {
+                debugger;
             }
         },
         data() {
