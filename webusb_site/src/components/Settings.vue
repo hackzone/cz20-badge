@@ -45,10 +45,7 @@
 <script>
     import {savetextfile, runfile, readfile, delfile, fetch_dir, on_connect, writetostdin} from '../webusb';
     import {mdbRow, mdbCol, mdbBtn, mdbInput, mdbCard, mdbCardHeader, mdbCardBody} from 'mdbvue';
-    import Vue from 'vue';
-    // import JsonEditor from 'vue-json-edit';
     import vueJsonEditor from 'vue-json-editor'
-    // Vue.use(JsonEditor);
 
     let component;
     export default {
