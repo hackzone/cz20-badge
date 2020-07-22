@@ -41,7 +41,7 @@
                             <p><strong>{{ current_app.name }}</strong></p>
                             <p>{{ current_app.description }}</p>
                             <p v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision">An update is available for this app
-                            <mdb-btn color="primary" size="sm" v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision" v-bind:class="{disabled: installing}" v-on:click="install_app(current_app.slug)">Install</mdb-btn>
+                            <mdb-btn color="primary" size="sm" v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision" v-bind:class="{disabled: installing}" v-on:click="install_app(current_app.slug, is_update=true)">Install</mdb-btn>
                             </p>
                         </div>
 
@@ -199,37 +199,49 @@
                 metadata['latest_release_url'] = metadata.releases[latest_release_key][0]['url'];
                 return metadata;
             },
-            install_app: async (app_slug, install_path='/flash/apps/') => {
+            install_app: async (app_slug, is_update=false, install_path='/flash/apps/') => {
                 component.installing = true;
-                let metadata = await component.get_app_metadata(app_slug);
-                let response = await fetch(metadata.latest_release_url);
-                let tar_gz = await response.arrayBuffer();
-                let tar = pako.inflate(tar_gz);
-                let files = await untar(tar.buffer);
+                try {
+                    let metadata = await component.get_app_metadata(app_slug);
+                    let response = await fetch(metadata.latest_release_url);
+                    let tar_gz = await response.arrayBuffer();
+                    let tar = pako.inflate(tar_gz);
+                    let files = await untar(tar.buffer);
 
-                let paths = [];
-                for(let file of files) {
-                    let dirs = file.name.split('/');
-                    dirs.pop();
-                    for(let i=1; i <= dirs.length; i++) {
-                        paths.push(install_path + dirs.slice(0,i).join('/'));
+                    let paths = [];
+                    for (let file of files) {
+                        let dirs = file.name.split('/');
+                        dirs.pop();
+                        for (let i = 1; i <= dirs.length; i++) {
+                            paths.push(install_path + dirs.slice(0, i).join('/'));
+                        }
                     }
-                }
-                let unique_paths = paths.filter((value, index, self) => self.indexOf(value) === index);
-                for(let path of unique_paths) {
-                    console.info('Creating folder', path);
-                    await createfolder(path);
-                }
 
-                for(let file of files) {
-                    let path = install_path + file.name;
-                    console.info('Writing file', path);
-                    await savefile(path, file.buffer);
-                }
+                    if (!is_update) {
+                        let unique_paths = paths.filter((value, index, self) => self.indexOf(value) === index);
+                        for (let path of unique_paths) {
+                            console.info('Creating folder', path);
+                            await createfolder(path);
+                        }
+                    }
 
-                component.installing = false;
-                component.local_apps.push(app_slug);
-                component.$emit('genNotification', 'Installed ' + metadata.name + ' successfully');
+                    for (let file of files) {
+                        let path = install_path + file.name;
+                        console.info('Writing file', path);
+                        await savefile(path, file.buffer);
+                    }
+
+                    if (is_update) {
+                        component.current_app = await component.get_local_app_metadata(app_slug, install_path);
+                    } else {
+                        component.local_apps.push(app_slug);
+                    }
+                    component.$emit('genNotification', 'Installed ' + metadata.name + ' successfully');
+                } catch(error) {
+                    component.$emit('genNotification', 'Failed to install app. Please try again.');
+                } finally {
+                    component.installing = false;
+                }
             },
             uninstall_app: async (app_slug, install_path='/flash/apps/') => {
                 try {
