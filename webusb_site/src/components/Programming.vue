@@ -21,7 +21,7 @@
           </mdb-row>
           <mdb-row class='mt-3'>
             <mdb-col sm='6' md='4' lg='3'>
-              <v-jstree :data='files' draggable multiple allow-batch whole-row @item-click='itemClick' @item-drop-before='itemDrop' @item-drop='otherDrop' @item-drag-start='itemDragStart'></v-jstree>
+              <v-jstree :data='files' draggable multiple allow-batch whole-row @item-click='itemClick' @item-toggle='itemToggle' @item-drop-before='itemDrop' @item-drop='otherDrop' @item-drag-start='itemDragStart'></v-jstree>
             </mdb-col>
             <mdb-col sm='6' md='8' lg='9'>
               <editor v-model='content_editor' lang='python' theme='monokai' height='500'></editor>
@@ -168,6 +168,26 @@ export default {
       node.model.selected = true;
       selected_item = node;
       component.updateNode(node);      
+    },
+    itemToggle:(node) => {
+      if (!node.data.is_dir) {
+        return;
+      }
+      // Run only once
+      if (!node.data.children.length || !node.data.children[0].isDummy) {
+        return;
+      }
+      // And only for opened windows (this event gets fired twice)
+      if (!node.data.opened) {
+        return;
+      }
+      // And only for items we haven't seen before
+      if (node.data.isToggled === true) {
+        return;
+      }
+
+      node.data.isToggled = true;
+      component.updateNode(node);
     },
     otherDrop: (node, item, d, e) => {
 
@@ -324,14 +344,14 @@ export default {
           full_path: '/flash',
           icon: 'fas fa-microchip',
           is_dir: true,
-          children: [{text:'Click parent to refresh', icon: 'none'}]
+          children: [{text:'Click parent to refresh', icon: 'none', isDummy: true}]
         },
         {
           text: 'sdcard',
           full_path: '/sdcard',
           icon: 'fas fa-sd-card',
           is_dir: true,
-          children: [{text:'Click parent to refresh', icon: 'none'}]
+          children: [{text:'Click parent to refresh', icon: 'none', isDummy: true}]
         }
       ]
     }
