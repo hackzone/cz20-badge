@@ -1,5 +1,11 @@
 <template>
     <section id="apps">
+        <mdb-modal size="lg" style="cursor: pointer; z-index: 9999;" v-if="installing">
+            <mdb-modal-body>
+                Currently writing: {{ installing_file }}
+                <mdb-progress :height="20" v-model="installing_progress" />
+            </mdb-modal-body>
+        </mdb-modal>
         <mdb-row>
             <mdb-col md="5">
                 <mdb-card class="mb-4">
@@ -109,6 +115,9 @@
         mdbCol,
         mdbBtn,
         mdbTbl,
+        mdbProgress,
+        mdbModal,
+        mdbModalBody,
         mdbCard,
         mdbCardBody,
         mdbCardHeader,
@@ -130,6 +139,9 @@
             mdbCol,
             mdbBtn,
             mdbTbl,
+            mdbProgress,
+            mdbModal,
+            mdbModalBody,
             mdbCard,
             mdbCardBody,
             mdbCardHeader,
@@ -200,6 +212,8 @@
                 return metadata;
             },
             install_app: async (app_slug, is_update=false, install_path='/flash/apps/') => {
+                component.installing_file = '';
+                component.installing_progress = 0;
                 component.installing = true;
                 try {
                     let metadata = await component.get_app_metadata(app_slug);
@@ -225,9 +239,11 @@
                         }
                     }
 
-                    for (let file of files) {
+                    for (let [i, file] of files.entries()) {
                         let path = install_path + file.name;
                         console.info('Writing file', path);
+                        component.installing_file = path;
+                        component.installing_progress = Math.floor((i / (files.length-1)) * 100);
                         await savefile(path, file.buffer);
                     }
 
@@ -238,7 +254,12 @@
                     }
                     component.$emit('genNotification', 'Installed ' + metadata.name + ' successfully');
                 } catch(error) {
-                    component.$emit('genNotification', 'Failed to install app. Please try again.');
+                    try {
+                        await deldir(install_path + app_slug);
+                    } catch(error) {
+                        console.error('Error removing app dir for ' + app_slug, error);
+                    }
+                    component.$emit('genNotification', 'Failed to install ' + app_slug + '. Please try again.');
                 } finally {
                     component.installing = false;
                 }
@@ -314,6 +335,8 @@
                 categories: ['all'],
                 states: ['working', 'all'],
                 installing: false,
+                installing_file: '',
+                installing_progress: 0,
                 color_picker: '007F7F'
             }
         },
