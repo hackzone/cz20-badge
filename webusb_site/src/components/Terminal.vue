@@ -25,8 +25,8 @@
             this.fitAddon.fit();
             window.addEventListener('resize', this.handleResize);
 
-            this.terminal.onKey((e) => {
-                this.$emit('key', e.key);
+            this.terminal.onData((data) => {
+                this.$emit('data', data);
             });
         },
         beforeDestroy() {

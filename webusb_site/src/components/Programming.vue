@@ -35,7 +35,7 @@
         <section>
               Python terminal
               <div class="md-form">
-                  <Terminal ref="terminal" v-on:key="commandpython"></Terminal>
+                  <Terminal ref="terminal" v-on:data="commandpython"></Terminal>
               </div>
         </section>
       </mdb-card-body>
