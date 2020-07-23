@@ -35,8 +35,7 @@
         <section>
               Python terminal
               <div class="md-form">
-                  <textarea placeholder=">>>" readonly wrap="hard" id="commandlog" style="resize: none; overflow:auto" v-model="commandlog"></textarea>
-                  <input autocomplete="off" type="text" id="example1" class="form-control" v-on:keyup="commandpython" v-model="command">
+                  <Terminal ref="terminal" v-on:key="commandpython"></Terminal>
               </div>
         </section>
       </mdb-card-body>
@@ -59,6 +58,7 @@ import 'brace/theme/monokai';
 import * as ace_editor from 'vue2-ace-editor';
 import { saveAs } from 'file-saver';
 import * as JSZip from 'jszip';
+import { default as Terminal } from './Terminal'
 
 let component = undefined;
 let selected_item = {model:{}};
@@ -69,13 +69,7 @@ const extension_whitelist = ["txt", "csv", "json", "py", "ini", "info", "md", "l
 
 function commandlog(str) {
   if(component) {
-    component.commandlog += str;
-    setTimeout(() => {
-      let textarea = document.getElementById("commandlog");
-      if(textarea.selectionStart == textarea.selectionEnd) {
-        textarea.scrollTop = textarea.scrollHeight;
-      }
-    }, 10);
+    component.$refs.terminal.handleLog(str);
   }
 }
 
@@ -89,7 +83,8 @@ export default {
     mdbCardBody,
     mdbInput,
     VJstree,
-    editor:ace_editor
+    editor:ace_editor,
+    Terminal,
   },
   beforeMount() {
     component = this;
@@ -302,11 +297,7 @@ export default {
 
     },
     commandpython(e) {
-      if(e.code === "Enter") {
-        //component.commandlog += component.command + "\n";
-        writetostdin(component.command + "\r\n");
-        component.command = "";
-      }
+      writetostdin(e);
     },
     connect:connect,
   },
@@ -315,8 +306,6 @@ export default {
       content_editor:'',
       content_original:'',
       editorfilename:'/flash/cache/scratch.py',
-      commandlog:"",
-      command:"",
       show: true,
       files: [
         {
