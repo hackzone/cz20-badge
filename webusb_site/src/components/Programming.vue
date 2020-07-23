@@ -68,7 +68,7 @@ let beforemoveloc = undefined;
 const extension_whitelist = ["txt", "csv", "json", "py", "ini", "info", "md", "log", "conf", "cfg"];
 
 function commandlog(str) {
-  if(component) {
+  if(component && component.$refs && component.$refs.terminal) {
     component.$refs.terminal.handleLog(str);
   }
 }
