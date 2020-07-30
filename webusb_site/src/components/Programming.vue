@@ -21,7 +21,7 @@
           </mdb-row>
           <mdb-row class='mt-3'>
             <mdb-col sm='6' md='4' lg='3'>
-              <v-jstree :data='files' draggable multiple allow-batch whole-row @item-click='itemClick' @item-drop-before='itemDrop' @item-drop='otherDrop' @item-drag-start='itemDragStart'></v-jstree>
+              <v-jstree :data='files' draggable multiple allow-batch whole-row @item-click='itemClick' @item-toggle='itemToggle' @item-drop-before='itemDrop' @item-drop='otherDrop' @item-drag-start='itemDragStart'></v-jstree>
             </mdb-col>
             <mdb-col sm='6' md='8' lg='9'>
               <editor v-model='content_editor' lang='python' theme='monokai' height='500'></editor>
@@ -35,8 +35,7 @@
         <section>
               Python terminal
               <div class="md-form">
-                  <textarea placeholder=">>>" readonly wrap="hard" id="commandlog" style="resize: none; overflow:auto" v-model="commandlog"></textarea>
-                  <input autocomplete="off" type="text" id="example1" class="form-control" v-on:keyup="commandpython" v-model="command">
+                  <Terminal ref="terminal" v-on:data="commandpython"></Terminal>
               </div>
         </section>
       </mdb-card-body>
@@ -59,6 +58,7 @@ import 'brace/theme/monokai';
 import * as ace_editor from 'vue2-ace-editor';
 import { saveAs } from 'file-saver';
 import * as JSZip from 'jszip';
+import { default as Terminal } from './Terminal'
 
 let component = undefined;
 let selected_item = {model:{}};
@@ -68,14 +68,8 @@ let beforemoveloc = undefined;
 const extension_whitelist = ["txt", "csv", "json", "py", "ini", "info", "md", "log", "conf", "cfg"];
 
 function commandlog(str) {
-  if(component) {
-    component.commandlog += str;
-    setTimeout(() => {
-      let textarea = document.getElementById("commandlog");
-      if(textarea.selectionStart == textarea.selectionEnd) {
-        textarea.scrollTop = textarea.scrollHeight;
-      }
-    }, 10);
+  if(component && component.$refs && component.$refs.terminal) {
+    component.$refs.terminal.handleLog(str);
   }
 }
 
@@ -89,7 +83,8 @@ export default {
     mdbCardBody,
     mdbInput,
     VJstree,
-    editor:ace_editor
+    editor:ace_editor,
+    Terminal,
   },
   beforeMount() {
     component = this;
@@ -169,6 +164,26 @@ export default {
       selected_item = node;
       component.updateNode(node);      
     },
+    itemToggle:(node) => {
+      if (!node.data.is_dir) {
+        return;
+      }
+      // Run only once
+      if (!node.data.children.length || !node.data.children[0].isDummy) {
+        return;
+      }
+      // And only for opened windows (this event gets fired twice)
+      if (!node.data.opened) {
+        return;
+      }
+      // And only for items we haven't seen before
+      if (node.data.isToggled === true) {
+        return;
+      }
+
+      node.data.isToggled = true;
+      component.updateNode(node);
+    },
     otherDrop: (node, item, d, e) => {
 
     },
@@ -243,14 +258,13 @@ export default {
         component.$emit('genNotification', 'Can only download folder','Download failed','times', 'red', 30);
       }
     },
-    save_ui: () => {
+    save_ui: async () => {
       let parts = component.editorfilename.split(".");
       if((parts.length > 1 && extension_whitelist.indexOf(parts[parts.length-1].toLowerCase()) >= 0) || window.confirm("File: "+component.editorfilename+" has not a textfile extension")) {
-        savetextfile(component.editorfilename, component.content_editor).then(() => {
-          component.content_original = component.content_editor;
-          component.itemClick(selected_item.$parent);
-          component.$emit('genNotification','Save succes', 'Save succes', 'check', 'green', 30);
-        });
+        await savetextfile(component.editorfilename, component.content_editor);
+        component.content_original = component.content_editor;
+        component.updateNode(selected_item.$parent);
+        component.$emit('genNotification','Save succes', 'Save succes', 'check', 'green', 30);
       }
     },
     rename_ui: () => {
@@ -288,19 +302,22 @@ export default {
     },
     runfile_ui: async () => {
       if(component.content_editor !== component.content_original) {
-        await savefile(component.editorfilename, component.content_editor);
+        await savetextfile(component.editorfilename, component.content_editor);
+        component.content_original = component.content_editor;
       }
-      runfile(component.editorfilename.replace('/flash/', '/'));
+      let import_name = component.editorfilename.replace('/flash/', '/').replace('/__init__.py', '').replace('.py', '')
+      if (import_name.length > 1 && import_name[0] === '/') {
+        import_name = import_name.substr(1);
+      }
+      import_name = import_name.replace('/', '.')
+
+      runfile(import_name);
     },
     info() {
 
     },
     commandpython(e) {
-      if(e.code === "Enter") {
-        //component.commandlog += component.command + "\n";
-        writetostdin(component.command + "\r\n");
-        component.command = "";
-      }
+      writetostdin(e);
     },
     connect:connect,
   },
@@ -309,8 +326,6 @@ export default {
       content_editor:'',
       content_original:'',
       editorfilename:'/flash/cache/scratch.py',
-      commandlog:"",
-      command:"",
       show: true,
       files: [
         {
@@ -318,14 +333,14 @@ export default {
           full_path: '/flash',
           icon: 'fas fa-microchip',
           is_dir: true,
-          children: [{text:'Click parent to refresh', icon: 'none'}]
+          children: [{text:'Click parent to refresh', icon: 'none', isDummy: true}]
         },
         {
           text: 'sdcard',
           full_path: '/sdcard',
           icon: 'fas fa-sd-card',
           is_dir: true,
-          children: [{text:'Click parent to refresh', icon: 'none'}]
+          children: [{text:'Click parent to refresh', icon: 'none', isDummy: true}]
         }
       ]
     }

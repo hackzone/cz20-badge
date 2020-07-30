@@ -13,3 +13,4 @@ bootloader-STM32.cbp
 cmake_install.cmake
 .idea
 cmake-build-debug
+/Debug/

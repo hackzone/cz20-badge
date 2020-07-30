@@ -33,14 +33,7 @@
                 <mdb-card class="mt-4">
                     <mdb-card-header>App - {{app_slug}}</mdb-card-header>
                     <mdb-card-body>
-                        <JsonEditor
-                                :options="{
-                                  confirmText: 'confirm',
-                                  cancelText: 'cancel',
-                                }"
-                                :objData="configs[app_slug]"
-                                v-model="configs[app_slug]">
-                        </JsonEditor>
+                        <vue-json-editor v-model="configs[app_slug]" :show-btns="false" :expandedOnStart="true" @json-change="onJsonChange"></vue-json-editor>
                         <mdb-btn color="primary" v-on:click="save_app(app_slug)">Save</mdb-btn>
                     </mdb-card-body>
                 </mdb-card>
@@ -50,12 +43,9 @@
 </template>
 
 <script>
-    import {savetextfile, runfile, readfile, delfile, fetch_dir, on_connect} from '../webusb';
+    import {savetextfile, runfile, readfile, delfile, fetch_dir, on_connect, writetostdin} from '../webusb';
     import {mdbRow, mdbCol, mdbBtn, mdbInput, mdbCard, mdbCardHeader, mdbCardBody} from 'mdbvue';
-    import Vue from 'vue';
-    import JsonEditor from 'vue-json-edit';
-    // import vueJsonEditor from 'vue-json-editor'
-    Vue.use(JsonEditor);
+    import vueJsonEditor from 'vue-json-editor'
 
     let component;
     export default {
@@ -72,6 +62,7 @@
             mdbCard,
             mdbCardHeader,
             mdbCardBody,
+            vueJsonEditor
         },
         methods: {
             update_local_apps: async () => {
@@ -103,27 +94,22 @@
                 component.app_slugs = configurable_apps;
             },
             save_wifi: async () => {
-                let tmp_filename = '/flash/cache/setup_wifi.py';
-                await savetextfile(tmp_filename, 'import machine, system\n'+
-                    'machine.nvs_setstr("system", "wifi.ssid", "' + component.wifi_ssid + '")\n' +
-                    'machine.nvs_setstr("system", "wifi.password", "' + component.wifi_password + '")\n' +
-                    'system.reboot()');
-                await runfile(tmp_filename);
+                await writetostdin('import machine, system;'+
+                    'machine.nvs_setstr("system", "wifi.ssid", "' + component.wifi_ssid + '");' +
+                    'machine.nvs_setstr("system", "wifi.password", "' + component.wifi_password + '");\r\n');
                 component.$emit('genNotification', 'WiFi settings updated successfully');
-                setTimeout(() => delfile(tmp_filename), 10000);
             },
             save_audio: async () => {
-                let tmp_filename = '/flash/cache/setup_audio.py';
-                await savetextfile(tmp_filename, 'import machine, system\n'+
-                    'machine.nvs_setint("system", "volume", ' + component.volume + ')\n' +
-                    'system.reboot()');
-                await runfile(tmp_filename);
+                await writetostdin('import machine, system;'+
+                    'machine.nvs_setint("system", "volume", ' + component.volume + ')\r\n');
                 component.$emit('genNotification', 'Audio settings updated successfully');
-                setTimeout(() => delfile(tmp_filename), 10000);
             },
             save_app: async (app_slug) => {
                 await savetextfile('/flash/config/app-'+app_slug+'.json', JSON.stringify(component.configs[app_slug]));
                 component.$emit('genNotification', 'App settings updated successfully');
+            },
+            onJsonChange: () => {
+                debugger;
             }
         },
         data() {

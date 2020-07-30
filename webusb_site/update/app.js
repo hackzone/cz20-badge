@@ -160,7 +160,7 @@ function checkWrite() {
 function prog_file() {
   console.log("Fetching file...")
   var oReq = new XMLHttpRequest();
-  oReq.open("GET", "/update/ledblink.bin", true);
+  oReq.open("GET", "/update/firmware-STM32.bin", true);
   oReq.responseType = "arraybuffer";
 
   oReq.onload = function (oEvent) {

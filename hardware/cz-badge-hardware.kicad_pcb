@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew "(5.1.5)-3")
+(kicad_pcb (version 20171130) (host pcbnew "(5.1.5-0-10_14)")
 
   (general
     (thickness 1.6)
@@ -92,7 +92,7 @@
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory "gerbers/"))
+      (outputdirectory "centroids/"))
   )
 
   (net 0 "")
@@ -630,14 +630,12 @@
   (module lcsc:FFC-SMD_8P-P1.00_FFC10028-08SBD224K6M (layer B.Cu) (tedit 5ED3E980) (tstamp 5ECCDDBC)
     (at 52.32 22.5)
     (path /5E7705B5)
+    (attr smd)
     (fp_text reference J7 (at 0.1 3.9) (layer B.SilkS)
       (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
     )
     (fp_text value Conn_01x08 (at 0 5.8) (layer B.Fab)
       (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
-    )
-    (fp_text user gge6 (at 0 1.8) (layer Cmts.User)
-      (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start -5.1 -3.8) (end -5.1 1) (layer B.SilkS) (width 0.254))
     (fp_line (start 5.1 -3.8) (end 5.1 1) (layer B.SilkS) (width 0.254))
@@ -669,6 +667,7 @@
 
   (module hackzone:hackzone (layer B.Cu) (tedit 0) (tstamp 5ECEFF09)
     (at 102.36 77.51 180)
+    (attr smd)
     (fp_text reference G*** (at 0 0) (layer B.SilkS) hide
       (effects (font (size 1.524 1.524) (thickness 0.3)) (justify mirror))
     )
@@ -1840,6 +1839,7 @@
   (module silicone_key_contact:silicone_key_contact (layer F.Cu) (tedit 5DC75A81) (tstamp 5DC705B7)
     (at 87.5 87.5)
     (path /5DC5BD01/5DC67D90)
+    (attr smd)
     (fp_text reference SW11 (at 0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -2687,6 +2687,7 @@
   (module esp32-wrover:XCVR_ESP32-WROVER (layer B.Cu) (tedit 5EB06E03) (tstamp 5E36E350)
     (at 74.7 31 180)
     (path /5DC9DC17)
+    (attr smd)
     (fp_text reference U2 (at -6.025 17.135) (layer B.SilkS)
       (effects (font (size 1 1) (thickness 0.015)) (justify mirror))
     )
@@ -4493,6 +4494,7 @@
   (module silicone_key_contact:silicone_key_contact (layer F.Cu) (tedit 5DC75A81) (tstamp 5DC6FD80)
     (at 112.5 37.5)
     (path /5DC5BD01/5DC5F514)
+    (attr smd)
     (fp_text reference SW4 (at 0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -4741,6 +4743,7 @@
   (module silicone_key_contact:silicone_key_contact (layer F.Cu) (tedit 5DC75A81) (tstamp 5DC709F2)
     (at 87.5 37.5)
     (path /5DC5BD01/5DC5F50E)
+    (attr smd)
     (fp_text reference SW3 (at 0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -4833,6 +4836,7 @@
   (module silicone_key_contact:silicone_key_contact_mirrored (layer F.Cu) (tedit 5E39A992) (tstamp 5DC6FEE8)
     (at 62.5 62.5)
     (path /5DC5BD01/5DC625C6)
+    (attr smd)
     (fp_text reference SW6 (at -0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -4925,6 +4929,7 @@
   (module silicone_key_contact:silicone_key_contact_mirrored (layer F.Cu) (tedit 5E39A992) (tstamp 5DC70107)
     (at 112.5 112.5)
     (path /5DC5BD01/5DC67DAE)
+    (attr smd)
     (fp_text reference SW16 (at -0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -5017,6 +5022,7 @@
   (module silicone_key_contact:silicone_key_contact_mirrored (layer F.Cu) (tedit 5E39A992) (tstamp 5DC707D6)
     (at 62.5 112.5)
     (path /5DC5BD01/5DC67DA2)
+    (attr smd)
     (fp_text reference SW14 (at -0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -5109,6 +5115,7 @@
   (module silicone_key_contact:silicone_key_contact_mirrored (layer F.Cu) (tedit 5E39A992) (tstamp 5DC7093E)
     (at 112.5 87.5)
     (path /5DC5BD01/5DC67D96)
+    (attr smd)
     (fp_text reference SW12 (at -0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -5201,6 +5208,7 @@
   (module silicone_key_contact:silicone_key_contact_mirrored (layer F.Cu) (tedit 5E39A992) (tstamp 5DC7071F)
     (at 62.5 87.5)
     (path /5DC5BD01/5DC67D8A)
+    (attr smd)
     (fp_text reference SW10 (at -0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -5293,6 +5301,7 @@
   (module silicone_key_contact:silicone_key_contact_mirrored (layer F.Cu) (tedit 5E39A992) (tstamp 5DC6FC18)
     (at 112.5 62.5)
     (path /5DC5BD01/5DC625D2)
+    (attr smd)
     (fp_text reference SW8 (at -0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -5385,6 +5394,7 @@
   (module silicone_key_contact:silicone_key_contact_mirrored (layer F.Cu) (tedit 5E39A992) (tstamp 5E3AE30F)
     (at 62.5 37.5)
     (path /5DC5BD01/5DC5D8CF)
+    (attr smd)
     (fp_text reference SW2 (at -0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -5510,10 +5520,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 142 /led_matrix/R8))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5553,10 +5563,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 130 /led_matrix/R7))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5596,10 +5606,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 118 /led_matrix/R6))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5639,10 +5649,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 106 /led_matrix/R5))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5682,10 +5692,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 139 /led_matrix/R4))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5725,10 +5735,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 127 /led_matrix/R3))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5768,10 +5778,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 115 /led_matrix/R2))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5811,10 +5821,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 103 /led_matrix/R1))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5854,10 +5864,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 145 /led_matrix/R12))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5897,10 +5907,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 133 /led_matrix/R11))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5940,10 +5950,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 121 /led_matrix/R10))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -5983,10 +5993,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 109 /led_matrix/R9))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -6026,10 +6036,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 112 /led_matrix/R13))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -6069,10 +6079,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 124 /led_matrix/R14))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -6112,10 +6122,10 @@
       (net 78 VCC))
     (pad 1 smd rect (at -1.25 -0.7) (size 1 0.8) (layers F.Cu F.Paste F.Mask)
       (net 136 /led_matrix/R15))
-    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LED_Cree-PLCC4_3.2x2.8mm_CCW.wrl
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -6159,6 +6169,11 @@
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
+    )
+    (model ${KISYS3DMOD}/LED_SMD.3dshapes/LL-R3528RGBC-008-B--3DModel-STEP-56544.STEP
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz -90 0 180))
     )
   )
 
@@ -8147,6 +8162,7 @@
   (module silicone_key_contact:silicone_key_contact (layer F.Cu) (tedit 5DC75A81) (tstamp 5DC6FF9C)
     (at 87.5 112.5)
     (path /5DC5BD01/5DC67DA8)
+    (attr smd)
     (fp_text reference SW15 (at 0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -8239,6 +8255,7 @@
   (module silicone_key_contact:silicone_key_contact (layer F.Cu) (tedit 5DC75A81) (tstamp 5DC7088A)
     (at 37.5 112.5)
     (path /5DC5BD01/5DC67D9C)
+    (attr smd)
     (fp_text reference SW13 (at 0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -8331,6 +8348,7 @@
   (module silicone_key_contact:silicone_key_contact (layer F.Cu) (tedit 5DC75A81) (tstamp 5DC7066B)
     (at 37.5 87.5)
     (path /5DC5BD01/5DC67D84)
+    (attr smd)
     (fp_text reference SW9 (at 0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -8423,6 +8441,7 @@
   (module silicone_key_contact:silicone_key_contact (layer F.Cu) (tedit 5DC75A81) (tstamp 5DC70050)
     (at 87.5 62.5)
     (path /5DC5BD01/5DC625CC)
+    (attr smd)
     (fp_text reference SW7 (at 0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -8515,6 +8534,7 @@
   (module silicone_key_contact:silicone_key_contact (layer F.Cu) (tedit 5DC75A81) (tstamp 5DC6FCCC)
     (at 37.5 62.5)
     (path /5DC5BD01/5DC625C0)
+    (attr smd)
     (fp_text reference SW5 (at 0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
@@ -8607,6 +8627,7 @@
   (module silicone_key_contact:silicone_key_contact (layer F.Cu) (tedit 5DC75A81) (tstamp 5DC6FE34)
     (at 37.5 37.5)
     (path /5DC5BD01/5DC5BF52)
+    (attr smd)
     (fp_text reference SW1 (at 0.5 -9.5) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )

@@ -1,0 +1,7 @@
+Ref,Val,Package,PosX,PosY,Rot,Side
+"J1","Conn_02x03_Odd_Even","PinSocket_2x03_P2.54mm_Vertical_SMD",-50.000000,33.500000,180.000000,bottom
+"J2","Conn_01x02_Female","Molex_PicoBlade_53261-0271_1x02-1MP_P1.25mm_Horizontal",-57.000000,21.000000,90.000000,bottom
+"J3","Conn_01x02_Female","Molex_PicoBlade_53261-0271_1x02-1MP_P1.25mm_Horizontal",-43.000000,21.000000,270.000000,bottom
+"J4","Conn_01x08_Female","FFC-SMD_8P-P1.00_FFC10028-08SBD224K6M",-72.600000,12.500000,180.000000,bottom
+"REF**","Fiducial_1mm_Mask2mm","Fiducial_1mm_Mask2mm",-42.200000,21.000000,0.000000,bottom
+"REF**","Fiducial_1mm_Mask2mm","Fiducial_1mm_Mask2mm",-73.400000,10.000000,0.000000,bottom

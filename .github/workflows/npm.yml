@@ -21,11 +21,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
+      - name: Install yarn
+        run: sudo npm install -g yarn
+      - name: Yarn
+        run: yarn
         working-directory: webusb_site
-      - run: npm run build --report
+      - run: yarn build --report
         working-directory: webusb_site
-      - run: npm run lint
+      - run: yarn lint
         working-directory: webusb_site
         env:
           CI: true

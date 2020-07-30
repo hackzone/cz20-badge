@@ -1,5 +1,11 @@
 <template>
     <section id="apps">
+        <mdb-modal size="lg" style="cursor: pointer; z-index: 9999;" v-if="installing">
+            <mdb-modal-body>
+                Currently writing: {{ installing_file }}
+                <mdb-progress :height="20" v-model="installing_progress" />
+            </mdb-modal-body>
+        </mdb-modal>
         <mdb-row>
             <mdb-col md="5">
                 <mdb-card class="mb-4">
@@ -39,9 +45,9 @@
                         </select>
                         <div v-if="current_app !== undefined" class="mt-3">
                             <p><strong>{{ current_app.name }}</strong></p>
-                            <p>{{ current_app.description }}</p>
-                            <p v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision">An update is available for this app
-                            <mdb-btn color="primary" size="sm" v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision" v-bind:class="{disabled: installing}" v-on:click="install_app(current_app.slug)">Install</mdb-btn>
+                            <vue-markdown v-bind:source="current_app.description"></vue-markdown>
+                            <p v-if="store_apps.filter((val) => val.name === current_app.name).length == 1 && parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision">An update is available for this app
+                            <mdb-btn color="primary" size="sm" v-if="parseInt(store_apps.filter((val) => val.name === current_app.name)[0].revision) !== current_app.revision" v-bind:class="{disabled: installing}" v-on:click="install_app(current_app.slug, is_update=true)">Install</mdb-btn>
                             </p>
                         </div>
 
@@ -60,19 +66,20 @@
                     <mdb-card-header>Install apps from app store</mdb-card-header>
                     <mdb-card-body>
                         <mdb-row>
-                            <mdb-col sm="2">
+                            <mdb-col sm="6" md="3">
                                 <span>Filter category</span>
                                 <select class="browser-default custom-select" v-model="selected_store_category">
                                     <option v-for="category in categories" v-bind:key="category" v-bind:value="category">{{category}}</option>
                                 </select>
                             </mdb-col>
-                        </mdb-row>
-                        <mdb-row class="mt-2 mb-2">
-                            <mdb-col sm="2">
+                            <mdb-col sm="6" md="3">
                                 <span>Filter development state</span>
                                 <select class="browser-default custom-select" v-model="selected_store_state">
                                     <option v-for="state in states" v-bind:key="state" v-bind:value="state">{{state}}</option>
                                 </select>
+                            </mdb-col>
+                            <mdb-col sm="6">
+                                <span>Apps uploaded to hatchery.badge.team will automatically show up here for everyone. Be sure to upload yours! :)</span>
                             </mdb-col>
                         </mdb-row>
 
@@ -108,19 +115,25 @@
         mdbCol,
         mdbBtn,
         mdbTbl,
+        mdbProgress,
+        mdbModal,
+        mdbModalBody,
         mdbCard,
         mdbCardBody,
         mdbCardHeader,
     } from 'mdbvue';
 
+    import VueMarkdown from 'vue-markdown';
     import {Sketch} from 'vue-color';
     import {on_connect, readfile, createfolder, savefile, fetch_dir, deldir, savetextfile} from '../webusb';
     import * as pako from 'pako';
     import * as untar from 'js-untar';
     window.pako = pako;
     window.untar = untar;
+    window.VueMarkdown = VueMarkdown;
 
     let component = undefined;
+    debugger;
 
     export default {
         name: 'Apps',
@@ -129,9 +142,13 @@
             mdbCol,
             mdbBtn,
             mdbTbl,
+            mdbProgress,
+            mdbModal,
+            mdbModalBody,
             mdbCard,
             mdbCardBody,
             mdbCardHeader,
+            'vue-markdown': VueMarkdown,
             'sketch-picker': Sketch,
         },
         beforeMount() {
@@ -198,37 +215,58 @@
                 metadata['latest_release_url'] = metadata.releases[latest_release_key][0]['url'];
                 return metadata;
             },
-            install_app: async (app_slug, install_path='/flash/apps/') => {
+            install_app: async (app_slug, is_update=false, install_path='/flash/apps/') => {
+                component.installing_file = '';
+                component.installing_progress = 0;
                 component.installing = true;
-                let metadata = await component.get_app_metadata(app_slug);
-                let response = await fetch(metadata.latest_release_url);
-                let tar_gz = await response.arrayBuffer();
-                let tar = pako.inflate(tar_gz);
-                let files = await untar(tar.buffer);
+                try {
+                    let metadata = await component.get_app_metadata(app_slug);
+                    let response = await fetch(metadata.latest_release_url);
+                    let tar_gz = await response.arrayBuffer();
+                    let tar = pako.inflate(tar_gz);
+                    let files = await untar(tar.buffer);
 
-                let paths = [];
-                for(let file of files) {
-                    let dirs = file.name.split('/');
-                    dirs.pop();
-                    for(let i=1; i <= dirs.length; i++) {
-                        paths.push(install_path + dirs.slice(0,i).join('/'));
+                    let paths = [];
+                    for (let file of files) {
+                        let dirs = file.name.split('/');
+                        dirs.pop();
+                        for (let i = 1; i <= dirs.length; i++) {
+                            paths.push(install_path + dirs.slice(0, i).join('/'));
+                        }
                     }
-                }
-                let unique_paths = paths.filter((value, index, self) => self.indexOf(value) === index);
-                for(let path of unique_paths) {
-                    console.info('Creating folder', path);
-                    await createfolder(path);
-                }
 
-                for(let file of files) {
-                    let path = install_path + file.name;
-                    console.info('Writing file', path);
-                    await savefile(path, file.buffer);
-                }
+                    if (!is_update) {
+                        let unique_paths = paths.filter((value, index, self) => self.indexOf(value) === index);
+                        for (let path of unique_paths) {
+                            console.info('Creating folder', path);
+                            await createfolder(path);
+                        }
+                    }
 
-                component.installing = false;
-                component.local_apps.push(app_slug);
-                component.$emit('genNotification', 'Installed ' + metadata.name + ' successfully');
+                    for (let [i, file] of files.entries()) {
+                        let path = install_path + file.name;
+                        console.info('Writing file', path);
+                        component.installing_file = path;
+                        component.installing_progress = Math.floor((i / (files.length-1)) * 100);
+                        await savefile(path, file.buffer);
+                    }
+
+                    if (is_update) {
+                        component.current_app = await component.get_local_app_metadata(app_slug, install_path);
+                    } else {
+                        component.local_apps.push(app_slug);
+                    }
+                    component.$emit('genNotification', 'Installed ' + metadata.name + ' successfully');
+                } catch(error) {
+                    try {
+                        await deldir(install_path + app_slug);
+                    } catch(error) {
+                        console.error('Error removing app dir for ' + app_slug, error);
+                    }
+                    component.$emit('genNotification', 'Failed to install ' + app_slug + '. Please try again.');
+                } finally {
+                    component.installing = false;
+                }
             },
             uninstall_app: async (app_slug, install_path='/flash/apps/') => {
                 try {
@@ -301,6 +339,8 @@
                 categories: ['all'],
                 states: ['working', 'all'],
                 installing: false,
+                installing_file: '',
+                installing_progress: 0,
                 color_picker: '007F7F'
             }
         },

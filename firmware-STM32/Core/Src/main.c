@@ -39,7 +39,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define URL  "webusb.wittemanlabs.nl"
+#define URL  "webusb.hackz.one"
 
 const tusb_desc_webusb_url_t desc_url =
 {
@@ -119,7 +119,10 @@ uint32_t board_millis(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+#ifdef BOOTLOADER_BUILD
+	SCB->VTOR = 0x08004000;
+	__enable_irq();
+#endif
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
