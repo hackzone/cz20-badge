@@ -148,7 +148,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USB_PCD_Init();
-  MX_TIM1_Init();
+//  MX_TIM1_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   HAL_I2C_EnableListen_IT(&hi2c1);
