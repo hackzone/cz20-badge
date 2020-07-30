@@ -22,6 +22,10 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 uint32_t bufferpos;
 uint32_t bufferpos_webusb;
 
+uint32_t disablepins;
+uint32_t disabletimeout;
+
+
 extern UART_HandleTypeDef UART_SERIAL;
 extern UART_HandleTypeDef UART_WEBUSB;
 
@@ -84,6 +88,11 @@ void cdc_task(void)
 
     }
     tud_cdc_write_flush();
+    if(disablepins && HAL_GetTick() > disabletimeout) {
+    	disablepins = 0;
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 1);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, 1);
+    }
 
 }
 
@@ -116,20 +125,22 @@ void tud_cdc_rx_wanted_cb(uint8_t itf, char wanted_char) {
 // Invoked when line state DTR & RTS are changed via SET_CONTROL_LINE_STATE
 void tud_cdc_line_state_cb(uint8_t itf, bool dtr, bool rts) {
 	if((dtr && rts)) {
-		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 1);
-		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, 1);
+		disablepins = 1;
+		disabletimeout = HAL_GetTick()+10;
 	} else {
-		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, !rts);
-		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, !dtr);
+		disablepins = 0;
 	}
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, !rts);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, !dtr);
 }
 
 // Invoked when line coding is change via SET_LINE_CODING
 void tud_cdc_line_coding_cb(uint8_t itf, cdc_line_coding_t const* p_line_coding) {
-	if (HAL_UART_DeInit(&UART_SERIAL) != HAL_OK) {
-			/* Initialization Error */
-			Error_Handler();
-		}
+//		if (HAL_UART_DeInit(&UART_SERIAL) != HAL_OK) {
+//			/* Initialization Error */
+//			Error_Handler();
+//		}
+		HAL_UART_AbortReceive(&UART_SERIAL);
 
 		/* set the Stop bit */
 		switch (p_line_coding->stop_bits) {
@@ -184,10 +195,12 @@ void tud_cdc_line_coding_cb(uint8_t itf, cdc_line_coding_t const* p_line_coding)
 		UART_SERIAL.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 		UART_SERIAL.Init.Mode = UART_MODE_TX_RX;
 
-		if (HAL_UART_Init(&UART_SERIAL) != HAL_OK) {
-			/* Initialization Error */
-			Error_Handler();
-		}
+//		if (HAL_UART_Init(&UART_SERIAL) != HAL_OK) {
+//			/* Initialization Error */
+//			Error_Handler();
+//		}
+
+		UART_SERIAL.Instance->BRR = UART_BRR_SAMPLING8(HAL_RCC_GetPCLK2Freq(), UART_SERIAL.Init.BaudRate);
 
 		/* Start reception: provide the buffer pointer with offset and the buffer size */
 		bufferpos = 0;

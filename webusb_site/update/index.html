@@ -10,7 +10,19 @@
 	
 	<button onclick="connect()">Connect</button>
 	<button onclick="prog_file()">Prog</button>
-	<h1>WebUSB updater</h1>
+	<h1>WebUSB updater for CZ20's STM32</h1>
+	<p>
+		<strong>Important: </strong>this tool should only be used if you know what you're doing, or were asked to run it.
+		It should not be able to brick your badge, but don't risk it without good reason.
+	</p>
+	<ol>
+		<li>Press and hold the middle 2 buttons of the 2nd row from the top on your badge.</li>
+		<li>Unplug and replug the USB cable into your badge (still pressing the buttons).</li>
+		<li>Your badge now starts in DFU mode, and will show a popup in Chrome that makes you go to this site.</li>
+		<li>Release the buttons, click "connect" above, and select "HackZone DFU".</li>
+		<li>Click "Program" and wait a couple dozen seconds for a popup that tells you if it worked.</li>
+		<li>Unplug and plug in the USB cable again. Done!</li>
+	</ol>
 	
 
 

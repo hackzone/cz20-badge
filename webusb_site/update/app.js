@@ -21,14 +21,14 @@ function compareTypedArrays(a, b) {
   return true;
 }
 
-function prog_succes() {
-  console.log("Program success");
+function prog_success() {
+  window.alert("Program success");
   dfu_setversion(1);
   dfu_restart();
 }
 
 function prog_failed() {
-  console.log("Program failed");
+  window.alert("Programming failed");
 }
 
 let readLoop = () => {
@@ -40,7 +40,7 @@ let readLoop = () => {
             if(nextprog == lengthprog) {
               verifactive = 0;
               if(compareTypedArrays(application, bytepayload)) {
-                prog_succes();
+                prog_success();
               } else {
                 prog_failed();
               }
@@ -126,7 +126,7 @@ function check_status(response) {
     console.log("Still writing...");
   } else {
     if(lengthprog == nextprog) {
-      console.log("Done programming :)");
+      window.alert("Done writing :)");
       clearInterval(checktimer);
       verify_flash();      
       return;
@@ -160,7 +160,7 @@ function checkWrite() {
 function prog_file() {
   console.log("Fetching file...")
   var oReq = new XMLHttpRequest();
-  oReq.open("GET", "/update/firmware-STM32.bin", true);
+  oReq.open("GET", "firmware-STM32.bin", true);
   oReq.responseType = "arraybuffer";
 
   oReq.onload = function (oEvent) {
