@@ -76,7 +76,7 @@ import {
   waves
 } from "mdbvue";
 
-import {device, connect} from './webusb';
+import {device, connect} from './badgecomm';
 
 let component = undefined;
 setInterval(() => {

@@ -50,7 +50,7 @@ window.itemDrop = function() {
 
 import {mdbToastNotification, mdbBtn, mdbCard, mdbCardBody, mdbCol, mdbRow, mdbInput} from 'mdbvue';
 import VJstree from 'vue-jstree';
-  import {connect, on_connect, runfile, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout, writetostdin, downloaddir} from '../webusb';
+  import {connect, on_connect, runfile, readfile, savefile, fetch_dir, createfolder, savetextfile, movefile, delfile, deldir, createfile, registerstdout, writetostdin, downloaddir} from '../badgecomm';
 import * as $ from 'jquery';
 import * as ace from 'brace';
 import 'brace/mode/python';
@@ -90,7 +90,7 @@ export default {
     component = this;
     // Auto-fetch /flash
     registerstdout(commandlog);
-    on_connect().then(() => this.itemClick({model: this.files[0]}));
+    on_connect().then(async () => {await transceive('from upysh import *'); this.itemClick({model: this.files[0]})});
   },
   methods: {
     parseDir: (data) => {
@@ -335,13 +335,13 @@ export default {
           is_dir: true,
           children: [{text:'Click parent to refresh', icon: 'none', isDummy: true}]
         },
-        {
-          text: 'sdcard',
-          full_path: '/sdcard',
-          icon: 'fas fa-sd-card',
-          is_dir: true,
-          children: [{text:'Click parent to refresh', icon: 'none', isDummy: true}]
-        }
+        // {
+        //   text: 'sdcard',
+        //   full_path: '/sdcard',
+        //   icon: 'fas fa-sd-card',
+        //   is_dir: true,
+        //   children: [{text:'Click parent to refresh', icon: 'none', isDummy: true}]
+        // }
       ]
     }
   }

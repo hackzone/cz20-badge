@@ -16,7 +16,7 @@
                 </mdb-card>
             </mdb-col>
 
-            <mdb-col sm="12" xl="6">
+            <!-- <mdb-col sm="12" xl="6">
                 <mdb-card class="mt-4">
                     <mdb-card-header>Audio Settings</mdb-card-header>
                     <mdb-card-body>
@@ -27,7 +27,7 @@
                         <mdb-btn color="primary" v-on:click="save_audio">Save</mdb-btn>
                     </mdb-card-body>
                 </mdb-card>
-            </mdb-col>
+            </mdb-col> -->
 
             <mdb-col sm="12" xl="6" v-for="app_slug in app_slugs" v-bind:key="app_slug">
                 <mdb-card class="mt-4">
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-    import {savetextfile, runfile, readfile, delfile, fetch_dir, on_connect, writetostdin} from '../webusb';
+    import {savetextfile, runfile, readfile, delfile, fetch_dir, on_connect, writetostdin} from '../badgecomm';
     import {mdbRow, mdbCol, mdbBtn, mdbInput, mdbCard, mdbCardHeader, mdbCardBody} from 'mdbvue';
     import vueJsonEditor from 'vue-json-editor'
 
@@ -109,7 +109,6 @@
                 component.$emit('genNotification', 'App settings updated successfully');
             },
             onJsonChange: () => {
-                debugger;
             }
         },
         data() {

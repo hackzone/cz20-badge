@@ -6,7 +6,7 @@
                 <mdb-progress :height="20" v-model="installing_progress" />
             </mdb-modal-body>
         </mdb-modal>
-        <mdb-row>
+        <!-- <mdb-row>
             <mdb-col md="5">
                 <mdb-card class="mb-4">
                     <mdb-card-body class="badge_container">
@@ -59,7 +59,7 @@
                     </mdb-card-body>
                 </mdb-card>
             </mdb-col>
-        </mdb-row>
+        </mdb-row> -->
         <mdb-row>
             <mdb-col md="12">
                 <mdb-card class="mb-4">
@@ -125,7 +125,7 @@
 
     import VueMarkdown from 'vue-markdown';
     import {Sketch} from 'vue-color';
-    import {on_connect, readfile, createfolder, savefile, fetch_dir, deldir, savetextfile} from '../webusb';
+    import {on_connect, readfile, createfolder, savefile, fetch_dir, deldir, savetextfile} from '../badgecomm';
     import * as pako from 'pako';
     import * as untar from 'js-untar';
     window.pako = pako;
@@ -133,7 +133,6 @@
     window.VueMarkdown = VueMarkdown;
 
     let component = undefined;
-    debugger;
 
     export default {
         name: 'Apps',
@@ -148,8 +147,8 @@
             mdbCard,
             mdbCardBody,
             mdbCardHeader,
-            'vue-markdown': VueMarkdown,
-            'sketch-picker': Sketch,
+            // 'vue-markdown': VueMarkdown,
+            // 'sketch-picker': Sketch,
         },
         beforeMount() {
             component = this;
@@ -165,7 +164,7 @@
                 await component.update_local_apps();
             });
 
-            fetch('https://hatchery.badge.team/basket/campzone2020/list/json',{mode:'cors'})
+            fetch('https://hatchery.badge.team/basket/pixel/list/json',{mode:'cors'})
                 .then(response => {response.json().then((apps) => {
                     component.store_apps = apps;
                     for(let app of apps) {

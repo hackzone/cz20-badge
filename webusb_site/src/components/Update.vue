@@ -40,7 +40,7 @@
         deldir,
         savetextfile,
         writetostdin
-    } from '../webusb';
+    } from '../badgecomm';
 
     let component = undefined;
 
@@ -57,18 +57,12 @@
         beforeMount() {
             component = this;
             on_connect().then(async () => {
-                let contents = await readfile('/flash/cache/version.txt');
-                let version;
-                try {
-                    version = JSON.parse(contents);
-                } catch {
-                    version = {'firmware': 'unknown'};
-                }
-                component.badge_firmware_version = version.firmware;
+                let version = await transceive('import consts; consts.INFO_FIRMWARE_BUILD');
+                component.badge_firmware_version = parseInt(version);
                 component.checking_badge = false;
             });
 
-            fetch('https://ota.cz20.hackz.one/version/campzone2020.txt',{mode:'cors'})
+            fetch('https://ota.badge.team/version/pixel.txt',{mode:'cors'})
                 .then(response => {response.json().then((version) => {
                     component.server_firmware_version = version.build;
                     component.server_firmware_name = version.name;
