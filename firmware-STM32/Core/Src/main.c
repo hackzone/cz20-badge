@@ -177,7 +177,9 @@ int main(void)
 
 		#if CFG_TUD_MIDI
 				midi_task();
-		#endif
+        #endif
+
+        vid_pid_task();
 
 		webusb_task();
 
@@ -710,6 +712,30 @@ void midi_task(void)
 
 
 #endif
+
+
+
+//--------------------------------------------------------------------+
+// USB VID/PID changer task
+//--------------------------------------------------------------------+
+
+void vid_pid_task(void)
+{
+    uint8_t* dirty_byte = (uint8_t*) getI2CMemory(123);
+
+    if(dirty_byte) {
+        uint8_t *vid = (uint8_t *) getI2CMemory(124);
+        uint8_t *pid = (uint8_t *) getI2CMemory(126);
+
+        desc_device.idVendor = *vid;
+        desc_device.idProduct = *pid;
+
+        *dirty_byte = 0;
+
+        // Trigger a reset on the USB port so we get re-enumerated by the host
+        usbd_reset(0);
+    }
+}
 
 //--------------------------------------------------------------------+
 // WebUSB use vendor class

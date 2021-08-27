@@ -47,6 +47,9 @@ bool tud_init (void);
 // Task function should be called in main/rtos loop
 void tud_task (void);
 
+// Reset the bus
+void usbd_reset(uint8_t rhport);
+
 // Interrupt handler, name alias to DCD
 #define tud_isr   dcd_isr
 
@@ -79,7 +82,7 @@ bool tud_control_status(uint8_t rhport, tusb_control_request_t const * request);
 
 // Invoked when received GET DEVICE DESCRIPTOR request
 // Application return pointer to descriptor
-uint8_t const * tud_descriptor_device_cb(void);
+uint8_t * tud_descriptor_device_cb(void);
 
 // Invoked when received GET BOS DESCRIPTOR request
 // Application return pointer to descriptor

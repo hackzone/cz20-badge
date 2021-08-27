@@ -315,7 +315,7 @@ bool tud_init (void)
   return true;
 }
 
-static void usbd_reset(uint8_t rhport)
+void usbd_reset(uint8_t rhport)
 {
   tu_varclr(&_usbd_dev);
 

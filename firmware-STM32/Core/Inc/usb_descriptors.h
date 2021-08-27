@@ -38,5 +38,6 @@ enum
 };
 
 extern uint8_t const desc_ms_os_20[];
+extern tusb_desc_device_t desc_device;
 
 #endif /* USB_DESCRIPTORS_H_ */

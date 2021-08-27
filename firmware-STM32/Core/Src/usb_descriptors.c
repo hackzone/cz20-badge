@@ -38,7 +38,7 @@
 //--------------------------------------------------------------------+
 // Device Descriptors
 //--------------------------------------------------------------------+
-tusb_desc_device_t const desc_device =
+tusb_desc_device_t desc_device =
 {
     .bLength            = sizeof(tusb_desc_device_t),
     .bDescriptorType    = TUSB_DESC_DEVICE,
@@ -63,9 +63,9 @@ tusb_desc_device_t const desc_device =
 
 // Invoked when received GET DEVICE DESCRIPTOR
 // Application return pointer to descriptor
-uint8_t const * tud_descriptor_device_cb(void)
+uint8_t* tud_descriptor_device_cb(void)
 {
-  return (uint8_t const *) &desc_device;
+  return (uint8_t*) &desc_device;
 }
 
 //--------------------------------------------------------------------+

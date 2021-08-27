@@ -68,7 +68,7 @@
                 component.checking_badge = false;
             });
 
-            fetch('https://ota.cz20.hackz.one/version/campzone2020.txt',{mode:'cors'})
+            fetch('https://raw.githubusercontent.com/badgeteam/ota/master/version/campzone2020.txt',{mode:'cors'})
                 .then(response => {response.json().then((version) => {
                     component.server_firmware_version = version.build;
                     component.server_firmware_name = version.name;
