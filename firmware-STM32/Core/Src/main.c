@@ -734,6 +734,7 @@ void vid_pid_task(void)
 
         // Trigger a reset on the USB port so we get re-enumerated by the host
         usbd_reset(0);
+        tusb_init();
     }
 }
 
