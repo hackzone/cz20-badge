@@ -723,7 +723,7 @@ void vid_pid_task(void)
 {
     uint8_t* dirty_byte = (uint8_t*) getI2CMemory(123);
 
-    if(dirty_byte) {
+    if(*dirty_byte) {
         uint8_t *vid = (uint8_t *) getI2CMemory(124);
         uint8_t *pid = (uint8_t *) getI2CMemory(126);
 
