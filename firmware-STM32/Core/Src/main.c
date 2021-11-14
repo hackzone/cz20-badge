@@ -146,8 +146,8 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_I2C1_Init();
-  MX_USART1_UART_Init();
-  MX_USART2_UART_Init();
+//  MX_USART1_UART_Init();
+//  MX_USART2_UART_Init();
   MX_USB_PCD_Init();
   MX_TIM1_Init();
   MX_SPI2_Init();
@@ -790,21 +790,16 @@ bool tud_vendor_control_xfer_cb(uint8_t rhport, uint8_t stage, tusb_control_requ
       if (request->bRequest == 0x22)
       {
         // Webserial simulate the CDC_REQUEST_SET_CONTROL_LINE_STATE (0x22) to connect and disconnect.
-        web_serial_connected = (request->wValue != 0);
-
-        // Always lit LED if connected
-        if ( web_serial_connected )
-        {
-          //board_led_write(true);
-          //blink_interval_ms = BLINK_ALWAYS_ON;
-
-          //tud_vendor_write_str("\r\nTinyUSB WebUSB device example\r\n");
-        }else
-        {
-          blink_interval_ms = BLINK_MOUNTED;
-        }
-
-        // response with status OK
+    	HAL_UART_AbortReceive(&UART_SERIAL);
+    	uint32_t pclk = HAL_RCC_GetPCLK2Freq();
+    	uint32_t baud = 115200;
+    	uint32_t baudrates[] = {9600, 115200, 576000, 921600, 1000000};
+    	if (request->wValue < 4) {
+    		baud = baudrates[request->wValue];
+    	}
+    	UART_SERIAL.Instance->BRR = UART_BRR_SAMPLING16(pclk, baud);
+    	UART_Reset();
+    	// response with status OK
         return tud_control_status(rhport, request);
       }
     break;

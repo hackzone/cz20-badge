@@ -25,7 +25,6 @@ uint32_t bufferpos_webusb;
 uint32_t disablepins;
 uint32_t disabletimeout;
 
-
 extern UART_HandleTypeDef UART_SERIAL;
 extern UART_HandleTypeDef UART_WEBUSB;
 
@@ -39,7 +38,7 @@ void uart_init(void) {
 	UART_SERIAL.Init.Parity = UART_PARITY_NONE;
 	UART_SERIAL.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	UART_SERIAL.Init.Mode = UART_MODE_TX_RX;
-
+	UART_SERIAL.Init.OverSampling = UART_OVERSAMPLING_16;
 	if (HAL_UART_Init(&UART_SERIAL) != HAL_OK) {
 		/* Initialization Error */
 		Error_Handler();
@@ -59,7 +58,7 @@ void uart_init(void) {
 	UART_WEBUSB.Init.Parity = UART_PARITY_NONE;
 	UART_WEBUSB.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	UART_WEBUSB.Init.Mode = UART_MODE_TX_RX;
-
+	UART_WEBUSB.Init.OverSampling = UART_OVERSAMPLING_16;
 	if (HAL_UART_Init(&UART_WEBUSB) != HAL_OK) {
 		/* Initialization Error */
 		Error_Handler();
@@ -192,12 +191,7 @@ void tud_cdc_line_coding_cb(uint8_t itf, cdc_line_coding_t const* p_line_coding)
 		UART_SERIAL.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 		UART_SERIAL.Init.Mode = UART_MODE_TX_RX;
 
-//		if (HAL_UART_Init(&UART_SERIAL) != HAL_OK) {
-//			/* Initialization Error */
-//			Error_Handler();
-//		}
-
-		UART_SERIAL.Instance->BRR = UART_BRR_SAMPLING8(HAL_RCC_GetPCLK2Freq(), UART_SERIAL.Init.BaudRate);
+		UART_SERIAL.Instance->BRR = UART_BRR_SAMPLING16(HAL_RCC_GetPCLK2Freq(), UART_SERIAL.Init.BaudRate);
 
 		/* Start reception: provide the buffer pointer with offset and the buffer size */
 		bufferpos = 0;
