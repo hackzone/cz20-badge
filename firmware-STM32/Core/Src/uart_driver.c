@@ -82,9 +82,7 @@ void cdc_task(void)
     {
       // read and echo back
       uint16_t count = tud_cdc_read(UserRxBufferFS, APP_RX_DATA_SIZE);
-      if(HAL_UART_Transmit_DMA(&UART_SERIAL, UserRxBufferFS, count) != HAL_OK) {
-    	  count++;
-      }
+      HAL_UART_Transmit_DMA(&UART_SERIAL, UserRxBufferFS, count);
 
     }
     tud_cdc_write_flush();
@@ -99,17 +97,16 @@ void cdc_task(void)
 void webusb_task(void)
 {
     // connected and there are data available
-    if ( tud_vendor_available() && HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == 0) {
-    	if(UART_WEBUSB.gState == HAL_UART_STATE_READY) {
+    if ( tud_vendor_n_available(1) && UART_WEBUSB.gState == HAL_UART_STATE_READY && HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == 0) {
       // read and echo back
-      uint16_t count = tud_vendor_read(WebusbRxBuffer, WEBUSB_RX_SIZE);
-      if(HAL_UART_Transmit_DMA(&UART_WEBUSB, WebusbRxBuffer, count) != HAL_OK) {
-    	  count++;
-      }
-     }
+      uint16_t count = tud_vendor_n_read(1, WebusbRxBuffer, WEBUSB_RX_SIZE);
+      HAL_UART_Transmit_DMA(&UART_WEBUSB, WebusbRxBuffer, count);
     }
-    //tud_vendor_write_flush();
 
+    if ( tud_vendor_n_available(0) && UART_SERIAL.gState == HAL_UART_STATE_READY) {
+    	uint16_t count = tud_vendor_n_read(0, UserRxBufferFS, APP_RX_DATA_SIZE);
+    	HAL_UART_Transmit_DMA(&UART_SERIAL, UserRxBufferFS, count);
+    }
 }
 
 // Invoked when received new data
@@ -216,12 +213,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 			Error_Handler();
 		}
 		tud_cdc_write(&UserTxBufferFS[!bufferpos*APP_TX_DATA_SIZE/2+APP_TX_DATA_SIZE/4], APP_TX_DATA_SIZE/4); //Invert bufferpos again because we inverted it for the receive call
+		tud_vendor_n_write(0, &UserTxBufferFS[!bufferpos*APP_TX_DATA_SIZE/2+APP_TX_DATA_SIZE/4], APP_TX_DATA_SIZE/4); //Invert bufferpos again because we inverted it for the receive call
 	} else if(huart == &UART_WEBUSB) {
 		bufferpos_webusb = !bufferpos_webusb;
 		if (HAL_UART_Receive_DMA(&UART_WEBUSB, (uint8_t*) &WebusbTxBuffer[bufferpos_webusb*WEBUSB_TX_SIZE/2], WEBUSB_TX_SIZE / 2) != HAL_OK) {
 			Error_Handler();
 		}
-		tud_vendor_write(&WebusbTxBuffer[!bufferpos_webusb*WEBUSB_TX_SIZE/2+WEBUSB_TX_SIZE/4], WEBUSB_TX_SIZE/4); //Invert bufferpos again because we inverted it for the receive call
+		tud_vendor_n_write(1, &WebusbTxBuffer[!bufferpos_webusb*WEBUSB_TX_SIZE/2+WEBUSB_TX_SIZE/4], WEBUSB_TX_SIZE/4); //Invert bufferpos again because we inverted it for the receive call
 	}
 }
 
@@ -237,6 +235,7 @@ void UART_Early_Exit(UART_HandleTypeDef *huart, uint32_t CNDTR)  {
 		len = len % (APP_TX_DATA_SIZE/4); //Remove the Half way callback
 
 		tud_cdc_write(&UserTxBufferFS[!bufferpos*APP_TX_DATA_SIZE/2+offset], len); //Invert bufferpos again because we inverted it for the receive call
+		tud_vendor_n_write(0, &UserTxBufferFS[!bufferpos*APP_TX_DATA_SIZE/2+offset], len); //Invert bufferpos again because we inverted it for the receive call
 	} else if(huart == &UART_WEBUSB) {
 		bufferpos_webusb = !bufferpos_webusb;
 		if (HAL_UART_Receive_DMA(&UART_WEBUSB, (uint8_t*) &WebusbTxBuffer[bufferpos_webusb*WEBUSB_TX_SIZE/2], WEBUSB_TX_SIZE / 2) != HAL_OK) {
@@ -246,7 +245,7 @@ void UART_Early_Exit(UART_HandleTypeDef *huart, uint32_t CNDTR)  {
 		uint32_t offset = len > WEBUSB_TX_SIZE/4 ? WEBUSB_TX_SIZE/4 : 0;
 		len = len % (WEBUSB_TX_SIZE/4); //Remove the Half way callback
 
-		tud_vendor_write(&WebusbTxBuffer[!bufferpos_webusb*WEBUSB_TX_SIZE/2+offset], len); //Invert bufferpos again because we inverted it for the receive call
+		tud_vendor_n_write(1, &WebusbTxBuffer[!bufferpos_webusb*WEBUSB_TX_SIZE/2+offset], len); //Invert bufferpos again because we inverted it for the receive call
 	}
 }
 
@@ -268,7 +267,8 @@ void WebUSB_Reset() {
 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart) {
 	if(huart == &UART_SERIAL) {
 		tud_cdc_write(&UserTxBufferFS[bufferpos*APP_TX_DATA_SIZE/2], APP_TX_DATA_SIZE/4);
+		tud_vendor_n_write(0, &UserTxBufferFS[bufferpos*APP_TX_DATA_SIZE/2], APP_TX_DATA_SIZE/4);
 	} else if(huart == &UART_WEBUSB) {
-		tud_vendor_write(&WebusbTxBuffer[bufferpos_webusb*WEBUSB_TX_SIZE/2], WEBUSB_TX_SIZE/4);
+		tud_vendor_n_write(1, &WebusbTxBuffer[bufferpos_webusb*WEBUSB_TX_SIZE/2], WEBUSB_TX_SIZE/4);
 	}
 }

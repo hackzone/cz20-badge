@@ -17,7 +17,6 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
@@ -30,6 +29,7 @@
 #include "led_driver.h"
 #include "uart_driver.h"
 #include "interrupt_pin.h"
+#include "device/usbd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -110,6 +110,7 @@ void cdc_task(void);
 void hid_task(void);
 void midi_task(void);
 uint32_t board_millis(void);
+void vid_pid_task(void);
 /* USER CODE END 0 */
 
 /**
@@ -148,7 +149,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USB_PCD_Init();
-//  MX_TIM1_Init();
+  MX_TIM1_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   HAL_I2C_EnableListen_IT(&hi2c1);
@@ -242,7 +243,8 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-  /** Initializes the CPU, AHB and APB busses clocks
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -255,7 +257,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Initializes the CPU, AHB and APB busses clocks
+  /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -648,7 +650,7 @@ void hid_task(void)
 // Invoked when received GET_REPORT control request
 // Application must fill buffer report's content and return its length.
 // Return zero will cause the stack to STALL request
-uint16_t tud_hid_get_report_cb(uint8_t report_id, hid_report_type_t report_type, uint8_t* buffer, uint16_t reqlen)
+uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t* buffer, uint16_t reqlen)
 {
   // TODO not Implemented
   (void) report_id;
@@ -661,7 +663,7 @@ uint16_t tud_hid_get_report_cb(uint8_t report_id, hid_report_type_t report_type,
 
 // Invoked when received SET_REPORT control request or
 // received data on OUT endpoint ( Report ID = 0, Type = 0 )
-void tud_hid_set_report_cb(uint8_t report_id, hid_report_type_t report_type, uint8_t const* buffer, uint16_t bufsize)
+void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t const* buffer, uint16_t bufsize)
 {
   // TODO set LED based on CAPLOCK, NUMLOCK etc...
   (void) report_id;
@@ -677,6 +679,13 @@ void tud_hid_set_report_cb(uint8_t report_id, hid_report_type_t report_type, uin
 //--------------------------------------------------------------------+
 
 #if CFG_TUD_MIDI
+
+static inline uint32_t tudi_midi_write24 (uint8_t jack_id, uint8_t b1, uint8_t b2, uint8_t b3)
+{
+  uint8_t msg[3] = { b1, b2, b3 };
+  return tud_midi_stream_write(jack_id, msg, 3);
+}
+
 
 void midi_task(void)
 {
@@ -702,7 +711,7 @@ void midi_task(void)
 	if(tud_midi_available()) {
 		uint8_t* data = getI2CMemory(95);
 		uint8_t* count = getI2CMemory(94);
-		*count = tud_midi_read(data, 32);
+		*count = tud_midi_stream_read(data, 32);
 		addInterruptReason(INTTERUPT_REASON_MIDI_RECEIVED);
 		setInterruptPin();
 		//Do something with the data here
@@ -733,7 +742,7 @@ void vid_pid_task(void)
         *dirty_byte = 0;
 
         // Trigger a reset on the USB port so we get re-enumerated by the host
-        usbd_reset(0);
+        //usbd_reset(0);
         tusb_init();
     }
 }
@@ -742,55 +751,69 @@ void vid_pid_task(void)
 // WebUSB use vendor class
 //--------------------------------------------------------------------+
 
-// Invoked when received VENDOR control request
-bool tud_vendor_control_request_cb(uint8_t rhport, tusb_control_request_t const * request)
+// Invoked when a control transfer occurred on an interface of this class
+// Driver response accordingly to the request and the transfer stage (setup/data/ack)
+// return false to stall control endpoint (e.g unsupported request)
+bool tud_vendor_control_xfer_cb(uint8_t rhport, uint8_t stage, tusb_control_request_t const * request)
 {
-  switch (request->bRequest)
+  // nothing to with DATA & ACK stage
+  if (stage != CONTROL_STAGE_SETUP) return true;
+
+  switch (request->bmRequestType_bit.type)
   {
-    case VENDOR_REQUEST_WEBUSB:
-      // match vendor request in BOS descriptor
-      // Get landing page url
-      return tud_control_xfer(rhport, request, (void*) &desc_url, desc_url.bLength);
-
-    case VENDOR_REQUEST_MICROSOFT:
-      if ( request->wIndex == 7 )
+    case TUSB_REQ_TYPE_VENDOR:
+      switch (request->bRequest)
       {
-        // Get Microsoft OS 2.0 compatible descriptor
-        uint16_t total_len;
-        memcpy(&total_len, desc_ms_os_20+8, 2);
+        case VENDOR_REQUEST_WEBUSB:
+          // match vendor request in BOS descriptor
+          // Get landing page url
+          return tud_control_xfer(rhport, request, (void*)(uintptr_t) &desc_url, desc_url.bLength);
 
-        return tud_control_xfer(rhport, request, (void*) desc_ms_os_20, total_len);
-      }else
-      {
-        return false;
+        case VENDOR_REQUEST_MICROSOFT:
+          if ( request->wIndex == 7 )
+          {
+            // Get Microsoft OS 2.0 compatible descriptor
+            uint16_t total_len;
+            memcpy(&total_len, desc_ms_os_20+8, 2);
+
+            return tud_control_xfer(rhport, request, (void*)(uintptr_t) desc_ms_os_20, total_len);
+          }else
+          {
+            return false;
+          }
+
+        default: break;
       }
+    break;
 
-    case 0x22:
-      // Webserial simulate the CDC_REQUEST_SET_CONTROL_LINE_STATE (0x22) to
-      // connect and disconnect.
-      web_serial_connected = (request->wValue != 0);
-
-      // Always lit LED if connected
-      if ( web_serial_connected )
+    case TUSB_REQ_TYPE_CLASS:
+      if (request->bRequest == 0x22)
       {
-        //board_led_write(true);
-        //blink_interval_ms = BLINK_ALWAYS_ON;
+        // Webserial simulate the CDC_REQUEST_SET_CONTROL_LINE_STATE (0x22) to connect and disconnect.
+        web_serial_connected = (request->wValue != 0);
 
+        // Always lit LED if connected
+        if ( web_serial_connected )
+        {
+          //board_led_write(true);
+          //blink_interval_ms = BLINK_ALWAYS_ON;
 
-      }else
-      {
-        blink_interval_ms = BLINK_MOUNTED;
+          //tud_vendor_write_str("\r\nTinyUSB WebUSB device example\r\n");
+        }else
+        {
+          blink_interval_ms = BLINK_MOUNTED;
+        }
+
+        // response with status OK
+        return tud_control_status(rhport, request);
       }
+    break;
 
-      // response with status OK
-      return tud_control_status(rhport, request);
-
-    default:
-      // stall unknown request
-      return false;
+    default: break;
   }
 
-  return true;
+  // stall unknown request
+  return false;
 }
 
 // Invoked when DATA Stage of VENDOR's request is complete

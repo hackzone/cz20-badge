@@ -83,11 +83,11 @@
   *        (when HSE is used as system clock source, directly or through the PLL).
   */
 #if !defined  (HSE_VALUE)
-  #define HSE_VALUE    ((uint32_t)16000000) /*!< Value of the External oscillator in Hz */
+  #define HSE_VALUE    16000000U /*!< Value of the External oscillator in Hz */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSE_STARTUP_TIMEOUT)
-  #define HSE_STARTUP_TIMEOUT    ((uint32_t)100)   /*!< Time out for HSE start up, in ms */
+  #define HSE_STARTUP_TIMEOUT    100U   /*!< Time out for HSE start up, in ms */
 #endif /* HSE_STARTUP_TIMEOUT */
 
 /**
@@ -96,7 +96,7 @@
   *        (when HSI is used as system clock source, directly or through the PLL).
   */
 #if !defined  (HSI_VALUE)
-  #define HSI_VALUE    ((uint32_t)8000000) /*!< Value of the Internal oscillator in Hz*/
+  #define HSI_VALUE    8000000U /*!< Value of the Internal oscillator in Hz*/
 #endif /* HSI_VALUE */
 
 /**
@@ -113,11 +113,11 @@
   *        This value is used by the UART, RTC HAL module to compute the system frequency
   */
 #if !defined  (LSE_VALUE)
-  #define LSE_VALUE    ((uint32_t)32768) /*!< Value of the External oscillator in Hz*/
+  #define LSE_VALUE    32768U /*!< Value of the External oscillator in Hz*/
 #endif /* LSE_VALUE */
 
 #if !defined  (LSE_STARTUP_TIMEOUT)
-  #define LSE_STARTUP_TIMEOUT    ((uint32_t)5000)   /*!< Time out for LSE start up, in ms */
+  #define LSE_STARTUP_TIMEOUT    5000U   /*!< Time out for LSE start up, in ms */
 #endif /* LSE_STARTUP_TIMEOUT */
 
 /* Tip: To avoid modifying this file each time you need to use different HSE,
@@ -127,10 +127,10 @@
 /**
   * @brief This is the HAL system configuration section
   */
-#define  VDD_VALUE                    ((uint32_t)3300) /*!< Value of VDD in mv */
-#define  TICK_INT_PRIORITY            ((uint32_t)0)    /*!< tick interrupt priority (lowest by default)  */
-#define  USE_RTOS                     0
-#define  PREFETCH_ENABLE              1
+#define  VDD_VALUE                    3300U /*!< Value of VDD in mv */
+#define  TICK_INT_PRIORITY            0U    /*!< tick interrupt priority (lowest by default)  */
+#define  USE_RTOS                     0U
+#define  PREFETCH_ENABLE              1U
 
 #define  USE_HAL_ADC_REGISTER_CALLBACKS         0U /* ADC register callback disabled       */
 #define  USE_HAL_CAN_REGISTER_CALLBACKS         0U /* CAN register callback disabled       */
@@ -168,30 +168,30 @@
 /* Section 1 : Ethernet peripheral configuration */
 
 /* MAC ADDRESS: MAC_ADDR0:MAC_ADDR1:MAC_ADDR2:MAC_ADDR3:MAC_ADDR4:MAC_ADDR5 */
-#define MAC_ADDR0   2
-#define MAC_ADDR1   0
-#define MAC_ADDR2   0
-#define MAC_ADDR3   0
-#define MAC_ADDR4   0
-#define MAC_ADDR5   0
+#define MAC_ADDR0   2U
+#define MAC_ADDR1   0U
+#define MAC_ADDR2   0U
+#define MAC_ADDR3   0U
+#define MAC_ADDR4   0U
+#define MAC_ADDR5   0U
 
 /* Definition of the Ethernet driver buffers size and count */
 #define ETH_RX_BUF_SIZE                ETH_MAX_PACKET_SIZE /* buffer size for receive               */
 #define ETH_TX_BUF_SIZE                ETH_MAX_PACKET_SIZE /* buffer size for transmit              */
-#define ETH_RXBUFNB                    ((uint32_t)8)       /* 4 Rx buffers of size ETH_RX_BUF_SIZE  */
-#define ETH_TXBUFNB                    ((uint32_t)4)       /* 4 Tx buffers of size ETH_TX_BUF_SIZE  */
+#define ETH_RXBUFNB                    8U       /* 4 Rx buffers of size ETH_RX_BUF_SIZE  */
+#define ETH_TXBUFNB                    4U       /* 4 Tx buffers of size ETH_TX_BUF_SIZE  */
 
 /* Section 2: PHY configuration section */
 
 /* DP83848_PHY_ADDRESS Address*/
 #define DP83848_PHY_ADDRESS           0x01U
 /* PHY Reset delay these values are based on a 1 ms Systick interrupt*/
-#define PHY_RESET_DELAY                 ((uint32_t)0x000000FF)
+#define PHY_RESET_DELAY                 0x000000FFU
 /* PHY Configuration delay */
-#define PHY_CONFIG_DELAY                ((uint32_t)0x00000FFF)
+#define PHY_CONFIG_DELAY                0x00000FFFU
 
-#define PHY_READ_TO                     ((uint32_t)0x0000FFFF)
-#define PHY_WRITE_TO                    ((uint32_t)0x0000FFFF)
+#define PHY_READ_TO                     0x0000FFFFU
+#define PHY_WRITE_TO                    0x0000FFFFU
 
 /* Section 3: Common PHY Registers */
 

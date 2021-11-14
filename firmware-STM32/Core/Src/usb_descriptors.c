@@ -25,6 +25,7 @@
 
 #include "tusb.h"
 #include "usb_descriptors.h"
+#include "tusb_config.h"
 
 /* A combination of interfaces must have a unique product id, since PC will save device driver after the first plug.
  * Same VID/PID with different interface e.g MSC (first), then CDC (later) will possibly cause system error on PC.
@@ -32,8 +33,8 @@
  * Auto ProductID layout's Bitmap:
  *   [MSB]         HID | MSC | CDC          [LSB]
  */
-#define _PID_MAP(itf, n)  ( (CFG_TUD_##itf) << (n) )
-#define USB_PID           (0x4000 | _PID_MAP(CDC, 0) | _PID_MAP(MSC, 1) | _PID_MAP(VENDOR, 4) )
+
+#define USB_PID           (0x4011)
 
 //--------------------------------------------------------------------+
 // Device Descriptors
@@ -63,7 +64,7 @@ tusb_desc_device_t desc_device =
 
 // Invoked when received GET DEVICE DESCRIPTOR
 // Application return pointer to descriptor
-uint8_t* tud_descriptor_device_cb(void)
+uint8_t const * tud_descriptor_device_cb(void)
 {
   return (uint8_t*) &desc_device;
 }
@@ -75,14 +76,14 @@ uint8_t* tud_descriptor_device_cb(void)
 
 uint8_t const desc_hid_report[] =
 {
-  TUD_HID_REPORT_DESC_KEYBOARD( HID_REPORT_ID(REPORT_ID_KEYBOARD), ),
-  TUD_HID_REPORT_DESC_MOUSE   ( HID_REPORT_ID(REPORT_ID_MOUSE), )
+  TUD_HID_REPORT_DESC_KEYBOARD( HID_REPORT_ID(REPORT_ID_KEYBOARD)),
+  TUD_HID_REPORT_DESC_MOUSE   ( HID_REPORT_ID(REPORT_ID_MOUSE))
 };
 
 // Invoked when received GET HID REPORT DESCRIPTOR
 // Application return pointer to descriptor
 // Descriptor contents must exist long enough for transfer to complete
-uint8_t const * tud_hid_descriptor_report_cb(void)
+uint8_t const * tud_hid_descriptor_report_cb(uint8_t instance)
 {
   return desc_hid_report;
 }
@@ -102,6 +103,7 @@ enum
 
 #if CFG_TUD_VENDOR
   ITF_NUM_VENDOR,
+  ITF_NUM_VENDOR2,
 #endif
 
 #if CFG_TUD_HID
@@ -120,14 +122,15 @@ enum
 
 #define EPNUM_CDC_NOTIF     0x01
 #define EPNUM_CDC           0x02
-#define EPNUM_VENDOR           0x03
-#define EPNUM_HID           0x04
-#define EPNUM_MIDI          0x05
+#define EPNUM_VENDOR        0x03
+#define EPNUM_VENDOR2       0x04
+#define EPNUM_HID           0x05
+#define EPNUM_MIDI          0x06
 
 uint8_t const desc_configuration[] =
 {
   // interface count, string index, total length, attribute, power in mA
-  TUD_CONFIG_DESCRIPTOR(ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 100),
+  TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 100),
 
 #if CFG_TUD_CDC
   // Interface number, string index, EP notification address and size, EP data address (out, in) and size.
@@ -135,12 +138,13 @@ uint8_t const desc_configuration[] =
 #endif
 
 #if CFG_TUD_VENDOR
-  TUD_VENDOR_DESCRIPTOR(ITF_NUM_VENDOR, 3+CFG_TUD_CDC+CFG_TUD_VENDOR, EPNUM_VENDOR, 0x80 | EPNUM_VENDOR, 64),
+  TUD_VENDOR_DESCRIPTOR(ITF_NUM_VENDOR, 3+CFG_TUD_CDC+1, EPNUM_VENDOR, 0x80 | EPNUM_VENDOR, CFG_TUD_VENDOR_EPSIZE),
+  TUD_VENDOR_DESCRIPTOR(ITF_NUM_VENDOR2, 3+CFG_TUD_CDC+2, EPNUM_VENDOR2, 0x80 | EPNUM_VENDOR2, CFG_TUD_VENDOR_EPSIZE),
 #endif
 
 #if CFG_TUD_HID
         // Interface number, string index, protocol, report descriptor len, EP In address, size & polling interval
-  TUD_HID_DESCRIPTOR(ITF_NUM_HID, 3+CFG_TUD_CDC+CFG_TUD_VENDOR+CFG_TUD_HID, HID_PROTOCOL_NONE, sizeof(desc_hid_report), 0x80 | EPNUM_HID, 16, 10),
+  TUD_HID_DESCRIPTOR(ITF_NUM_HID, 3+CFG_TUD_CDC+CFG_TUD_VENDOR+CFG_TUD_HID, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report), 0x80 | EPNUM_HID, 16, 10),
 #endif
 
 #if CFG_TUD_MIDI
@@ -246,6 +250,7 @@ char const* string_desc_arr [] =
   "CampZone20 UART",             // 4: CDC Interface
 #endif
 #ifdef CFG_TUD_VENDOR
+  "CampZone20 WebUSB Uart",     // 5: MSC Interface
   "CampZone20 WebUSB",     // 5: MSC Interface
 #endif
 #ifdef CFG_TUD_HID
@@ -260,7 +265,7 @@ static uint16_t _desc_str[32];
 
 // Invoked when received GET STRING DESCRIPTOR request
 // Application return pointer to descriptor, whose contents must exist long enough for transfer to complete
-uint16_t const* tud_descriptor_string_cb(uint8_t index)
+uint16_t const* tud_descriptor_string_cb(uint8_t index, uint16_t langid)
 {
   uint8_t chr_count;
 
