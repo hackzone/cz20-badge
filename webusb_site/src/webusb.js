@@ -252,15 +252,6 @@
      let textdecoder = undefined;
      let file_contents = undefined;
  
-     if(message_type === 3 && message_id === 0) {
-         textdecoder = new TextDecoder("ascii");
-         let consolelog = textdecoder.decode(data);
-         console.log(consolelog);
-         if(stdout_callback) {
-             stdout_callback(consolelog);
-         }
-     }
- 
      if (message_type === 1 && message_id === 0) {
          textdecoder = new TextDecoder("ascii");
          file_contents = textdecoder.decode(data);
