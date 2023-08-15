@@ -15,6 +15,7 @@
     "jquery": "^3.5.1",
     "js-untar": "^2.0.0",
     "jszip": "^3.7.0",
+    "mdb-vue-ui-kit": "^4.0.0",
     "mdbvue": "^5.8.3",
     "pako": "^1.0.11",
     "vue": "^2.6.11",
@@ -25,6 +26,7 @@
     "vue-markdown": "^2.2.4",
     "vue2-ace-editor": "0.0.15",
     "vue2-google-maps": "^0.10.7",
+    "vuex": "^4.1.0",
     "xterm": "^4.8.1",
     "xterm-addon-fit": "^0.4.0"
   },
