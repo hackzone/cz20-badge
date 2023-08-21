@@ -207,7 +207,7 @@
                 };
             },
             get_app_metadata: async (app_slug) => {
-                let metadata_url = 'https://badge.team/eggs/get/' + app_slug + '/json';
+                let metadata_url = 'https://hatchery.badge.team/eggs/get/' + app_slug + '/json';
                 let response = await fetch(metadata_url);
                 let metadata = await response.json();
                 let release_keys = Object.keys(metadata.releases).sort();
