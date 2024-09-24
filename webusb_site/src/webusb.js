@@ -41,7 +41,7 @@ export function buildpacket(size, command) {
 }
 
 export function buildpacketWithFilename(size, command, filename) {
-    let {buffer, message_id} = buildpacket(filename.length+1+size, command, message_id);
+    let {buffer, message_id} = buildpacket(filename.length+1+size, command);
     for(let i = 0; i<filename.length; i++) {
         buffer[packetheadersize+i] = filename.charCodeAt(i);
     }
