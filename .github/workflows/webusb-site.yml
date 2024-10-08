@@ -18,9 +18,9 @@ jobs:
           yarn build
           cp CNAME dist/CNAME
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_PAT }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: webusb_site/dist # The folder the action should deploy.
-          CLEAN: true # Automatically remove deleted files from the deploy branch
+          token: ${{ secrets.DEPLOY_PAT }}
+          branch: gh-pages # The branch the action should deploy to.
+          folder: webusb_site/dist # The folder the action should deploy.
+          clean: true # Automatically remove deleted files from the deploy branch
