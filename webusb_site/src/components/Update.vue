@@ -10,6 +10,7 @@
                         Latest available on the server: {{checking_server ? 'Checking...' : server_firmware_version}}<br><br>
 
                         Make sure you configure your WiFi on the Settings page first. Pressing the update button will reboot the badge. If WiFi can't connect, the LEDs will remain off. Update progress is shown with green LEDs. It's safe to disconnect the badge before and during updating, but try to do that only if the screen remains off for 30+ seconds.<br><br>
+			If you cannot connect to Wifi for some reason, then flash the badge via <a href="https://badgeteam.github.io/web-updates/">https://badgeteam.github.io/web-updates/</a>.<br><br>
 
                         <mdb-btn color="primary" size="sm" v-on:click="update">Update over WiFi</mdb-btn>
                     </mdb-card-body>
